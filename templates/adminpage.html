@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Quisite - Admin</title>
+</head>
+
+<body>
+
+    <!-- Nav -->
+	<div class="navbar_home">
+    <div class="row">
+        <div class="col-xs-6">
+            <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+                QUISITE
+            </a>
+        </div>
+        <div class="col-xs-6" style="text-align: right">
+          <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
+            <label class="">
+              <input style="height: 22px; padding: 0px 11px;" name="Logout" type="submit" class=" btn btn-info " id="Logout" value="Logout">
+            </label>
+          </form>
+        </div>
+    </div>
+</div>
+
+
+
+  <!-- <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+        <a class="navbar-brand " href="{{ url_for('main.home') }}">FakePanda</a>
+      </div>
+
+    </div>
+  </nav> -->
+  <div style="float:right">
+    <!-- <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
+      <label class="logoutLblPos">
+        <input name="Logout" type="submit" style="margin-left: 5px;" class=" btn btn-info " id="Logout" value="Logout">
+      </label>
+    </form> -->
+  </div>
+  <div class="container">
+
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#Shop">Shops</a></li>
+      <li><a href="#ShopOrder" onclick="searchShopOrders()">Shop Orders</a></li>
+      <li><a href="#TsRecord" onclick="searchTransactionRecord()">Transaction Records</a></li>
+      <li><a href="#Profile">Profile</a></li>
+    </ul>
+
+    <div class="tab-content">
+      
+      <!-- ADDING REGISTER FOR STORE HERE -->
+      <div id="Shop" class="tab-pane fade in active">
+        <form action="shop_register" method="post" id="register" class="fh5co-form animate-box"
+          data-animate-effect="fadeIn">
+          <h3> Start a business </h3>
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <script>
+            var messages = "{{ '\n'.join(messages) | safe }}";
+            alert(messages);
+          </script>
+          <ul class=flashes>
+            {% for message in messages %}
+            <div class="alert alert-warning">
+              <button type="button" class="close" data-dismiss="alert">x</button>
+              {{ message }}
+            </div>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% endwith %}
+          {% block body %}{% endblock %}
+          <div class="form-group ">
+            <div class="row">
+              <div class="col-xs-2">
+                <label for="shop_name">shop name</label>
+                {% if not user_info['U_type'] %}
+                <!-- if the user is not a shop owner-->
+                <input class="form-control" id="shop_name" name="shop_name" placeholder="macdonald" type="text">
+                <div id="msg"></div>
+                {% else %}
+                <!-- if the user is a shop owner-->
+                <input class="form-control" id="shop_name" name="shop_name" placeholder="{{shop_info['S_name']}}"
+                  type="text" readonly>
+                {% endif %}
+              </div>
+              <div class="col-xs-2">
+                <label for="shop_category">shop category</label>
+                {% if not user_info['U_type'] %}
+                <!-- if the user is not a shop owner-->
+                <input class="form-control" id="shop_category" name="shop_category" placeholder="fast food" type="text">
+                {% else %}
+                <!-- if the user is a shop owner-->
+                <input class="form-control" id="shop_category" name="shop_category"
+                  placeholder="{{shop_info['S_foodtype']}}" type="text" readonly>
+                {% endif %}
+              </div>
+              
+              <script type="text/javascript">
+                $('document').ready(function () {
+                  $('#shop_name').on('input', function () {
+                    $.ajax({
+                      url: 'http://' + window.location.host + "/register-shop_name-check",
+                      method: "POST",
+                      data: $('#shop_name').serialize(),
+                      async: false,
+                      success: function (data) {
+                        $('#msg').html(data);
+                      },
+                      error: function (jqxhr, textStatus, errorThrown) {
+                        alert("error: " + textStatus)
+                      }
+                    })
+                  });
+                });
+              </script>
+            </div>
+          </div>
+
+          <div class=" row" style=" margin-top: 25px;">
+            <div class=" col-xs-3">
+              {% if not user_info['U_type'] %}
+              <!-- if the user is not a shop owner-->
+              <button type="submit" class="btn btn-primary">register</button>
+              {% else %}
+              <!-- if the user is a shop owner-->
+              <button type="button" class="btn btn-primary" disabled>register</button>
+              {% endif %}
+            </div>
+          </div>
+        </form>
+        <!-- SHOP(ADD)  -->
+        <hr>
+        <form action="shop_add" method="post" id="shop_add" class="fh5co-form animate-box" data-animate-effect="fadeIn"
+          enctype="multipart/form-data">
+          <h3>ADD</h3>
+
+          <div class="form-group ">
+            <div class="row">
+
+              <div class="col-xs-6">
+                <label for="meal_name">meal name</label>
+                <input class="form-control" id="meal_name" name="meal_name" type="text">
+              </div>
+            </div>
+            <div class="row" style=" margin-top: 15px;">
+
+              <div class="col-xs-3">
+                <label for="meal_price">price</label>
+                <input class="form-control" id="meal_price" name="meal_price" type="text">
+              </div>
+              <div class="col-xs-3">
+                <label for="meal_quantity">quantity</label>
+                <input class="form-control" id="meal_quantity" name="meal_quantity" type="text">
+              </div>
+            </div>
+
+            <div class="row" style=" margin-top: 25px;">
+
+              <div class=" col-xs-3">
+                <label for="meal_pic">Upload Image</label>
+                <input id="meal_pic" type="file" name="meal_pic" multiple class="file-loading">
+
+              </div>
+              <div class=" col-xs-3">
+                <button style=" margin-top: 15px;" type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- DISPLAY OWN SHOP MENU -->
+        <div class="row">
+          <div class="  col-xs-8">
+            <table class="table" style=" margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Picture</th>
+                  <th scope="col">meal name</th>
+
+                  <th scope="col">price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in product_info %}
+                <tr>
+                  <th scope="row">{{ loop.index }}</th>
+                  <td><img src="data:image/{{row['P_imagetype']}};base64,{{image_info[loop.index-1]}}"
+                      style="width: 72px; height: 72px;" alt="menu_image"></td>
+                  <td>{{row['P_name']}}</td>
+
+                  <td>{{row['P_price']}} </td>
+                  <td>{{row['P_quantity']}} </td>
+                  <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ loop.index }}">
+                      Edit
+                    </button></td>
+                  <!-- Modal -->
+
+                  <div class="modal fade" id="{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
+                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">{{row['P_name']}} Edit</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <!-- EDIT PRODUCT -->
+                        <form id="edit_price_and_quantity" action="edit_price_and_quantity" method="post">
+                          <div class="modal-body">
+                            <input name="edit_PID" type="hidden" value="{{row['PID']}}">
+                            <div class="row">
+                              <div class="col-xs-6">
+                                <label for="edit_price">price</label>
+                                <input class="form-control" id="edit_price" name="edit_price" type="text">
+                              </div>
+                              <div class="col-xs-6">
+                                <label for="edit_quantity">quantity</label>
+                                <input class="form-control" id="edit_quantity" name="edit_quantity" type="text">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-default">Edit</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- DELETE PRODUCT -->
+                  <form id="delete_product" action="delete_product" method="post">
+                    <input name="delete_PID" type="hidden" value="{{row['PID']}}">
+                    <td><button type="submit" class="btn btn-danger">Delete</button></td>
+                  </form>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+
+      </div>
+      <script type="text/javascript">
+        var UID = -1;
+        // get user location
+        $(document).ready(function () {
+          $.ajax({
+            url: 'http://' + window.location.host + '/get_session',
+            type: 'GET',
+            dataType: 'json',
+            success: function (result) {
+              UID = result.user_info['UID']
+            },
+            error: function (xhr, status, error) {
+              var err = eval("(" + xhr.responseText + ")");
+              alert(err.Message + '\n' + 'http://' + window.location.host + '/get_session');
+            }
+          });
+        })
+      </script>
+      <!-- Shop Orders -->
+      <div id="ShopOrder" class="tab-pane fade">
+        <h3>Shop Orders</h3>
+        <select class="form-control" name="Status" id="shop-order-status" style="width:150px; "
+          onchange="updateShopOrderTable()">
+          <option>All</option>
+          <option>Finished</option>
+          <option>Pending</option>
+          <option>Cancelled</option>
+        </select>
+        <div class="row">
+          <div class="col-xs-8" id="ShopOrder-table">
+            <table class="table" style="margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">Order ID</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Start Time</th>
+                  <th scope="col">End Time</th>
+                  <th scope="col">Shop Name</th>
+                  <th scope="col">Total Price</th>
+                  <th scope="col">Order Details</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Select</th>
+                </tr>
+              </thead>
+              <tbody id="ShopOrder-update">
+                <!-- for loop1 should start here -->
+                <tr>
+                  <th scope="row">1</th>
+                  <td>
+                    tmp2
+                  </td>
+                  <td>
+                    tmp3
+                  </td>
+                  <td>
+                    tmp4
+                  </td>
+                  <td>
+                    tmp5
+                  </td>
+                  <td>
+                    tmp6
+                  </td>
+                  <td>
+                    <button type="button" data-toggle="modal" data-target="#ShopOrderDetail-1"
+                      class="btn btn-info ">Order Details</button>
+                  </td>
+                  <td style="display: flex;">
+                    <button type="button" data-toggle="modal" data-target="test" name="test" class="btn btn-success "
+                      onclick="none">Done</button>
+                    <button type="button" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
+                      onclick="none">Cancel</button>
+                  </td>
+                </tr>
+                <!-- for loop1 should end here -->
+              </tbody>
+            </table>
+            <div>
+              <button type="button" name="empty" class="btn btn-danger " onclick="batchDeleteShopOrder()">Cancel Seleted
+                Orders</button>
+              <button type="button" name="empty" class="btn btn-success " onclick="batchCompleteShopOrder()">Complete
+                Seleted Orders</button>
+            </div>
+            <!-- for loop2 should start here -->
+            <!-- Modal: ShopOrderDetail-{id} -->
+            <div class="modal fade" id="ShopOrderDetail-1" data-backdrop="static" tabindex="-1" role="dialog"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Order Details</h4>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table">
+                      <thread>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Picture</th>
+                          <th scope="col">Meal name</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Quantity</th>
+                        </tr>
+                      </thread>
+                      <tbody id="ShopOrderDetail-T-1">
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>tmp11</td>
+                          <td>tmp12</td>
+                          <td>tmp13</td>
+                          <td>tmp14</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>tmp21</td>
+                          <td>tmp22</td>
+                          <td>tmp23</td>
+                          <td>tmp24</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- EX: row['subtotal'] -->
+                    <!-- <p class="text-right">Subtotal $200</p>
+                    <p class="text-right"><small><em>Delivery fee $0</em></small></p>
+                    <p class="text-right">Total Price $200</p> -->
+                    <div class="modal-footer">
+                      <p class="text-right" id="Subtotal"></p>
+                      <!-- <p class="text-right" id="Delivery_fee"></p> -->
+                      <p class="text-right" id="Total_price"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- for loop2 should end here -->
+          </div>
+        </div>
+        <script type="text/javascript">
+          function completeShopOrder(oid) {
+            // implement your order complete function
+            // !!! careful, use parseInt(OID) here since OID is str
+            OID = parseInt(oid);
+            $.ajax({
+              url: 'http://' + window.location.host + '/order-complete',
+              type: 'POST',
+              data: { 'OID': OID },
+              dataType: 'json',
+              success: function (result) {
+                alert(result.msg);
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert(jqxhr.responseText)
+              }
+            })
+            // and refresh order table
+            searchShopOrders();
+          }
+          function cancelShopOrder(oid) {
+            // implement your order cancel function
+            // !!! careful, use parseInt(OID) here since OID is str
+            OID = parseInt(oid);
+            $.ajax({
+              url: 'http://' + window.location.host + '/order-delete',
+              type: 'POST',
+              data: { 'OID': OID, 'is_shopowner': true },
+              dataType: 'json',
+              success: function (result) {
+                alert(result.msg);
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert(jqxhr.responseText)
+              }
+            })
+            // and refresh order table
+            searchShopOrders();
+          }
+          function updateShopOrderDetail(OID) {
+            $.ajax({
+              url: 'http://' + window.location.host + "/order-detail",
+              method: "POST",
+              data: { 'OID': parseInt(OID), 'UID': parseInt(UID) },
+              async: false,
+              success: function (Order_info) {
+                body = ""
+                var Products = Order_info.Products
+                for (let i = 0; i < Products.length; i++) {
+                  p = Products[i]
+                  body += "<tr>"
+                  body += `<th scope="row">${i + 1}</th>`
+                  body += `<td><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px;"></td>
+                            <td>${p.P_name}</td>
+                            <td>${p.P_price}</td>
+                            <td>${p.Order_quantity}</td>`
+                  body += "</tr>"
+                }
+                $('#ShopOrderDetail-1 #ShopOrderDetail-T-1').html(body);
+                // $('#ShopOrderDetail-1 #Subtotal').html(`Subtotal ₱${Order_info.Subtotal}`)
+                // $('#ShopOrderDetail-1 #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
+                $('#ShopOrderDetail-1 #Total_price').html(`Total Price ₱${Order_info.Subtotal}`)
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert(jqxhr.responseText)
+              }
+            })
+          }
+          function batchCompleteShopOrder() {
+            all_succ = true;
+            has_select = false;
+            $('#ShopOrder-table').find('input:checked').each(function () {
+              has_select = true;
+              OID = parseInt($(this).attr('name'))
+              $.ajax({
+                url: 'http://' + window.location.host + '/order-complete',
+                type: 'POST',
+                async: false,
+                data: { 'OID': OID },
+                dataType: 'json',
+                success: function (result) {
+                  console.log(result.msg);
+                },
+                error: function (jqxhr, textStatus, errorThrown) {
+                  all_succ = false;
+                  alert(jqxhr.responseText);
+                }
+              })
+            });
+            if (all_succ && has_select) {
+              alert('Seleted orders completed successfully');
+            }
+            searchShopOrders()
+          }
+          function batchDeleteShopOrder() {
+            all_succ = true;
+            has_select = false;
+            $('#ShopOrder-table').find('input:checked').each(function () {
+              has_select = true;
+              OID = parseInt($(this).attr('name'))
+              $.ajax({
+                url: 'http://' + window.location.host + '/order-delete',
+                type: 'POST',
+                async: false,
+                data: { 'OID': OID, 'is_shopowner': true },
+                dataType: 'json',
+                success: function (result) {
+                  console.log(result.msg);
+                },
+                error: function (jqxhr, textStatus, errorThrown) {
+                  all_succ = false;
+                  alert(jqxhr.responseText);
+                }
+              })
+            });
+            if (all_succ && has_select) {
+              alert('Seleted orders cancelled successfully');
+            }
+            searchShopOrders()
+          }
+          ShopOrders = [];
+          function updateShopOrderTable() {
+            var table = '', filter = document.getElementById("shop-order-status").value;
+
+            ShopOrders.sort(function(a, b) {
+                return b.unique_number - a.unique_number;
+            });
+
+
+            $.each(ShopOrders, function (i, order) {
+              if (filter != 'All' && order.Status != filter) { return; }
+              table += '<tr><th scope="row">' + order.unique_number + '</th>';
+              table += '<td>' + order.Status + '</td>';
+              table += '<td>' + order.start_time + '</td>';
+              table += '<td>' + order.end_time + '</td>';
+              table += '<td>' + order.S_name + '</td>';
+              table += '<td>' + order.total_price + '</td>';
+              table += `
+                <td>
+                  <button type="button" name="${order.OID}" data-toggle="modal" data-target="#ShopOrderDetail-1" class="btn btn-info " 
+                  onclick="updateShopOrderDetail(this.name)"> Order Details</button>
+                </td>`;
+              if (order.Status == 'Pending') {
+                table += `
+                <td>
+                  <button type="button" name="${order.OID}" data-toggle="modal" class="btn btn-success " 
+                  onclick="completeShopOrder(this.name)"> Done</button>
+                  <button type="button" name="${order.OID}" data-toggle="modal" class="btn btn-danger " 
+                  onclick="cancelShopOrder(this.name)"> Cancel</button>
+                </td>
+                <td>
+                  <input type="checkbox" class="form-check-input" name="${order.OID}">
+                </td></tr>`
+              } else {
+                table += '<td></td><td></td></tr>'
+              }
+            });
+            $("#ShopOrder-update").html(table);
+          }
+          function searchShopOrders() {
+            $.ajax({
+              url: 'http://' + window.location.host + "/search-ShopOrders",
+              method: "POST",
+              data: { 'UID': UID },
+              async: false,
+              success: function (data) {
+                ShopOrders = data.tableRow;
+                updateShopOrderTable();
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert("error: " + textStatus)
+              }
+            })
+          }
+        </script>
+      </div>
+
+      <!-- Transacrion Records -->
+      <div id="TsRecord" class="tab-pane fade">
+        <h3>Transacrion Records</h3>
+        <select class="form-control" name="Status" id="transaction-status" style="width:150px; "
+          onchange="updateTransactionRecord()">
+          <option value="All">All</option>
+          <option value="Payment">Payment</option>
+          <option value="Recieve">Recieve</option>
+          <option value="Recharge">Recharge</option>
+        </select>
+        <div class="row">
+          <div class="col-xs-8">
+            <table class="table" style="margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">Record ID</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Trader</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="transaction-update">
+                <tr>
+                  <td>
+                    tmp1
+                  </td>
+                  <td>
+                    tmp2
+                  </td>
+                  <td>
+                    tmp3
+                  </td>
+                  <td>
+                    tmp4
+                  </td>
+                  <td>
+                    tmp5
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+        transactions = [];
+        function updateTransactionRecord() {
+          var table = '', filter = document.getElementById("transaction-status").value;
+          $.each(transactions, function (i, transaction) {
+            if (filter != 'All' && transaction.Action != filter) { return; }
+            table += '<tr><th scope="row">' + transaction.TID + '</th>';
+            table += '<td>' + transaction.Action + '</td>';
+            table += '<td>' + transaction.Time + '</td>';
+            table += '<td>' + transaction.Trader + '</td>';
+            table += '<td>' + transaction.T_amount + '</td></tr>';
+          });
+          $("#transaction-update").html(table);
+        }
+        function searchTransactionRecord() {
+          $.ajax({
+            url: 'http://' + window.location.host + "/search-transactionRecord",
+            type: "POST",
+            data: { 'UID': UID },
+            async: false,
+            success: function (data) {
+              transactions = data.tableRow
+              updateTransactionRecord();
+            },
+            error: function (jqxhr, textStatus, errorThrown) {
+              alert("error: " + textStatus)
+            }
+          })
+        }
+      </script>
+      <!-- Profile -->
+
+      <div id="Profile" class="tab-pane fade">
+        <h3>Profile</h3>
+        <div class="row">
+          <div class="col-xs-12">
+            <div>
+              Username: {{user_info['U_account']}}
+            </div>
+            <div>
+              Name: {{user_info['U_name']}}
+            </div>
+            <div>
+              Account Type: {{'manager' if user_info['U_type'] else
+              'user'}}
+            </div>
+            <div>
+              PhoneNumber: {{user_info['U_phone']}}
+            </div>
+            <div>
+              
+            walletbalance: {{user_info['U_balance']}}
+            </div>
+            <!-- Modal -->
+            <button type="button " style="margin-left: 5px;" class=" btn btn-info " data-toggle="modal"
+              data-target="#top_up">Top Up</button>
+            <div class="modal fade" id="top_up" data-backdrop="static" tabindex="-1" role="dialog"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog  modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Top Up</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form id="top_up" action="top_up" method="post">
+                      <input type="number" class="form-control" name="value" placeholder="enter add value">
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">Add</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        
+        
+        <h3>User Information</h3>
+
+        <!-- DISPLAY OWN SHOP MENU -->
+        <div class="row">
+          <div class="  col-xs-8">
+            <table class="table" style=" margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">UID</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Name</th>
+
+                  <th scope="col">Phone Number</th>
+                  <th scope="col">Wallet Balance</th>
+                  <th scope="col">Top Up</th>
+                  <th scope="col">Change Phone Number</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in costumer_info %}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{row['UID']}}</th>
+                  <td>{{row['U_account']}}</td>
+                  <td>{{row['U_name']}}</td>
+
+                  <td>{{row['U_phone']}} </td>
+                  <td>{{row['U_balance']}} </td>
+                  <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#top_up{{ loop.index }}">
+                      Top Up
+                    </button></td>
+                  <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#edit_phone_number{{ loop.index }}">
+                      Change
+                    </button></td>
+                  <!-- Modal TOP UP-->
+                  <div class="modal fade" id="top_up{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
+                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog  modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="staticBackdropLabel">{{row['U_name']}} Top Up</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="top_up{{ loop.index }}" action="top_up" method="post">
+                            <input name="costumer_UID" type="hidden" value="{{row['UID']}}">
+                            
+                              <input type="number" class="form-control" name="value" placeholder="enter add value">
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-default">Add</button>
+                              </div>
+                              
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- EDIT PHONE -->
+                  <div class="modal fade" id="edit_phone_number{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
+                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog  modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="staticBackdropLabel">{{row['U_name']}} Change Phone Number</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="edit_phone_number{{ loop.index }}" action="edit_phone_number" method="post">
+                            <input name="edit_UID" type="hidden" value="{{row['UID']}}">
+                            <label for="edit_phone">Enter New Number</label>
+                            <input class="form-control" id="edit_phone" name="edit_phone" type="text" placeholder="ex: 9123456789">
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-default">Confirm</button>
+                              </div>
+                              
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- DELETE ACCOUNT -->
+                  <form id="delete_account" action="delete_account" method="post">
+                    <input name="delete_UID" type="hidden" value="{{row['UID']}}">
+                    <td><button type="submit" class="btn btn-danger">Delete</button></td>
+                  </form>
+                </tr>
+        
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
+  <script>
+    $(document).ready(function () {
+      $(".nav-tabs a").click(function () {
+        $(this).tab('show');
+      });
+    });
+  </script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>

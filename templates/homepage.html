@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Quisite</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="A ordering system By 12 - Einstein" />
+	<meta name="keywords" content="A ordering system By 12 - Einstein" />
+	<meta name="author" content="" />
+
+	
+
+	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content="" />
+	<meta property="og:image" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:site_name" content="" />
+	<meta property="og:description" content="" />
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+	<!-- Modernizr JS -->
+	<script src="{{ url_for('static', filename='js/modernizr-2.6.2.min.js') }}"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Nav -->
+	<div class="navbar_home">
+        <div class="row">
+            <div class="col-xs-6">
+                <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+                    QUISITE
+                </a>
+            </div>
+            <div class="col-xs-6" style="text-align: right">
+                <div>
+                    <a href="#" class="btn__standard" style="margin-right: 10px">
+                        <img src="{{ url_for('main.get_search_image') }}" style="width: 20px" />
+                    </a>
+                    <a href="index.html" class="btn__standard">
+                        <img src="{{ url_for('main.get_user_image') }}" style="width: 20px" />
+                    </a>
+                </div>
+            </div>
+        </div>
+	</div>
+
+    <!-- Content -->
+    <div class="bg-frntpage">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 animate-box" data-animate-effect="fadeInLeft">
+                <div class="poppins-extrabold hmpage__title">
+                    PURCHASE WITHOUT HESITATION
+                </div>
+                <div style="width: 300px">
+                  <div class="poppins-regular" style="font-size: 15px; color: #202020; margin-bottom: 20px">
+                    Most comfortable way of ordering in Quirino HIghschool canteen.
+                    <br><br>
+                    Launch, Order, Connect with a shopkeepers
+                  </div>
+                  
+                </div>
+                <div class="btn__mobile_size">
+                  <div class="row">
+                      <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
+                          <a href="sign-up.html" class="btn__standard btn-joinnow poppins-regular">
+                              Join now
+                          </a>
+                      </div>
+                      <div class="col-xs-12 col-md-6">
+                          <a href="index.html" class="btn__standard btn-login poppins-regular">
+                            Log In
+                          </a>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-6 mobile__rmHomepage">
+              <img src="{{ url_for('main.get_logo_image') }}" style="width: 450px" />
+            </div>
+        </div>
+    </div>
+    <div class="bg-scndpage">
+      <div class="row animate-box" style="padding: 50px 100px" data-animate-effect="fadeInUp">
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_borger_image') }}" class="product__img" />
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_kakanin_image') }}" class="product__img" />
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_mangojuice_image') }}" class="product__img" />
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_spag_image') }}" class="product__img" />
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_tomi_image') }}" class="product__img" />
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_valuemeal_image') }}" class="product__img" />
+        </div>
+      </div>
+    </div>
+    
+
+	<!-- jQuery -->
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<!-- Bootstrap -->
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<!-- Placeholder -->
+	<script src="{{ url_for('static', filename='js/jquery.placeholder.min.js') }}"></script>
+	<!-- Waypoints -->
+	<script src="{{ url_for('static', filename='js/jquery.waypoints.min.js') }}"></script>
+	<!-- Main JS -->
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+
+
+</body>
+
+</html>
+
+<style>
+.bg-frntpage {
+    background: linear-gradient(#9B9B9B 70%, #ED3B3B);
+    height: 600px;
+    padding: 50px 100px
+}
+.btn-joinnow {
+    background: #800000;
+    color: white;
+    padding: 10px 60px;
+    font-size: 13px;
+}
+.btn-joinnow:hover {
+    background: transparent;
+    color: black;
+    border: 1px solid #020202;
+    padding: 10px 60px;
+    font-size: 13px;
+}
+.btn-login {
+    background: transparent;
+    color: black;
+    border: 1px solid #020202;
+    padding: 10px 60px;
+    font-size: 13px;
+}
+.btn-login:hover {
+    background: #800000;
+    color: white;
+    border: 0px solid #020202;
+    padding: 10px 60px;
+    font-size: 13px;
+}
+
+.hmpage__title {
+  font-size: 60px; 
+  color: #202020; 
+  line-height: 1; 
+  margin-bottom: 50px;
+}
+
+.product__img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 10px
+}
+.bg-scndpage {
+  background: #800000;
+}
+.btn__mobile_size {
+  width: 400px;
+}
+
+@media (max-width: 991px) {
+  .mobile__rmHomepage {
+    display: none;
+  }
+  .product__img {
+    margin-bottom: 30px;
+  }
+  .btn__mobile_size {
+    width: 100%;
+  }
+}
+
+@media (max-width: 773px) {
+  .bg-frntpage {
+    padding: 50px 20px
+  }
+}
+
+@media (max-width: 481px) {
+  .hmpage__title {
+    font-size: 45px; 
+    margin-bottom: 40px;
+  }
+}
+</style>
