@@ -285,8 +285,8 @@ input, textarea {
 
 /* Navbar css */
 .navbar_home {
-  background: #800000;
-  padding: 20px 100px;
+  background: #ecb22b;
+  padding: 10px 100px;
 }
 .branding__title {
   color: white;
@@ -310,6 +310,12 @@ input, textarea {
   .navbar_home {
     background: #800000;
     padding: 20px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
   }
 }
 

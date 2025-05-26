@@ -9,7 +9,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Quisite - Sign Up</title>
+	<title>Sign Up - Cravengers</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -63,9 +63,8 @@
 	<div class="navbar_home">
         <div class="row">
             <div class="col-xs-6">
-                <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
-                    QUISITE
-                </a>
+                <!-- Return home BTN -->
+				<a style="color: black; text-decoration: none;" class="poppins-bold" href="homepage.html">&#x21a9; Return to Home</a>
             </div>
             <div class="col-xs-6" style="text-align: right">
                 <div>
@@ -79,74 +78,67 @@
             </div>
         </div>
 	</div>
-
-	<!-- Return home BTN -->
-	<div style="margin-top: 20px; margin-left: 20px; position: absolute;">
-		<a style="padding: 10px 20px; background: #800000; color: white; text-decoration: none;" class="poppins-regular" href="homepage.html">&#x21a9; Return to home</a>
-	</div>
-
-	<div class="container" style="margin-bottom: 50px;">
-
-		<div class="row">
-			<div class="col-md-4 col-md-offset-4">
-
-
-				<!-- Start Sign In Form -->
-				<form action="register" method="post" id="register" class="fh5co-form animate-box"
-					data-animate-effect="fadeIn">
+	<div class="bg-frntpage" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+		<div class="container" style="display: flex; align-items: center; justify-content: center; gap: 150px; flex-wrap: wrap;">
+			<div style="max-width: 450px; width: 100%;">
+				<form action="register" method="post" id="register" class="fh5co-form animate-box" data-animate-effect="fadeIn">
 					<h2 class="poppins-bold" style="text-align: center;">Sign Up</h2>
-					<!-- <div class="form-group">
-							<div class="alert alert-success" role="alert">Your info has been saved.</div>
-						</div> -->
+
+					<!-- Flash messages -->
 					{% with messages = get_flashed_messages() %}
 					{% if messages %}
-					<ul class=flashes>
+					<ul class="flashes">
 						{% for message in messages %}
 						<li>{{ message }}</li>
 						{% endfor %}
 					</ul>
 					{% endif %}
 					{% endwith %}
+
 					{% block body %}{% endblock %}
-					<div class="form-group">
-						<label for="name" class="sr-only poppins-regular">Name</label>
-						<input type="text" class="form-control poppins-regular" id="name" name="name" placeholder="Name ex: John Doe"
-							autocomplete="off">
-					</div>
-					<div class="form-group">
-						<label for="name" class="sr-only poppins-regular">phone number</label>
-						<input type="text" class="form-control poppins-regular" id="phonenumber" name="phonenumber"
-							placeholder="Phone num ex: 9123456789" autocomplete="off">
-					</div>				 
-					<div class="form-group">
-						<label for="Account" class="sr-only poppins-regular">User name</label>
-						<input type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name ex: johndoe"
-							autocomplete="off">
-						<div id="msg"></div>
-					</div>
-					<div class="form-group">
-						<label for="password" class="sr-only poppins-regular">Password</label>
-						<input type="password" class="form-control poppins-regular" id="password" name="password" placeholder="Password"
-							autocomplete="off">
-					</div>
-					<div class="form-group">
-						<label for="re-password" class="sr-only poppins-regular">Re-type Password</label>
-						<input type="password" class="form-control poppins-regular" id="re-password" name="re-password"
-							placeholder="Re-type Password" autocomplete="off">
-					</div>
-			
 
-					<div class="form-group poppins-regular">
-						<p>Already registered? <a href="index.html">Sign In</a></p>
-					</div>
-					<div class="form-group poppins-regular">
-						<input type="submit" value="Sign Up" style="width: 100%; background: #800000; color: white; padding: 10px 0px" class="btn">
+					<!-- Step 1 -->
+					<div id="step1">
+						<div class="form-group">
+							<input style="border-bottom: 1px solid #800000" type="text" class="form-control poppins-regular" id="name" name="name" placeholder="Name ex: John Doe" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<input style="border-bottom: 1px solid #800000" type="text" class="form-control poppins-regular" id="phonenumber" name="phonenumber" placeholder="Phone num ex: 9123456789" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<input style="border-bottom: 1px solid #800000" type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name ex: johndoe" autocomplete="off">
+							<div id="msg"></div>
+						</div>
+						<div class="form-group" style="margin-bottom: 10px;">
+							<button type="button" class="btn" style="width: 100%; background: #800000; color: white;" onclick="nextStep()">Next</button>
+						</div>
+						<div class="form-group poppins-regular" style="text-align: center; margin-bottom: 5px;">
+							<p>Already registered? <a style="color: #800000;" href="index.html">Log In</a></p>
+						</div>
 					</div>
 
+					<!-- Step 2 -->
+					<div id="step2" style="display: none;">
+						<div class="form-group">
+							<input style="border-bottom: 1px solid #800000" type="password" class="form-control poppins-regular" id="password" name="password" placeholder="Password" autocomplete="off">
+						</div>
+						<div class="form-group">
+							<input style="border-bottom: 1px solid #800000" type="password" class="form-control poppins-regular" id="re-password" name="re-password" placeholder="Re-type Password" autocomplete="off">
+						</div>
+						<div class="form-group" style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+							<button type="button" class="btn poppins-regular" onclick="prevStep()" style="flex: 1; background: #ffffff00; color: black; border: 1px solid black">
+								Back
+							</button>
+							<input type="submit" value="Sign Up" class="btn poppins-regular" style="flex: 1; background: #800000; color: white;">
+						</div>
+
+						<div class="form-group poppins-regular" style="text-align: center; margin-bottom: 5px;">
+							<p>Already registered? <a style="color: #800000;" href="index.html">Log In</a></p>
+						</div>
+					</div>
 				</form>
-				<!-- END Sign In Form -->
-
 			</div>
+			
 			<script type="text/javascript">
 				$('document').ready(function () {
 					$('#Account').on('input', function () {
@@ -164,7 +156,32 @@
 						})
 					});
 				});
+				
+				function nextStep() {
+					// Optional: Add basic validation before continuing
+					const name = document.getElementById('name').value.trim();
+					const phone = document.getElementById('phonenumber').value.trim();
+					const username = document.getElementById('Account').value.trim();
+
+					if (!name || !phone || !username) {
+						alert('Please fill out all fields.');
+						return;
+					}
+
+					// Switch form parts
+					document.getElementById('step1').style.display = 'none';
+					document.getElementById('step2').style.display = 'block';
+				}
+
+					function prevStep() {
+					document.getElementById('step2').style.display = 'none';
+					document.getElementById('step1').style.display = 'block';
+				}
 			</script>
+			
+			<div style="text-align: center;">
+				<img src="{{ url_for('main.get_logo_image') }}" style="width: 370px;" alt="Cravengers Logo" />
+			</div>
 		</div>
 	</div>
 
@@ -173,3 +190,11 @@
 </body>
 
 </html>
+<style>
+.bg-frntpage {
+    background:
+      linear-gradient(229deg,#AF191A 10%, #F3BD38 46%);
+	height: 100vh;
+    padding: 50px 100px;
+}
+</style>

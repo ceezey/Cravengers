@@ -86,6 +86,10 @@ def get_profilematerial_image():
     filename = '../templates/assets/profile_material.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
+@main.route('/cravengers')
+def get_cravengers_image():
+    filename = '../templates/assets/cravengers.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
 
 
 @main.route("/adminpage.html")

@@ -9,7 +9,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Quisite</title>
+	<title>Cravengers</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="A ordering system By 12 - Einstein" />
 	<meta name="keywords" content="A ordering system By 12 - Einstein" />
@@ -53,9 +53,8 @@
 	<div class="navbar_home">
         <div class="row">
             <div class="col-xs-6">
-                <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
-                    QUISITE
-                </a>
+                <!-- Return home BTN -->
+				<a style="color: black; text-decoration: none;" class="poppins-bold" href="homepage.html">&#x21a9; Return to Home</a>
             </div>
             <div class="col-xs-6" style="text-align: right">
                 <div>
@@ -69,53 +68,44 @@
             </div>
         </div>
 	</div>
-
-	<!-- Return home BTN -->
-	<div style="margin-top: 20px; margin-left: 20px; position: absolute;">
-		<a style="padding: 10px 20px; background: #800000; color: white; text-decoration: none;" class="poppins-regular" href="homepage.html">&#x21a9; Return to home</a>
-	</div>
-
-
-	<div class="container">
-
-		<div class="row">
-			<div class="col-md-4 col-md-offset-4">
-
-
-				<!-- Start Sign In Form -->
+	<div class="bg-frntpage" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+		<div class="container" style="display: flex; align-items: center; justify-content: center; gap: 150px; flex-wrap: wrap;">
+			<!-- Sign-in form -->
+			<div style="max-width: 450px; width: 100%;">
 				<form action="login" method="post" class="fh5co-form animate-box" data-animate-effect="fadeIn">
-					<h2 class="poppins-bold" style="text-align: center;">Sign In</h2>
+					<h2 class="poppins-bold" style="text-align: center;">Log In</h2>
 					{% with messages = get_flashed_messages() %}
 						{% if messages %}
 							{% for message in messages %}
-							<p style="color: red; text-align: center; text-transform: uppercase;" class="poppins-bold">{{ message }}</li>
+								<p style="color: red; text-align: center; text-transform: uppercase;" class="poppins-bold">{{ message }}</p>
 							{% endfor %}
 						{% endif %}
 					{% endwith %}
 					{% block body %}{% endblock %}
 					<div class="form-group">
 						<label for="Account" class="sr-only poppins-regular">User Name</label>
-						<input style="padding-left: 10px" type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name"
-							autocomplete="off">
+						<input style="padding-left: 10px; border-bottom: 1px solid #800000;" type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name" autocomplete="off">
 					</div>
 					<div class="form-group">
 						<label for="password" class="sr-only poppins-regular">Password</label>
-						<input style="padding-left: 10px" type="password" class="form-control poppins-regular" id="password" name="password" placeholder="Password"
-							autocomplete="off">
+						<input style="padding-left: 10px; border-bottom: 1px solid #800000;" type="password" class="form-control poppins-regular" id="password" name="password" placeholder="Password" autocomplete="off">
 					</div>
-
-					<div class="form-group poppins-regular">
-						<p>Not registered? <a href="sign-up.html">Sign Up</a> </p>
-					</div>
-					<div class="form-group poppins-regular">
+					<div class="form-group poppins-regular" style="margin-bottom: 10px;">
 						<input style="width: 100%; background: #800000; color: white; padding: 10px 0px" type="submit" value="Sign In" class="btn">
 					</div>
+					<div class="form-group poppins-regular" style="text-align: center; margin-bottom: 5px;">
+						<p>Not registered? <a style="color: #800000;" href="sign-up.html">Sign Up</a> </p>
+					</div>
 				</form>
-				<!-- END Sign In Form -->
+			</div>
 
+			<!-- Logo -->
+			<div style="text-align: center;">
+				<img src="{{ url_for('main.get_logo_image') }}" style="width: 370px;" alt="Cravengers Logo" />
 			</div>
 		</div>
 	</div>
+
 
 	<!-- jQuery -->
 	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
@@ -134,3 +124,11 @@
 </body>
 
 </html>
+<style>
+.bg-frntpage {
+    background:
+      linear-gradient(229deg,#AF191A 10%, #F3BD38 46%);
+	height: 100vh;
+    padding: 50px 100px;
+}
+</style>

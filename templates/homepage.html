@@ -9,7 +9,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Quisite</title>
+	<title>Cravengers</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="A ordering system By 12 - Einstein" />
 	<meta name="keywords" content="A ordering system By 12 - Einstein" />
@@ -50,80 +50,58 @@
 <body>
 
     <!-- Nav -->
-	<div class="navbar_home">
-        <div class="row">
-            <div class="col-xs-6">
-                <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
-                    QUISITE
-                </a>
-            </div>
-            <div class="col-xs-6" style="text-align: right">
-                <div>
-                    <a href="#" class="btn__standard" style="margin-right: 10px">
-                        <img src="{{ url_for('main.get_search_image') }}" style="width: 20px" />
-                    </a>
-                    <a href="index.html" class="btn__standard">
-                        <img src="{{ url_for('main.get_user_image') }}" style="width: 20px" />
-                    </a>
-                </div>
-            </div>
-        </div>
-	</div>
+	<div class="navbar_home" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #eab830;">
+      <!-- Logo (Left) -->
+      <a href="homepage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
+          <img src="{{ url_for('main.get_logo_image') }}" style="width: 40px;" />
+      </a>
+
+      <!-- Right icons (Search & Profile) -->
+      <div style="display: flex; align-items: center;">
+          <a href="#" class="btn__standard" style="margin-right: 15px; display: flex; align-items: center;">
+              <img src="{{ url_for('main.get_search_image') }}" style="width: 25px;" />
+          </a>
+          <a href="index.html" class="btn__standard" style="margin-right: 50px; display: flex; align-items: center;">
+              <img src="{{ url_for('main.get_user_image') }}" style="width: 25px;" />
+          </a>
+      </div>
+  </div>
+
 
     <!-- Content -->
-    <div class="bg-frntpage">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 animate-box" data-animate-effect="fadeInLeft">
-                <div class="poppins-extrabold hmpage__title">
-                    PURCHASE WITHOUT HESITATION
-                </div>
-                <div style="width: 300px">
-                  <div class="poppins-regular" style="font-size: 15px; color: #202020; margin-bottom: 20px">
-                    Most comfortable way of ordering in Quirino HIghschool canteen.
-                    <br><br>
-                    Launch, Order, Connect with a shopkeepers
-                  </div>
-                  
-                </div>
-                <div class="btn__mobile_size">
-                  <div class="row">
-                      <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
-                          <a href="sign-up.html" class="btn__standard btn-joinnow poppins-regular">
-                              Join now
-                          </a>
-                      </div>
-                      <div class="col-xs-12 col-md-6">
-                          <a href="index.html" class="btn__standard btn-login poppins-regular">
-                            Log In
-                          </a>
-                      </div>
-                  </div>
+    <div class="bg-frntpage" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center;">
+        <div style="display: flex; flex-direction: column; align-items: center;">            
+            <!-- Logo centered and enlarged -->
+            <div style="margin-bottom: 10px;">
+                <img src="{{ url_for('main.get_cravengers_image') }}" style="width: 800px;" alt="Cravengers Logo" />
+            </div>
+
+            <!-- Tagline -->
+            <div style="margin-bottom: 30px;">
+                <div class="poppins-extrabold" style="font-size: 24px; color: #ffffff;">
+                    ASSEMBLE YOUR CRAVINGS
                 </div>
             </div>
-            <div class="col-md-6 mobile__rmHomepage">
-              <img src="{{ url_for('main.get_logo_image') }}" style="width: 450px" />
+
+            <!-- Buttons side-by-side -->
+            <div style="display: flex; gap: 20px;">
+                <a href="sign-up.html" class="btn__standard btn-joinnow poppins-bold">
+                    Sign up
+                </a>
+                <a href="index.html" class="btn__standard btn-login poppins-bold">
+                    Log In
+                </a>
             </div>
         </div>
     </div>
-    <div class="bg-scndpage">
+    <div class="bg-scndpage" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center;">
       <div class="row animate-box" style="padding: 50px 100px" data-animate-effect="fadeInUp">
-        <div class="col-xs-12 col-sm-4 col-md-2">
-          <img src="{{ url_for('main.get_borger_image') }}" class="product__img" />
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-2">
-          <img src="{{ url_for('main.get_kakanin_image') }}" class="product__img" />
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-2">
-          <img src="{{ url_for('main.get_mangojuice_image') }}" class="product__img" />
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-2">
-          <img src="{{ url_for('main.get_spag_image') }}" class="product__img" />
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-2">
-          <img src="{{ url_for('main.get_tomi_image') }}" class="product__img" />
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-2">
-          <img src="{{ url_for('main.get_valuemeal_image') }}" class="product__img" />
+        <div class="poppins-regular" style="display: flex; flex-direction: column; align-items: center; font-size: 16px; color: white;">
+          <p>
+            With Cravengers, every order you place brings more than just delicious food to your doorstep. Earn streaks by ordering 
+            regularly, unlock unique badges as you try new dishes, and level up your foodie profile to climb the ranks of the ultimate
+            Cravenger leaderboard. The more you eat, the more you achieve — because here, your appetite fuels your progress.
+          </p>
         </div>
       </div>
     </div>
@@ -149,36 +127,44 @@
 
 <style>
 .bg-frntpage {
-    background: linear-gradient(#9B9B9B 70%, #ED3B3B);
-    height: 600px;
+    height: 600px; 
+    background: 
+      linear-gradient(339deg,#00000000 78%, #F7300D 100%),
+      linear-gradient(15deg,#00000000 76%, #F7300D 100%),
+      linear-gradient(180deg,#000000FF 41%, #F7300D 100%);
     padding: 50px 100px
 }
 .btn-joinnow {
     background: #800000;
-    color: white;
-    padding: 10px 60px;
-    font-size: 13px;
+    color: #ecb22b;
+    border: 1px solid white;
+    border-radius: 7px;
+    padding: 8px 40px;
+    font-size: 16px;
 }
 .btn-joinnow:hover {
     background: transparent;
-    color: black;
-    border: 1px solid #020202;
-    padding: 10px 60px;
-    font-size: 13px;
+    color: white;
+    border: 1px solid white;
+    border-radius: 7px;
+    padding: 8px 40px;
+    font-size: 16px;
 }
 .btn-login {
     background: transparent;
-    color: black;
-    border: 1px solid #020202;
-    padding: 10px 60px;
-    font-size: 13px;
+    color: white;
+    border: 1px solid white;
+    border-radius: 7px;
+    padding: 8px 40px;
+    font-size: 16px;
 }
 .btn-login:hover {
-    background: #800000;
+    background: #ecb22b;
     color: white;
-    border: 0px solid #020202;
-    padding: 10px 60px;
-    font-size: 13px;
+    border: 1px solid white;
+    border-radius: 7px;
+    padding: 8px 40px;
+    font-size: 16px;
 }
 
 .hmpage__title {
@@ -195,7 +181,8 @@
   border-radius: 10px
 }
 .bg-scndpage {
-  background: #800000;
+  background: #F7300D;
+  /* background: linear-gradient(#000000 36%, #F7300D 100%); */
 }
 .btn__mobile_size {
   width: 400px;

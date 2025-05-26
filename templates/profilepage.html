@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Quisite - Profile</title>
+	<title>Profile - Cravengers</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="A ordering system By 12 - Einstein" />
 	<meta name="keywords" content="A ordering system By 12 - Einstein" />
@@ -43,28 +43,27 @@
 <body>
 
   <!-- Nav -->
-	<div class="navbar_home">
-    <div class="row">
-        <div class="col-xs-6">
-            <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
-                QUISITE
-            </a>
-        </div>
-        <div class="col-xs-6" style="text-align: right">
-            <div class="nav-tabs" style="border: 0 !important">
-              <a href="/productlistpage.html" class="btn__standard" style="margin-right: 10px">
-                <img src="{{ url_for('main.get_home_image') }}" style="width: 20px" />
-            </a>
-                <a href="/userpage.html" class="btn__standard" style="margin-right: 10px">
-                    <img src="{{ url_for('main.get_search_image') }}" style="width: 20px" />
-                </a>
-                <a href="/profilepage.html" class="btn__standard">
-                    <img src="{{ url_for('main.get_user_image') }}" style="width: 20px" />
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="navbar_home" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+      <div>
+          <!-- <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+              CRAVENGERS
+          </a> -->
+          <a href="homepage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
+              <img src="{{ url_for('main.get_logo_image') }}" style="width: 40px;" />
+          </a>
+      </div>
+      
+      <div style="text-align: right; display: flex;">
+          <div class="nav-tabs" style="border: 0 !important">
+              <a href="/userpage.html" class="btn__standard" style="margin-right: 15px">
+                  <img src="{{ url_for('main.get_search_image') }}" style="width: 25px" />
+              </a>
+              <a href="/productlistpage.html" class="btn__standard" style="margin-right: 50px">
+                  <img src="{{ url_for('main.get_home_image') }}" style="width: 25px" />
+              </a>
+          </div>
+      </div>
+  </div>
 
 
 
@@ -82,28 +81,28 @@
         <div class="bg__profile">
           <div class="bg-frntpage poppins-medium">
 
-              <div class="poppins-extrabold title__header">HELLO THERE FRIENDS!</div>
+              <div class="poppins-extrabold title__header" style="color: black">HELLO THERE FRIENDS!</div>
 
             <div class="row" style="padding: 20px 0px">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
 
                 <div class="profile__info">
-                    <div style="margin-bottom: 10px;">
+                    <div style="margin-bottom: 10px; color: black;">
                       Username:
                         <div>
-                            <input placeholder="{{user_info['U_account']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff;" />
+                            <input placeholder="{{user_info['U_account']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; color: black" />
                         </div>
                     </div>
-                    <div style="margin-bottom: 10px;">
+                    <div style="margin-bottom: 10px; color: black">
                       Name: 
                       <div>
-                        <input placeholder="{{user_info['U_name']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; text-transform: capitalize;" />
+                        <input placeholder="{{user_info['U_name']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; text-transform: capitalize; color: black" />
                       </div>
                     </div>
-                    <div style="margin-bottom: 10px;">
+                    <div style="margin-bottom: 10px; color: black">
                       Phone Number: 
                       <div>
-                        <input placeholder="{{user_info['U_phone']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff;" />
+                        <input placeholder="{{user_info['U_phone']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; color: black" />
                       </div>
                     </div>
                     
@@ -124,7 +123,7 @@
               </div>
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="wallet__balance">
-                    <div class="poppins-extrabold" style="font-size: 60px;">
+                    <div class="poppins-extrabold" style="font-size: 60px; color: black">
                     ₱ {{user_info['U_balance']}}
                     </div>
                     <div class="balance__">
@@ -132,7 +131,7 @@
                     </div>
                 </div>
 
-                <div class="wallet__balance" style="margin-top: 10px;">
+                <div class="wallet__balance" style="margin-top: 10px; color: black">
                     To top up your load, please contact the canteen admin to add the amount, and send it via GCash to 09123456789. Once confirmed, your load will appear here.
                 </div>
               </div>
@@ -593,13 +592,21 @@
 
 <style>
 .bg-frntpage {
-    background-image: url('https://cdn.shopify.com/s/files/1/0810/4768/3383/files/profile_material.png?v=1715223517');
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: 
+      radial-gradient(75% 75% at 33% 62%, #F3BD38 6%, #F3BD3800 38%),
+      radial-gradient(75% 75% at 30% 63%, #F3BD38 6%, #F3BD3800 38%),
+      radial-gradient(75% 75% at 23% 76%, #F3BD38 6%, #F3BD3800 38%),
+      radial-gradient(75% 75% at 20% 81%, #F3BD38 6%, #F3BD3800 38%),
+      radial-gradient(63% 80% at 48% 0%, #F3BD38 1%, #F3BD3800 36%),
+      radial-gradient(63% 80% at 54% 1%, #F3BD38 1%, #F3BD3800 36%),
+      radial-gradient(63% 80% at 56% -1%, #F3BD38 1%, #F3BD3800 36%),
+      radial-gradient(63% 80% at 40% -8%, #F3BD38 1%, #F3BD3800 36%),
+      radial-gradient(63% 80% at 52% 13%, #F3BD38 1%, #F3BD3800 36%),
+      radial-gradient(63% 80% at 54% 10%, #F3BD38 1%, #F3BD3800 36%),
+      radial-gradient(63% 80% at 49% 5%, #F3BD38 1%, #F3BD3800 36%),
+      linear-gradient(125deg, #AF191A 56%, #F3BD38 85%);
     height: 100vh;
     padding: 50px 100px;
-    color: black;
 }
 .bg__profile {
   width: 100%;
