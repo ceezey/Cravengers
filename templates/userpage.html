@@ -105,7 +105,7 @@
                 <div class="canteen_data">
 
                   <div class="poppins-medium header__tltCanteen">
-                    <form style="display: flex" class="form-horizontal" action="/action_page.php" method="post" id="search_form">
+                    <form style="display: flex;" class="form-horizontal" action="/action_page.php" method="post" id="search_form">
                           <input type="text" class="form-control" name="meal" placeholder="Search Meal">
           
                           <button type="submit" style="margin-left: 15px; height: 34px; background-color: #F3BD38; border: 1px solid white;" class="btn btn-primary">Search</button>
@@ -124,38 +124,48 @@
 
             <script type="text/javascript">
               var menu_data = {};
-              function updateMealTable(shop) {
+              function updateMealTable(button) {
                 // console.log(menu_data[shop.name])	
-                var n, div = '', menu = menu_data[shop.name];
+                const fullName = button.getAttribute('name'); // e.g. "Mama's Kitchen_menu"
+                const stallName = fullName.replace('_menu', ''); // e.g. "Mama's Kitchen"
+
+                 // Map stall name to logo
+                const stallLogos = {
+                  "Mama's Kitchen": "../static/images/mamas-kitchen.png",
+                  "Street Food Spencer": "../static/images/street-food-spencer.png",
+                  "Roast Republic": "../static/images/roast-republic.png"
+                };
+
+                const logoSrc = stallLogos[stallName] || "../static/images/default-stall.png";
+
+                // Update modal title
+                document.getElementById('modal-shop-title').textContent = `${stallName} Menu`;
+                document.getElementById("modal-bg-logo").src = logoSrc;
+                
+                // Get menu data
+                const menu = menu_data[stallName + '_menu'];
+                let div = '';
                 $.each(menu, function (i, m) {
                   div += 
-                    '<div>' +
-                      '<div style="background: #800000; color: white; border-radius: 10px; padding: 15px; margin: 10px">' +
-                        '<div>' +
-                          '<img src="data:image/' + m.P_imagetype + ';base64,' + atob(m.P_image) + '" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px">' + 
-                        '</div>' +
-  
-                        '<div style="font-size: 20px; text-transform: capitalize">' + m.P_name + '</div>' +
-                        '<div style="font-size: 30px;" class="poppins-bold">' + '₱' + m.P_price + '</div>' +
-  
-                        '<hr>' +
-  
-                        '<div>' + 
-                          '<div>Qty:</div>' + '<div>' + m.P_quantity + '</div>' +
-                        '</div>' +
-  
-                        '<hr>' +
-  
-                        `<input type="hidden" name="PIDs" value="${m.PID}">` +
-                        `<div>` +
-                          `<div>Enter Quantity:</div>` +
-                          `<input class="input__order" type="number" name="Quantities" min="0" max="` + m.P_quantity + `" value="0">` +
-                        `</div>` +
-                      '</div>' +
-                      
-  
-  
-                    '</div>'               
+                  '<div class="menu-card">' +
+                    '<img src="data:image/' + m.P_imagetype + ';base64,' + atob(m.P_image) + '" class="menu-img">' + 
+
+                    // Name + Price in a flex row
+                    '<div class="menu-row between">' +
+                      '<div class="menu-name">' + m.P_name + '</div>' +
+                      '<div class="menu-price poppins-bold">₱' + m.P_price + '</div>' +
+                    '</div>' +
+
+                    '<hr>' +
+                    `<input type="hidden" name="PIDs" value="${m.PID}">` +
+
+                    // Qty label + input in a flex row
+                    `<div class="menu-row between">` +
+                      `<div class="poppins-bold" style="font-size: 20px;">Qty:</div>` +
+                      `<input class="input__order" type="number" name="Quantities" min="0" max="${m.P_quantity}" value="0">` +
+                    `</div>` +
+
+                  '</div>';               
                 })
                 $("#menu-update").html(div);
               }
@@ -180,29 +190,37 @@
                   $.each(shop_arr[index], function (i, td) {
                     menu_data[td.shop_name + '_menu'] = td.menu
                     // Alternate between the two image paths for each shop
-                    // var imagePath = (i % 2 === 0) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213' : 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213';
-                    
-                    // var imagePath = (i === 0) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213' :
-                    // (i === 1) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213' :
-                    // '';
+                    var shopMeta = {
+                      "Mama's Kitchen": {
+                        image: '../static/images/mamas-kitchen.png',
+                        color: '#ff6a00'
+                      },
+                      "Street Food Spencer": {
+                        image: '../static/images/street-food-spencer.png',
+                        color: '#ffb800'
+                      },
+                      "Roast Republic": {
+                        image: '../static/images/roast-republic.png',
+                        color: '#0d3b2e'
+                      }
+                    };
 
-                    var imagePath;
-                    if (td.shop_name === 'Canteen') {
-                        imagePath = 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213';
-                    } else if (td.shop_name === 'Co-op') {
-                        imagePath = 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213';
-                    }
-                    // div += '<div>' + (i + 1) + '</div>';
-                    // div += '<div>' + td.shop_name + '</div>';
-  
-                    div += 
-                            '<div class="container__img">' + 
-                              '<img class="canteen__img" src="' + imagePath + '" alt="Shop Image">' + 
-                                '<div class="centered poppins-medium">' + 
-                                  '<div>' + td.shop_name + '</div>' +
-                                  '<div>' + shop_1 + td.shop_name + shop_2 + '</div>' + 
-                                '</div>' + 
-                            '</div>';
+                    var meta = shopMeta[td.shop_name] || {
+                      image: '../static/images/default.png',
+                      color: '#cccccc'
+                    };
+
+                    div += `
+                      <div class="stall-card text-center">
+                        <div class="stall-card-inner" style="background-color: ${meta.color}">
+                          <img class="stall-logo" src="${meta.image}" alt="Shop Image"/>
+                          <p class="stall-name poppins-bold">${td.shop_name}</p>
+                        </div>
+                        <button type="button" data-toggle="modal" data-target="#menu" name="${td.shop_name}_menu" class="btn choose-btn poppins-bold" onclick="updateMealTable(this)">
+                          Choose
+                        </button>
+                      </div>
+                    `;
   
                     
                     // div += shop_1 + td.shop_name + shop_2;
@@ -276,12 +294,6 @@
                         updatePage(Math.ceil(shop_data.length / shops_per_page));
                         updateShopTable("1");
                     }
-
-                    // for (key in menu_data) delete menu_data[key];
-                    // shop_data = data.tableRow
-                    // updateArr(shop_data);
-                    // updatePage(Math.ceil(shop_data.length / shops_per_page));
-                    // updateShopTable("1");
                   },
                   error: function (jqxhr, textStatus, errorThrown) {
                     alert("error: " + textStatus)
@@ -289,40 +301,6 @@
                 })
                 return false;
               });
-  
-              // var hash_table = { "shop": 'S_name', "distance": 'manhattan', "category": 'S_foodtype' }
-              // $('form.form-horizontal').on('submit', function () {
-              //   var location = { 'U_lat': lat, 'U_lon': lon }
-              //   var f = $(this), method = f.attr('method'), input_value = {};
-              //   f.find('[name]').each(function (index, value) {
-              //     var inputs = $(this),
-              //       name = inputs.attr('name'),
-              //       value = inputs.val();
-              //     input_value[name] = value;
-              //   });
-              //   if (input_value['price_low'] == '') {
-              //     input_value['price_low'] = 0
-              //   }
-              //   input_value['ordering'] = hash_table[input_value['ordering']]
-              //   input_value['desc'] = document.getElementById("desc").checked
-              //   $.ajax({
-              //     url: 'https://' + window.location.host + "/search-shops",
-              //     method: method,
-              //     data: Object.assign({}, input_value, location),
-              //     async: false,
-              //     success: function (data) {
-              //       for (key in menu_data) delete menu_data[key];
-              //       shop_data = data.tableRow
-              //       updateArr(shop_data);
-              //       updatePage(Math.ceil(shop_data.length / shops_per_page));
-              //       updateShopTable("1");
-              //     },
-              //     error: function (jqxhr, textStatus, errorThrown) {
-              //       alert("error: " + textStatus)
-              //     }
-              //   })
-              //   return false;
-              // });
             </script>
             
 
@@ -334,102 +312,28 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
-                    <button type="button" style="color: #fff !important" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" style="color: #fff !important">Menu</h4>
+                    <button type="button" class="modal-close-button close" data-dismiss="modal">&times;</button>
+                    <h4 id="modal-shop-title" class="poppins-bold modal-title" style="color: #000000 !important">Menu</h4>
                   </div>
                   <form id="Order_Preview">
                     <div class="modal-body">
-                      <!-- Order made -->
-                      <div class="row">
-                        <div class="col-md-6 col-sm-12 poppins-medium">
+                      <div class="modal-logo-container">
+                        <img id="modal-bg-logo" src="" alt="Stall Logo" />
+                        <!-- Order made -->
+                        <div id="menu-update" class="menu-grid">
 
-
-                          <div>
-                            <img src="{{ url_for('main.get_logo_image') }}" style="width: 300px; margin: 0 auto;" />
-                          </div>
-
-                          <div style="color: #000; font-size: 25px; margin: 50px 0px" class="poppins-bold">
-                            <p>CLICK AND CHOOSE OF ANY<br> FOOD YOU ARE CRAVING!</p>
-                          </div>
-                          
-                          <div class="row">
-                            <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
-                              <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
-
-                                <div class="poppins-bold" style="font-size: 23px;">
-                                  01
-                                </div>
-
-                                <div class="poppins-bold" style="font-size: 30px;">
-                                  ORDERING
-                                </div>
-
-                                <div style="font-size: 10px;">
-                                  CLICK ANY KIND OF FOODS SHOWN ON SCREEN. PAY ATTENTION TO THE QUANTITY AND SERVING TIME
-                                </div>
-
-                              </div>
-                            </div>
-
-                            <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
-                              <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
-
-                                <div class="poppins-bold" style="font-size: 23px;">
-                                  02
-                                </div>
-
-                                <div class="poppins-bold" style="font-size: 30px;">
-                                  PAYMENT
-                                </div>
-
-                                <div style="font-size: 10px;">
-                                  LOAD ANY AMOUNT OF MONEY (EXCEED YOUR LOAD AMOUNT TO THE PRICE OF FOOD) AND LET THE WEBSITE TRANSFORM IT TO CASH
-                                </div>
-
-                              </div>
-                            </div>
-
-                            <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
-                              <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
-
-                                <div class="poppins-bold" style="font-size: 30px;">
-                                  TAKE NOTE
-                                </div>
-
-                                <div style="font-size: 10px; text-transform: uppercase;">
-                                  Any food you order, is your responsibility to pick it up in Canteen
-                                </div>
-
-                              </div>
-                            </div>
-
-
-                          </div>
                         </div>
-                        <div class="col-md-6 col-sm-12">
-
-                          <div class="table poppins-medium" style="width: 200px; margin: 0 auto;">
-                            <div>
-                              
-                            </div>
-
-                            <div id="menu-update">
-
-                            </div>
-                          </div>
-                        </div>
-
                       </div>
-
+                
                       <!-- Order button  -->
                     </div>
                     <div class="modal-footer">
-                      <label><span style="color: #fff">Shipping Option:</span>
+                      <label  style="text-align: left;"><span style="color: #000000;">Shipping Option:</span>
                         <select class="form-control" name="PickUp" style="width: 150px;">
-                          <option value="1">Pick-up</option>
+                          <option value="1"></option>
                         </select>
                       </label>
-                      <button type="submit" name="Order_Preview" class="btn btn-default buy__now">Proceed Checkout</button>
+                      <button type="submit" name="Order_Preview" class="poppins-bold btn btn-default buy__now">Proceed Checkout</button>
                     </div>
                   </form>
                 </div>
@@ -451,96 +355,93 @@
                         async: false,
                         success: function (Order_info) {
                           div = ""
+                          console.log(Order_info.Products)
+
+                          let groupedProducts = {};
                           var Products = Order_info.Products
                           for (let i = 0; i < Products.length; i++) {
-                            p = Products[i]
-                            var imagePath;
-                            var store_name = ""
-                            var store_number = ""
-                            var store_socmed = ""
-
-                            // Co-op
-                            var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997_1.jpg?v=1715357713";
-                            var co_opStoreName = "Co-op"
-                            var co_opStoreNumber = "0997 293 6833"
-                            var co_opStoreSocMed = "Messenger: QHS Co-op Admin"
-
-                            // Canteen
-                            var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715221227";
-                            var canteenStoreName = "Canteen"
-                            var canteenStoreNumber = "0966 006 3617"
-                            var canteenStoreSocMed = "Messenger: QHS Canteen Admin"
-
-                            if (p.P_owner === 1) {
-                                imagePath = co_opImagePath;
-                                store_name = co_opStoreName;
-                                store_number = co_opStoreNumber;
-                                store_socmed = co_opStoreSocMed;
-                            } else if (p.P_owner === 2) {
-                                imagePath = canteenImagePath;
-                                store_name = canteenStoreName;
-                                store_number = canteenStoreNumber;
-                                store_socmed = canteenStoreSocMed;
-                            } else {
-                                // Handle other cases if needed
+                            let p = Products[i];
+                            if (!groupedProducts[p.P_owner]) {
+                              groupedProducts[p.P_owner] = [];
                             }
-                        div += 
-                         `<div class="col-md-4 col-sm-12 poppins-medium preventLoop">
-                            <div>
-                              <img src="${imagePath}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px">
-                            </div>
-                            <div style="margin-top: 10px">
-                              <p style="color: white; font-size: 30px" class="poppins-bold">${store_name}</p>
-                            </div>
+                            groupedProducts[p.P_owner].push(p);
+                          }
 
-                            <div style="text-align: left">
-                              <div>
-                                <p style="color: white; font-size: 17px">Shop Information:</p>
+                          for (const ownerId in groupedProducts) {
+                            const products = groupedProducts[ownerId];
+
+                            // Default values
+                            let imagePath = "", store_name = "", store_number = "", store_socmed = "";
+
+                            if (ownerId == 1) {
+                              imagePath = "../static/images/mamas-kitchen.png";
+                              store_name = "Mama's Kitchen";
+                              store_number = "0987 654 3210";
+                              store_socmed = "Messenger: Mama's Kitchen";
+                            } else if (ownerId == 2) {
+                              imagePath = "../static/images/street-food-spencer.png";
+                              store_name = "Street Food Spencer";
+                              store_number = "0912 345 9789";
+                              store_socmed = "Messenger: Street Food Spencer";
+                            } else if (ownerId == 3) {
+                              imagePath = "../static/images/roast-republic.png";
+                              store_name = "Roast Republic";
+                              store_number = "0922 334 4567";
+                              store_socmed = "Messenger: Roast Republic";
+                            }
+
+                            div += `
+                              <div class="col-md-4 col-sm-12 poppins-medium preventLoop">
+                                <div><img src="${imagePath}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;"></div>
+                                <div style="margin-top: 10px"><p style="color: white; font-size: 30px" class="poppins-bold">${store_name}</p></div>
+                                <div style="text-align: left">
+                                  <p style="color: white; font-size: 17px">Shop Information:</p>
+                                  <div class="poppins-bold" style="color: white; font-size: 17px; margin-left: 30px;">
+                                    <div>${store_number}</div>
+                                    <div>${store_socmed}</div>
+                                  </div>
+                                  <br>
+                                  <p style="color: white; font-size: 17px;">Serving Time:</p>
+                                  <div style="margin-left: 30px;">
+                                    <p class="poppins-bold" style="color: white; font-size: 17px;">1-2 Minutes</p>
+                                  </div>
+                                </div>
                               </div>
-                              <div>
-                                <div class="poppins-bold" style="color: white; font-size: 17px">${store_number}</div>
-                                <div class="poppins-bold" style="color: white; font-size: 17px">${store_socmed}</div>
-                              </div>
-                              <br>
-                              <div>
-                                <p style="color: white; font-size: 17px">Serving Time:</p>
-                              </div>
-                              <div>
-                                <p class="poppins-bold" style="color: white; font-size: 17px">1-2 Minutes</p>
-                              </div>
-                            </div>
-                          </div>`
+                            `;
 
+                            div += `
+                              <div class="col-md-8 col-sm-12">
+                                <table class="table" style="margin-top: 15px; color: black;">
+                                  <thead style="background-color: #800000; color: #F3BD38;">
+                                    <tr>
+                                      <th style="text-align: center;">QTY</th>
+                                      <th style="text-align: center;">Picture</th>
+                                      <th style="text-align: center;">Meal name</th>
+                                      <th style="text-align: center;">Price</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="poppins-bold">
+                            `;
 
-
-
-                          div += '<div class="col-md-8 col-sm-12">'
-                            div += '<table class="table" style=" margin-top: 15px; color: white;">'
-                              div += `<thead>
+                            // Render each product in this group
+                            for (let p of products) {
+                              div += `
                                 <tr>
-                                  <th scope="col" style="text-align: center;">QTY</th>
-                                  <th scope="col">Picture</th>
-
-                                  <th scope="col">Meal name</th>
-
-                                  <th scope="col" style="text-align: right;">Price</th>
+                                  <td style="text-align: center;">${p.Order_quantity}</td>
+                                  <td style="text-align: center;"><img src="data:image/${p.P_imagetype};base64,${atob(p.P_image)}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 10px;"></td>
+                                  <td style="text-align: center; text-transform: capitalize;">${p.P_name}</td>
+                                  <td style="text-align: center;">${p.P_price}</td>
                                 </tr>
-                              </thead>`
+                              `;
+                              Home_Order_Info.PIDs.push(p.PID);
+                              Home_Order_Info.Quantities.push(p.Order_quantity);
+                            }
 
-                              div += '<tbody>'
-                              
-                                div += "<tr>" 
-                                div += `<td style="text-align: center; align-content: center;">${p.Order_quantity}</td>` +
-                                `<td style="text-align: left"><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 10px"></td>
-                                <td style="text-align: left; text-transform: capitalize; align-content: center;">${p.P_name}</td>
-                                <td style="text-align: right; align-content: center;">${p.P_price}</td>`
-                                div += "</tr>"
-                              div += "</tbody>"
-                            div += "</table>"
-                          div += "</div>"
-
-                            Home_Order_Info.PIDs.push(p.PID)
-                            Home_Order_Info.Quantities.push(p.Order_quantity)
+                            div += `
+                                  </tbody>
+                                </table>
+                              </div>
+                            `;
                           }
                           $('#Order_Made #Order_Made_Menu').html(div);
                           $('#Order_Made #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
@@ -583,8 +484,8 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
-                    <button type="button" style="color: #fff;" class="close" onclick="location.reload(true);">&times;</button>
-                    <h4 class="modal-title" style="color: #fff;">Check out</h4>
+                    <button type="button" class="modal-close-button close" onclick="location.reload(true);">&times;</button>
+                    <h4 class="poppins-bold modal-title" style="color: #000000;">Check out</h4>
                   </div>
                   <form id="Order_Made_form">
                     <div class="modal-body">
@@ -592,89 +493,84 @@
                       <div id="Order_Made_Menu" class="row">
 
                       </div>
-
                       <!-- Order button  -->
                     </div>
                     <!-- <input type="hidden" name="Order_info"></input> -->
-                    <div class="modal-footer">
-                      <!-- <p class="text-right" id="Subtotal"></p> -->
-                      <!-- <p class="text-right" id="Delivery_fee"></p> -->
-                      <span class="text-right poppins-bold" style="color: white; padding: 10px 60px; border: 1px solid #fff" id="Total_price"></span>
-                        <button type="submit" name="Order_Made" class="btn btn-default buy__now">BUY NOW</button>
-                    </div>
+                    <div class="modal-footer nya">
+                      <div class="buy-row">
+                        <div class="poppins-medium text-white" style="color: white; font-size: 20px;">Total:</div>
+                        <span class="total-price poppins-bold text-white" id="Total_price">₱0.00</span>
+                      </div>    
 
+                      <button type="submit" name="Order_Made" class="poppins-bold btn btn-default buy__now">
+                        BUY NOW
+                      </button>
                     </div>
                   </form>
                 </div>
-                <script type="text/javascript">
-                  $('document').ready(function () {
-                    $('#Order_Made').on('submit', function (event) {
-                      console.log(JSON.stringify(Home_Order_Info))
-                      event.preventDefault();
-                      $.ajax({
-                        url: 'http://' + window.location.host + "/order_made",
-                        method: "POST",
-                        contentType: 'application/json',
-                        data: JSON.stringify(Home_Order_Info),
-                        async: false,
-                        success: function (data) {
-                          console.log(data)
-                          // alert(data.message);
-                          // location.reload(true);
-
-                          if (data.message === "Failed to create order: insufficient balance") {
-                            // Show success message using SweetAlert
-                            Swal.fire({
-                                position: "center",
-                                icon: "error",
-                                title: data.message,
-                                text: "Please Top-Up",
-                                showConfirmButton: true,
-                            });
-                        }
-                        else {
-                          Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: data.message,
-                            text: "Please Proceed to My Orders for receipt",
-                            showDenyButton: true,
-                            confirmButtonText: "Go to Profile",
-                            denyButtonText: `Continue Shopping`,
-                            allowOutsideClick: false,
-
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              window.location.assign("/profilepage.html")
-                            } else if (result.isDenied) {
-                              location.reload(true);
-                            }
-                          });
-                          
-                        }
-                        },
-                        error: function (jqxhr, textStatus, errorThrown) {
-                          alert(jqxhr.responseText)
-                          location.reload(true);
-                        }
-                      })
-                    });
-                  });
-                </script>
               </div>
+              <script type="text/javascript">
+                $('document').ready(function () {
+                  $('#Order_Made').on('submit', function (event) {
+                    console.log(JSON.stringify(Home_Order_Info))
+                    event.preventDefault();
+                    $.ajax({
+                      url: 'http://' + window.location.host + "/order_made",
+                      method: "POST",
+                      contentType: 'application/json',
+                      data: JSON.stringify(Home_Order_Info),
+                      async: false,
+                      success: function (data) {
+                        console.log(data)
+                        // alert(data.message);
+                        // location.reload(true);
+
+                        if (data.message === "Failed to create order: insufficient balance") {
+                          // Show success message using SweetAlert
+                          Swal.fire({
+                              position: "center",
+                              icon: "error",
+                              title: data.message,
+                              text: "Please Top-Up",
+                              showConfirmButton: true,
+                          });
+                      }
+                      else {
+                        Swal.fire({
+                          position: "center",
+                          icon: "success",
+                          title: data.message,
+                          text: "Please Proceed to My Orders for receipt",
+                          showDenyButton: true,
+                          confirmButtonText: "Go to Profile",
+                          denyButtonText: `Continue Shopping`,
+                          allowOutsideClick: false,
+
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            window.location.assign("/profilepage.html")
+                          } else if (result.isDenied) {
+                            location.reload(true);
+                          }
+                        });
+                        
+                      }
+                      },
+                      error: function (jqxhr, textStatus, errorThrown) {
+                        alert(jqxhr.responseText)
+                        location.reload(true);
+                      }
+                    })
+                  });
+                });
+              </script>
             </div>
           </div>
-
         </div>
       </div>
-
-
-
-
     </div>
   </div>
 
-</div>
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
@@ -713,125 +609,331 @@
     height: 100vh;
     padding: 50px 100px;
   }
-    .container {
+  .container {
     text-align: center;
-  }
-  .canteen__img {
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-    margin: 10px;
-    border-radius: 10px;
-  }
-  .container__img {
-    position: relative;
-    color: white;
-    display: ruby;
-  }
-  .centered {
-    position: absolute;
-    top: -10px;
-    left: 0;
-    text-align: center;
-    padding: 0px 110px;
-    /* transform: translate(-50%, -50%); */
-  }
-  .btn__opnMenu {
-    background: #800000;
-    transition: 0.5s;
-  }
-  .btn__opnMenu:hover {
-    background: #700000;
-    color: white
   }
   .header__tltCanteen {
-    color: white; 
+    /* font-size: 32px; */
     background: #800000; 
-    width: 300px; 
-    margin: 0 auto; 
+    border-radius: 8px;
+    width: 50%; 
+    border: none; 
+    padding: 10px;
+    align-items: center;
+    margin-left: 285px; /*temporary lng*/
+    /* display: flex;
+    justify-content: center; */
+  }
+  .total-price {
+    color: black; 
+    padding: 5px 30px; 
+    border-radius: 5px;
+    background-color: #b8b8b8;
+  }
+  .nya {
+    display: flex;
+    justify-content: flex-end; /* Align content to the right */
+    align-items: center;
+    gap: 20px; /* space between total and button */
+    padding: 10px 20px;
+  }
+
+  .buy-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* SHOP CSS */
+  #shop-update {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 70px;
+    padding: 40px 20px;
+  }
+  .stall-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
+  }
+  .stall-card-inner {
+    width: 250px;
+    height: 260px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px 10px rgba(233, 73, 73, 0.452);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .stall-logo {
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+    object-fit: contain;
     border-radius: 10px;
-    padding: 10px
+    padding: 10px;
   }
-  input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button {
-  opacity: 1;
-}
-
-input:focus {
-  border: 0 !important;
-}
-input:focus-visible {
-  outline: 0;
-}
-.input__order {
-  width: 100%;
-      text-align: center;
-      padding: 10px;
-      border-radius: 10px;
-      outline: 0;
-      border: 0;
-}
-.modal-content {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-@media (min-width: 800px) {
-    .modal-dialog {
-        width: 800px;
-        margin: 30px auto;
-    }
-}
-@media (min-width: 1000px) {
-    .modal-dialog {
-        width: 900px;
-        margin: 30px auto;
-    }
-}
-@media (min-width: 1200px) {
-    .modal-dialog {
-        width: 1200px;
-        margin: 30px auto;
-    }
-}
-
-
-
-.buy__now {
-  color: white;
-  background: #800;
-  outline: 0;
-  border: 0;
-  padding: 10px 30px;
-  margin-top: -2px;
-}
-
-.preventLoop:nth-child(n + 2) {
-  display: none;
-}
-
-
-@media (max-width: 688px) {
-  .container__img  {
+  .stall-name {
+    position: relative;
+    display: inline-block;
+    margin-top: none;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 18px;
+    /* border-bottom: 2px solid white; */
+    padding-bottom: 20px;
+  }
+  .stall-name::after {
+    content: '';
     display: block;
+    height: 2px;
+    background-color: white;
+    width: 100%;
+    position: absolute;
+    /* bottom: -8px; */
+    left: 0;
   }
-  .centered {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+
+  /* BUTTONS CSS */
+  .choose-btn {
+    margin-top: 10px;
+    background-color: #f5c241;
+    color: #800000;
+    border-radius: 6px;
+    padding: 6px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border: none;
+    transition: background 0.3s ease;
   }
-}
+  .choose-btn:hover {
+    background-color: #ffd65a;
+  }
+  .toggle-btn {
+    position: relative;
+    width: 100%;
+    text-align: left;
+  }
+  .toggle-btn .arrow {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+  }
+  .buy__now {
+    color: white;
+    background: #800;
+    font-size: 15px;
+    outline: 0;
+    border: 0;
+    padding: 10px 30px;
+    margin-top: -2px;
+  }
 
-.spacing__canteenList {
-  margin-top: 150px;
-}
+  /* MENU CSS */
+  #menu-update { /* Each menu card */
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    /* gap: 20px; */
+    justify-items: center; /* center cards in their grid cells */
+    padding: 20px;
+  }
+  .menu-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .menu-row.between {
+    justify-content: space-between;
+  }
+  .menu-card {
+    width: 300px;
+    background: #800000;
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+    text-align: center;
+  }
+  .menu-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 15px;
+    margin-bottom: 3px;
+  }
+  .menu-name {
+    font-size: 20px;
+    text-transform: capitalize;
+  }
+  .menu-price {
+    font-size: 20px;
+    margin-bottom: none;
+  }
+  .menu-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 70px;
+    justify-content: center;
+    padding: 20px;
+  }
 
-@media (max-width: 999px) {
+  /* MODAL CSS */
+  .modal-logo-container {
+    position: relative;
+  }
+  #modal-bg-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.20; 
+    width: 1100px;
+    height: 1100px;
+    z-index: 0;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+    pointer-events: none;
+  }
+  .modal-header {
+    align-items: center;
+  }
+  .modal-close-button {
+    font-size: 28px;       /* larger size */
+    font-weight: bold;
+    color: #000000;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0 12px;
+    transform: scale(1.2);
+    cursor: pointer;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    animation: subtle-pulse 1.8s infinite ease-in-out;
+  }
+
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+  .input__order {
+    width: 50px;
+    padding: 4px 5px;
+    border-radius: 1px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  input:focus {
+    border: 0 !important;
+  }
+  input:focus-visible {
+    outline: 0;
+  }
+  .input__order {
+    width: 100%;
+    text-align: center;
+    padding: 2px;
+    border-radius: 5px;
+    outline: 0;
+    border: 0;
+  }
+  .modal-content {
+    background: rgba(253, 217, 15, 0.445);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* TABLE CSS */
+  .table thead th {
+    border: none !important;
+  }
+  .table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .table tbody td {
+    border: none;
+  }
+
+  .form-control {
+    padding: 4px 5px;
+  }
+
+  .preventLoop:nth-child(n + 2) {
+    display: none;
+  }
+
   .spacing__canteenList {
-    margin-top: 20px;
+    margin-top: 150px;
   }
-}
+
+  /* VERSATILE CSS */
+  @keyframes subtle-pulse {
+    0% { transform: scale(1.2); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1.2); }
+  }
+
+  @media (max-width: 768px) {
+    .menu-card {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 992px) {
+    #menu-update {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 576px) {
+    #menu-update {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 688px) {
+    .stall-card {
+      display: block;
+    }
+    .stall-name {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+  }
+
+  @media (max-width: 999px) {
+    .spacing__canteenList {
+      margin-top: 20px;
+    }
+  }
+
+  @media (min-width: 800px) {
+      .modal-dialog {
+          width: 800px;
+          margin: 30px auto;
+      }
+  }
+  @media (min-width: 1000px) {
+      .modal-dialog {
+          width: 900px;
+          margin: 30px auto;
+      }
+  }
+  @media (min-width: 1200px) {
+      .modal-dialog {
+          width: 1200px;
+          margin: 30px auto;
+      }
+  }
+
 </style>

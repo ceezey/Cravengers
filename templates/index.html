@@ -68,41 +68,48 @@
             </div>
         </div>
 	</div>
-	<div class="bg-frntpage" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-		<div class="container" style="display: flex; align-items: center; justify-content: center; gap: 150px; flex-wrap: wrap;">
+	<div class="bg-frntpage">
+		<div class="container">
 			<!-- Sign-in form -->
-			<div style="max-width: 450px; width: 100%;">
-				<form action="login" method="post" class="fh5co-form animate-box" data-animate-effect="fadeIn">
-					<h2 class="poppins-bold" style="text-align: center;">Log In</h2>
-					{% with messages = get_flashed_messages() %}
-						{% if messages %}
-							{% for message in messages %}
-								<p style="color: red; text-align: center; text-transform: uppercase;" class="poppins-bold">{{ message }}</p>
-							{% endfor %}
-						{% endif %}
-					{% endwith %}
-					{% block body %}{% endblock %}
-					<div class="form-group">
-						<label for="Account" class="sr-only poppins-regular">User Name</label>
-						<input style="padding-left: 10px; border-bottom: 1px solid #800000;" type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name" autocomplete="off">
+			 <div class="page-row">
+				<div class="col-md-6">
+					<div style="width: 450px;">
+						<form action="login" method="post" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+							<h2 class="poppins-bold" style="text-align: center;">Log In</h2>
+							{% with messages = get_flashed_messages() %}
+								{% if messages %}
+									{% for message in messages %}
+										<p style="color: red; text-align: center; text-transform: uppercase;" class="poppins-bold">{{ message }}</p>
+									{% endfor %}
+								{% endif %}
+							{% endwith %}
+							{% block body %}{% endblock %}
+							<div class="form-group">
+								<label for="Account" class="sr-only poppins-regular">User Name</label>
+								<input style="padding-left: 10px; border-bottom: 1px solid #800000;" type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name" autocomplete="off">
+							</div>
+							<div class="form-group">
+								<label for="password" class="sr-only poppins-regular">Password</label>
+								<input style="padding-left: 10px; border-bottom: 1px solid #800000;" type="password" class="form-control poppins-regular" id="password" name="password" placeholder="Password" autocomplete="off">
+							</div>
+							<div class="form-group poppins-regular" style="margin-bottom: 10px;">
+								<input style="width: 100%; background: #800000; color: white; padding: 10px 0px" type="submit" value="Log In" class="btn">
+							</div>
+							<div class="form-group poppins-regular" style="text-align: center; margin-bottom: 5px;">
+								<p>Not registered? <a style="color: #800000;" href="sign-up.html">Sign Up</a> </p>
+							</div>
+						</form>
 					</div>
-					<div class="form-group">
-						<label for="password" class="sr-only poppins-regular">Password</label>
-						<input style="padding-left: 10px; border-bottom: 1px solid #800000;" type="password" class="form-control poppins-regular" id="password" name="password" placeholder="Password" autocomplete="off">
-					</div>
-					<div class="form-group poppins-regular" style="margin-bottom: 10px;">
-						<input style="width: 100%; background: #800000; color: white; padding: 10px 0px" type="submit" value="Sign In" class="btn">
-					</div>
-					<div class="form-group poppins-regular" style="text-align: center; margin-bottom: 5px;">
-						<p>Not registered? <a style="color: #800000;" href="sign-up.html">Sign Up</a> </p>
-					</div>
-				</form>
-			</div>
+				</div>
 
-			<!-- Logo -->
-			<div style="text-align: center;">
-				<img src="{{ url_for('main.get_logo_image') }}" style="width: 370px;" alt="Cravengers Logo" />
-			</div>
+				<!-- Logo -->
+				<div class="col-md-6">
+					<div style="align-items: center; justify-content: center;">
+						<img src="{{ url_for('main.get_logo_image') }}" style="width: 100%; max-width:370px; height: auto; padding-top: 20px;" alt="Cravengers Logo" />
+					</div>
+				</div>
+			 </div>
+			
 		</div>
 	</div>
 
@@ -125,10 +132,28 @@
 
 </html>
 <style>
-.bg-frntpage {
-    background:
-      linear-gradient(229deg,#AF191A 10%, #F3BD38 46%);
-	height: 100vh;
-    padding: 50px 100px;
-}
+	.bg-frntpage {
+		background:
+		linear-gradient(229deg,#AF191A 10%, #F3BD38 46%);
+		min-height: 100vh;
+		display: flex;
+	}
+	.container {
+		align-items: center; 
+	}
+	.page-row {
+		display: flex; 
+		justify-content: center; 
+		gap: 100px; 
+		padding-top: 100px;
+		margin-left: 100px;
+	}
+	.col-md-6 {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+
+
 </style>

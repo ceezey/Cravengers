@@ -91,23 +91,25 @@
             </form>
             
             <script type="text/javascript">
-              function updateMealTable(button) {
-                const fullName = button.getAttribute('name'); // e.g., "Roast Republic_menu"
-                const stallName = fullName.replace('_menu', '');
-                document.getElementById('modal-shop-title').textContent = `${stallName} Menu`;
-
-                // Continue with loading the menu items as before
-                
-              }
               var menu_data = {};
               function updateMealTable(button) {
                 // console.log(menu_data[shop.name])	
                 const fullName = button.getAttribute('name'); // e.g. "Mama's Kitchen_menu"
                 const stallName = fullName.replace('_menu', ''); // e.g. "Mama's Kitchen"
 
+                 // Map stall name to logo
+                const stallLogos = {
+                  "Mama's Kitchen": "../static/images/mamas-kitchen.png",
+                  "Street Food Spencer": "../static/images/street-food-spencer.png",
+                  "Roast Republic": "../static/images/roast-republic.png"
+                };
+
+                const logoSrc = stallLogos[stallName] || "../static/images/default-stall.png";
+
                 // Update modal title
                 document.getElementById('modal-shop-title').textContent = `${stallName} Menu`;
-
+                document.getElementById("modal-bg-logo").src = logoSrc;
+                
                 // Get menu data
                 const menu = menu_data[stallName + '_menu'];
                 let div = '';
@@ -127,7 +129,7 @@
 
                     // Qty label + input in a flex row
                     `<div class="menu-row between">` +
-                      `<div class="poppins-bold">Qty:</div>` +
+                      `<div class="poppins-bold" style="font-size: 20px;">Qty:</div>` +
                       `<input class="input__order" type="number" name="Quantities" min="0" max="${m.P_quantity}" value="0">` +
                     `</div>` +
 
@@ -265,9 +267,9 @@
       <!-- Accordion Steps Section -->
       
       <div class="container">
-        <div class="row justify-content-center text-center" style="gap: 20px;">
+        <div class="row-page">
 
-          <div class="col-md-4 col-sm-12 mb-4">
+          <div class="step-center col-md-4 col-sm-12 mb-4">
             <div class="card step-card h-100">
               <div class="card-header step-header" id="headingOne">
                 <h5 class="mb-0">
@@ -289,7 +291,7 @@
             </div>
           </div>
 
-          <div class="col-md-4 col-sm-12 mb-4">
+          <div class="step-center col-md-4 col-sm-12 mb-4">
             <div class="card step-card h-100">
               <div class="card-header step-header" id="headingTwo">
                 <h5 class="mb-0">
@@ -311,7 +313,7 @@
             </div>
           </div>
 
-          <div class="col-md-4 col-sm-12 mb-4">
+          <div class="step-center col-md-4 col-sm-12 mb-4">
             <div class="card step-card h-100">
               <div class="card-header step-header" id="headingThree">
                 <h5 class="mb-0">
@@ -392,28 +394,28 @@
           <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" style="color: #000000 !important" class="close" data-dismiss="modal">&times;</button>
-              <h4 id="modal-shop-title" class="modal-title" style="color: #000000 !important">Menu</h4>
+              <button type="button" class="modal-close-button close" data-dismiss="modal">&times;</button>
+              <h4 id="modal-shop-title" class="poppins-bold modal-title" style="color: #000000 !important">Menu</h4>
             </div>
             <form id="Order_Preview">
               <div class="modal-body">
-                <!-- Order made -->
-                
+                <div class="modal-logo-container">
+                  <img id="modal-bg-logo" src="" alt="Stall Logo" />
+                  <!-- Order made -->
+                  <div id="menu-update" class="menu-grid">
 
-                <div id="menu-update" class="menu-grid">
-
+                  </div>
                 </div>
-                    
-
+           
                 <!-- Order button  -->
               </div>
               <div class="modal-footer">
-                <label><span style="color: #000000">Shipping Option:</span>
+                <label  style="text-align: left;"><span style="color: #000000;">Shipping Option:</span>
                   <select class="form-control" name="PickUp" style="width: 150px;">
-                    <option value="1">Pick-up</option>
+                    <option value="1"></option>
                   </select>
                 </label>
-                <button type="submit" name="Order_Preview" class="btn btn-default buy__now">Proceed Checkout</button>
+                <button type="submit" name="Order_Preview" class="poppins-bold btn btn-default buy__now">Proceed Checkout</button>
               </div>
             </form>
           </div>
@@ -436,109 +438,95 @@
                   success: function (Order_info) {
                     div = ""
                     console.log(Order_info.Products)
+
+                    let groupedProducts = {};
                     var Products = Order_info.Products
                     for (let i = 0; i < Products.length; i++) {
-                      p = Products[i]
-                      var imagePath;
-                      var store_name = ""
-                      var store_number = ""
-                      var store_socmed = ""
-
-                      // Mama's Kitchen
-                      var mkImagePath = "../static/images/mamas-kitchen.png";
-                      var mkStoreName = "Mama's Kitchen"
-                      var mkStoreNumber = "0987 654 3210"
-                      var mkStoreSocMed = "Messenger: Mama's Kitchen"
-
-                      // Streetfood Spencer
-                      var sfsImagePath = "../static/images/street-food-spencer.png";
-                      var sfsStoreName = "Street Food Spencer"
-                      var sfsStoreNumber = "0912 345 9789"
-                      var sfsStoreSocMed = "Messenger: Street Food Spencer"
-
-                      // Roast Republic
-                      var rpImagePath = "../static/images/roast-republic.png";
-                      var rpStoreName = "Roast Republic"
-                      var rpStoreNumber = "0922 334 4567"
-                      var rpStoreSocMed = "Messenger: Roast Republic"
-
-                      if (p.P_owner === 1) {
-                          imagePath = mkImagePath;
-                          store_name = mkStoreName;
-                          store_number = mkStoreNumber;
-                          store_socmed = mkStoreSocMed;
-                      } else if (p.P_owner === 2) {
-                          imagePath = sfsImagePath;
-                          store_name = sfsStoreName;
-                          store_number = sfsStoreNumber;
-                          store_socmed = sfsStoreSocMed;
-                      } else if (p.P_owner === 3) {
-                          imagePath = rpImagePath;
-                          store_name = rpStoreName;
-                          store_number = rpStoreNumber;
-                          store_socmed = rpStoreSocMed;
-                      } else {
-                          // Handle other cases if needed
+                      let p = Products[i];
+                      if (!groupedProducts[p.P_owner]) {
+                        groupedProducts[p.P_owner] = [];
                       }
-                  div += 
-                    `<div class="col-md-4 col-sm-12 poppins-medium preventLoop">
-                      <div>
-                        <img src="${imagePath}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px">
-                      </div>
-                      <div style="margin-top: 10px">
-                        <p style="color: white; font-size: 30px" class="poppins-bold">${store_name}</p>
-                      </div>
-
-                      <div style="text-align: left">
-                        <div>
-                          <p style="color: white; font-size: 17px">Shop Information:</p>
-                        </div>
-                        <div>
-                          <div class="poppins-bold" style="color: white; font-size: 17px">${store_number}</div>
-                          <div class="poppins-bold" style="color: white; font-size: 17px">${store_socmed}</div>
-                        </div>
-                        <br>
-                        <div>
-                          <p style="color: white; font-size: 17px">Serving Time:</p>
-                        </div>
-                        <div>
-                          <p class="poppins-bold" style="color: white; font-size: 17px">1-2 Minutes</p>
-                        </div>
-                      </div>
-                    </div>`
-
-
-
-
-                    div += '<div class="col-md-8 col-sm-12">'
-                      div += '<table class="table" style=" margin-top: 15px; color: white;">'
-                        div += `<thead>
-                          <tr>
-                            <th scope="col" style="text-align: center;">QTY</th>
-                            <th scope="col">Picture</th>
-
-                            <th scope="col">Meal name</th>
-
-                            <th scope="col" style="text-align: right;">Price</th>
-                          </tr>
-                        </thead>`
-
-                        div += '<tbody>'
-                        
-                          div += "<tr>" 
-                          div += `<td style="text-align: center; align-content: center;">${p.Order_quantity}</td>` +
-                          `<td style="text-align: left"><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 10px"></td>
-                          <td style="text-align: left; text-transform: capitalize; align-content: center;">${p.P_name}</td>
-                          <td style="text-align: right; align-content: center;">${p.P_price}</td>`
-                          div += "</tr>"
-                        div += "</tbody>"
-                      div += "</table>"
-                    div += "</div>"
-
-
-                      Home_Order_Info.PIDs.push(p.PID)
-                      Home_Order_Info.Quantities.push(p.Order_quantity)
+                      groupedProducts[p.P_owner].push(p);
                     }
+
+                    for (const ownerId in groupedProducts) {
+                      const products = groupedProducts[ownerId];
+
+                      // Default values
+                      let imagePath = "", store_name = "", store_number = "", store_socmed = "";
+
+                      if (ownerId == 1) {
+                        imagePath = "../static/images/mamas-kitchen.png";
+                        store_name = "Mama's Kitchen";
+                        store_number = "0987 654 3210";
+                        store_socmed = "Messenger: Mama's Kitchen";
+                      } else if (ownerId == 2) {
+                        imagePath = "../static/images/street-food-spencer.png";
+                        store_name = "Street Food Spencer";
+                        store_number = "0912 345 9789";
+                        store_socmed = "Messenger: Street Food Spencer";
+                      } else if (ownerId == 3) {
+                        imagePath = "../static/images/roast-republic.png";
+                        store_name = "Roast Republic";
+                        store_number = "0922 334 4567";
+                        store_socmed = "Messenger: Roast Republic";
+                      }
+
+                      div += `
+                        <div class="col-md-4 col-sm-12 poppins-medium preventLoop">
+                          <div><img src="${imagePath}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;"></div>
+                          <div style="margin-top: 10px"><p style="color: white; font-size: 30px" class="poppins-bold">${store_name}</p></div>
+                          <div style="text-align: left">
+                            <p style="color: white; font-size: 17px">Shop Information:</p>
+                            <div class="poppins-bold" style="color: white; font-size: 17px; margin-left: 30px;">
+                              <div>${store_number}</div>
+                              <div>${store_socmed}</div>
+                            </div>
+                            <br>
+                            <p style="color: white; font-size: 17px;">Serving Time:</p>
+                            <div style="margin-left: 30px;">
+                              <p class="poppins-bold" style="color: white; font-size: 17px;">1-2 Minutes</p>
+                            </div>
+                          </div>
+                        </div>
+                      `;
+
+                      div += `
+                        <div class="col-md-8 col-sm-12">
+                          <table class="table" style="margin-top: 15px; color: black;">
+                            <thead style="background-color: #800000; color: #F3BD38;">
+                              <tr>
+                                <th style="text-align: center;">QTY</th>
+                                <th style="text-align: center;">Picture</th>
+                                <th style="text-align: center;">Meal name</th>
+                                <th style="text-align: center;">Price</th>
+                              </tr>
+                            </thead>
+                            <tbody class="poppins-bold">
+                      `;
+
+                      // Render each product in this group
+                      for (let p of products) {
+                        div += `
+                          <tr>
+                            <td style="text-align: center;">${p.Order_quantity}</td>
+                            <td style="text-align: center;"><img src="data:image/${p.P_imagetype};base64,${atob(p.P_image)}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 10px;"></td>
+                            <td style="text-align: center; text-transform: capitalize;">${p.P_name}</td>
+                            <td style="text-align: center;">${p.P_price}</td>
+                          </tr>
+                        `;
+                        Home_Order_Info.PIDs.push(p.PID);
+                        Home_Order_Info.Quantities.push(p.Order_quantity);
+                      }
+
+                      div += `
+                            </tbody>
+                          </table>
+                        </div>
+                      `;
+                    }
+
+                    
                     $('#Order_Made #Order_Made_Menu').html(div);
                     $('#Order_Made #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
                   //   $('#Order_Made #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
@@ -556,15 +544,15 @@
                     // alert(jqxhr.responseText)
                     // location.reload(true);
 
-                      // Show success message using SweetAlert
-                      Swal.fire({
-                          position: "top-end",
-                          icon: "error",
-                          title: jqxhr.responseText,
-                          text: "",
-                          showConfirmButton: false,
-                          timer: 2500,
-                      });
+                    // Show success message using SweetAlert
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: jqxhr.responseText,
+                        text: "",
+                        showConfirmButton: false,
+                        timer: 2500,
+                    });
 
                   }
                 })
@@ -581,8 +569,8 @@
           <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" style="color: #fff;" class="close" onclick="location.reload(true);">&times;</button>
-              <h4 class="modal-title" style="color: #fff;">Check out</h4>
+              <button type="button" class="modal-close-button close" onclick="location.reload(true);">&times;</button>
+              <h4 class="poppins-bold modal-title" style="color: #000000;">Check out</h4>
             </div>
             <form id="Order_Made_form">
               <div class="modal-body">
@@ -590,80 +578,82 @@
                 <div id="Order_Made_Menu" class="row">
 
                 </div>
-
                 <!-- Order button  -->
               </div>
               <!-- <input type="hidden" name="Order_info"></input> -->
-              <div class="modal-footer">
-                <!-- <p class="text-right" id="Subtotal"></p> -->
-                <!-- <p class="text-right" id="Delivery_fee"></p> -->
-                  <span class="text-right poppins-bold" style="color: white; padding: 10px 60px; border: 1px solid #fff" id="Total_price"></span>
-                  <button type="submit" name="Order_Made" class="btn btn-default buy__now">BUY NOW</button>
-                </div>
+              <div class="modal-footer nya">
+                <div class="buy-row">
+                  <div class="poppins-medium text-white" style="color: white; font-size: 20px;">Total:</div>
+                  <span class="total-price poppins-bold text-white" id="Total_price">₱0.00</span>
+                </div>    
 
+                <button type="submit" name="Order_Made" class="poppins-bold btn btn-default buy__now">
+                  BUY NOW
+                </button>
               </div>
             </form>
           </div>
-          <script type="text/javascript">
-            $('document').ready(function () {
-              $('#Order_Made').on('submit', function (event) {
-                console.log(JSON.stringify(Home_Order_Info))
-                event.preventDefault();
-                $.ajax({
-                  url: 'http://' + window.location.host + "/order_made",
-                  method: "POST",
-                  contentType: 'application/json',
-                  data: JSON.stringify(Home_Order_Info),
-                  async: false,
-                  success: function (data) {
-                    console.log(data)
-                    // alert(data.message);
-                    // location.reload(true);
+        </div>
+        <script type="text/javascript">
+          $('document').ready(function () {
+            $('#Order_Made').on('submit', function (event) {
+              console.log(JSON.stringify(Home_Order_Info))
+              event.preventDefault();
+              $.ajax({
+                url: 'http://' + window.location.host + "/order_made",
+                method: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify(Home_Order_Info),
+                async: false,
+                success: function (data) {
+                  console.log(data)
+                  // alert(data.message);
+                  // location.reload(true);
 
-                    if (data.message === "Failed to create order: insufficient balance") {
-                      // Show success message using SweetAlert
-                      Swal.fire({
-                          position: "center",
-                          icon: "error",
-                          title: data.message,
-                          text: "Please Top-Up",
-                          showConfirmButton: true,
-                      });
-                  }
-                  else {
+                  if (data.message === "Failed to create order: insufficient balance") {
+                    // Show success message using SweetAlert
                     Swal.fire({
-                      position: "center",
-                      icon: "success",
-                      title: data.message,
-                      text: "Please Proceed to My Orders for receipt",
-                      showDenyButton: true,
-                      confirmButtonText: "Go to Profile",
-                      denyButtonText: `Continue Shopping`,
-                      allowOutsideClick: false,
-
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        window.location.assign("/profilepage.html")
-                      } else if (result.isDenied) {
-                        location.reload(true);
-                      }
+                        position: "center",
+                        icon: "error",
+                        title: data.message,
+                        text: "Please Top-Up",
+                        showConfirmButton: true,
                     });
-                    
-                  }
-                },
+                }
+                else {
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: data.message,
+                    text: "Please Proceed to My Orders for receipt",
+                    showDenyButton: true,
+                    confirmButtonText: "Go to Profile",
+                    denyButtonText: `Continue Shopping`,
+                    allowOutsideClick: false,
+
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      window.location.assign("/profilepage.html")
+                    } else if (result.isDenied) {
+                      location.reload(true);
+                    }
+                  });
                   
+                }
+              },
+                
 
-                  error: function (jqxhr, textStatus, errorThrown) {
-                    alert(jqxhr.responseText)
-                    location.reload(true);
+                error: function (jqxhr, textStatus, errorThrown) {
+                  alert(jqxhr.responseText)
+                  location.reload(true);
 
-                  }
-                })
-              });
+                }
+              })
             });
-          </script>
+          });
+        </script>
       </div>
-    
+    </div>
   </div>
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
@@ -691,43 +681,21 @@
       linear-gradient(338deg, #AF191A00 52%, #F3BD38 69%),
       linear-gradient(180deg, #AF191A00 93%, #AF191A 100%),
       linear-gradient(156deg, #AF191A 63%, #F3BD38 82%);
-    height: 100vh;
+    min-height: 100vh;
   }
   .bg-scndpage {
     background: 
       linear-gradient(180deg, #AF191A 0%, #000000FF 31%);
-    height: 100vh;
+    min-height: 100vh;
   }
   .container {
     text-align: center;
   }
-  .toggle-btn {
-    position: relative;
-    width: 100%;
-    text-align: left;
-  }
-
-  .toggle-btn .arrow {
-    position: absolute;
-    bottom: 8px;
-    right: 12px;
-  }
-  .btn-login {
-    background: transparent;
-    color: white;
-    border: 1px solid white;
-    border-radius: 7px;
-    padding: 8px 40px;
-    font-size: 16px;
-  }
-  body {
-      font-family: 'Poppins', sans-serif;
-      background: #f0f2f5;
-      color: #333;
-  }
-  /* .headline {
-  margin-right: 500px;
-  } */
+	.page-row {
+		display: flex; 
+		justify-content: center; 
+		gap: 20px; 
+	}
   .hero-title {
     font-size: 48px;
     /* font-weight: 700; */
@@ -742,19 +710,41 @@
     text-align: left;
     color: white;
   }
-  .buy-now {
-    border-radius: 7px;
-    padding: 5px 20px;
-    font-size: 20px;
-    background-color: white;
-    color: #800000;
-    border: 1px solid black;
-    font-weight: 600;
-    transition: background 0.3s;
+  .header__tltCanteen {
+    font-size: 32px;
+    color: white; 
+    background: none; 
+    width: 100%; 
+    border-bottom: 3px solid white; 
+    padding: 10px;
   }
-  .buy-now:hover {
-    background-color: #e0e0e0;
+  .total-price {
+    color: black; 
+    padding: 5px 30px; 
+    border-radius: 5px;
+    background-color: #b8b8b8;
   }
+  .nya {
+    display: flex;
+    justify-content: flex-end; /* Align content to the right */
+    align-items: center;
+    gap: 20px; /* space between total and button */
+    padding: 10px 20px;
+  }
+
+  .buy-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  
+  /* STEPS CSS */
+  .step-center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
   .section-steps {
     padding: 30px 0;
     background: white;
@@ -790,7 +780,8 @@
     color: black;           
     padding: 20px;
   }
-  
+
+  /* SHOP CSS */
   #shop-update {
     display: flex;
     flex-wrap: wrap;
@@ -798,16 +789,12 @@
     gap: 70px;
     padding: 40px 20px;
   }
-
-  /* Card wrapper */
   .stall-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: visible;
   }
-
-  /* Glowing background box */
   .stall-card-inner {
     width: 250px;
     height: 260px;
@@ -818,8 +805,6 @@
     justify-content: center;
     align-items: center;
   }
-
-  /* Logo inside card */
   .stall-logo {
     width: 100%;
     max-width: 240px;
@@ -828,8 +813,6 @@
     border-radius: 10px;
     padding: 10px;
   }
-
-  /* Stall name */
   .stall-name {
     position: relative;
     display: inline-block;
@@ -851,7 +834,7 @@
     left: 0;
   }
 
-  /* Choose button */
+  /* BUTTONS CSS */
   .choose-btn {
     margin-top: 10px;
     background-color: #f5c241;
@@ -862,23 +845,71 @@
     border: none;
     transition: background 0.3s ease;
   }
-
   .choose-btn:hover {
     background-color: #ffd65a;
   }
+  .toggle-btn {
+    position: relative;
+    width: 100%;
+    text-align: left;
+  }
+  .toggle-btn .arrow {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+  }
+  .buy-now {
+    border-radius: 7px;
+    padding: 5px 20px;
+    font-size: 20px;
+    background-color: white;
+    color: #800000;
+    border: 1px solid black;
+    font-weight: 600;
+    transition: background 0.3s;
+  }
+  .buy-now:hover {
+    background-color: #e0e0e0;
+  }
+  .btn__opnMenu {
+    background: #800000;
+    transition: 0.5s;
+  }
+  .btn__opnMenu:hover {
+    background: #700000;
+    color: white
+  }
+  .buy__now {
+    color: white;
+    background: #800;
+    font-size: 15px;
+    outline: 0;
+    border: 0;
+    padding: 10px 30px;
+    margin-top: -2px;
+  }
 
-  #menu-update {
+  /* MENU CSS */
+  #menu-update { /* Each menu card */
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
     /* gap: 20px; */
     justify-items: center; /* center cards in their grid cells */
     padding: 20px;
   }
-
-
-  /* Each menu card */
+  .menu-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .menu-row.between {
+    justify-content: space-between;
+  }
   .menu-card {
-    width: 250px;
+    width: 300px;
     background: #800000;
     color: white;
     border-radius: 10px;
@@ -886,32 +917,127 @@
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
     text-align: center;
   }
-
-  /* Image inside card */
   .menu-img {
     width: 100%;
     height: auto;
     object-fit: contain;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    border-radius: 15px;
+    margin-bottom: 3px;
   }
-
-  /* Menu name and price styling */
   .menu-name {
-    font-size: 30px;
+    font-size: 20px;
     text-transform: capitalize;
   }
-
   .menu-price {
-    font-size: 30px;
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin-bottom: none;
   }
   .menu-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px;
+    gap: 70px;
     justify-content: center;
-    padding: 10px;
+    padding: 20px;
+  }
+
+  /* MODAL CSS */
+  .modal-logo-container {
+    position: relative;
+  }
+  #modal-bg-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.20; 
+    width: 1100px;
+    height: 1100px;
+    z-index: 0;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+    pointer-events: none;
+  }
+  .modal-header {
+    align-items: center;
+  }
+  .modal-close-button {
+    font-size: 28px;       /* larger size */
+    font-weight: bold;
+    color: #000000;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0 12px;
+    transform: scale(1.2);
+    cursor: pointer;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    animation: subtle-pulse 1.8s infinite ease-in-out;
+  }
+
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+  .input__order {
+    width: 50px;
+    padding: 4px 5px;
+    border-radius: 1px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  input:focus {
+    border: 0 !important;
+  }
+  input:focus-visible {
+    outline: 0;
+  }
+  .input__order {
+    width: 100%;
+    text-align: center;
+    padding: 2px;
+    border-radius: 5px;
+    outline: 0;
+    border: 0;
+  }
+  .modal-content {
+    background: rgba(253, 217, 15, 0.445);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* TABLE CSS */
+  .table thead th {
+    border: none !important;
+  }
+  .table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .table tbody td {
+    border: none;
+  }
+
+  .form-control {
+    padding: 4px 5px;
+  }
+
+  .preventLoop:nth-child(n + 2) {
+    display: none;
+  }
+
+  .spacing__canteenList {
+    margin-top: 150px;
+  }
+
+  /* VERSATILE CSS */
+  @keyframes subtle-pulse {
+    0% { transform: scale(1.2); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1.2); }
   }
 
   @media (max-width: 768px) {
@@ -919,6 +1045,7 @@
       width: 100%;
     }
   }
+
   @media (max-width: 992px) {
     #menu-update {
       grid-template-columns: repeat(2, 1fr);
@@ -931,144 +1058,40 @@
     }
   }
 
-  .menu-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  /* Space between left and right (like name and price) */
-  .menu-row.between {
-    justify-content: space-between;
-  }
-
-  /* Optional: tighter spacing for the input */
-  .input__order {
-    width: 60px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    text-align: center;
-  }
-
-  .canteen__img {
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-    margin: 10px;
-    border-radius: 10px;
-  }
-  .container__img {
-    position: relative;
-    color: white;
-    display: ruby;
-  }
-  .centered {
-    position: absolute;
-    top: -10px;
-    left: 0;
-    text-align: center;
-    padding: 0px 110px;
-    /* transform: translate(-50%, -50%); */
-  }
-  .btn__opnMenu {
-    background: #800000;
-    transition: 0.5s;
-  }
-  .btn__opnMenu:hover {
-    background: #700000;
-    color: white
-  }
-  .header__tltCanteen {
-    font-size: 32px;
-    color: white; 
-    background: none; 
-    width: 100%; 
-    border-bottom: 3px solid white; 
-    padding: 10px
-  }
-  input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button {
-  opacity: 1;
-}
-
-input:focus {
-  border: 0 !important;
-}
-input:focus-visible {
-  outline: 0;
-}
-.input__order {
-  width: 100%;
-  text-align: center;
-  padding: 2px;
-  border-radius: 5px;
-  outline: 0;
-  border: 0;
-}
-.modal-content {
-  background: rgba(253, 217, 15, 0.445);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-@media (min-width: 800px) {
-    .modal-dialog {
-        width: 800px;
-        margin: 30px auto;
+  @media (max-width: 688px) {
+    .stall-card {
+      display: block;
     }
-}
-@media (min-width: 1000px) {
-    .modal-dialog {
-        width: 900px;
-        margin: 30px auto;
+    .stall-name {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
-}
-@media (min-width: 1200px) {
-    .modal-dialog {
-        width: 1200px;
-        margin: 30px auto;
+  }
+
+  @media (max-width: 999px) {
+    .spacing__canteenList {
+      margin-top: 20px;
     }
-}
-
-
-
-.buy__now {
-  color: white;
-  background: #800;
-  outline: 0;
-  border: 0;
-  padding: 10px 30px;
-  margin-top: -2px;
-}
-
-.preventLoop:nth-child(n + 2) {
-  display: none;
-}
-
-
-@media (max-width: 688px) {
-  .container__img  {
-    display: block;
   }
-  .centered {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+
+  @media (min-width: 800px) {
+      .modal-dialog {
+          width: 800px;
+          margin: 30px auto;
+      }
   }
-}
-
-
-.spacing__canteenList {
-  margin-top: 150px;
-}
-
-@media (max-width: 999px) {
-  .spacing__canteenList {
-    margin-top: 20px;
+  @media (min-width: 1000px) {
+      .modal-dialog {
+          width: 900px;
+          margin: 30px auto;
+      }
   }
-}
+  @media (min-width: 1200px) {
+      .modal-dialog {
+          width: 1200px;
+          margin: 30px auto;
+      }
+  }
+
 </style>
