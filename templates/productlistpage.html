@@ -91,39 +91,52 @@
             </form>
             
             <script type="text/javascript">
+              function updateMealTable(button) {
+                const fullName = button.getAttribute('name'); // e.g., "Roast Republic_menu"
+                const stallName = fullName.replace('_menu', '');
+                document.getElementById('modal-shop-title').textContent = `${stallName} Menu`;
+
+                // Continue with loading the menu items as before
+                
+              }
               var menu_data = {};
-              function updateMealTable(shop) {
+              function updateMealTable(button) {
                 // console.log(menu_data[shop.name])	
-                var n, div = '', menu = menu_data[shop.name];
+                const fullName = button.getAttribute('name'); // e.g. "Mama's Kitchen_menu"
+                const stallName = fullName.replace('_menu', ''); // e.g. "Mama's Kitchen"
+
+                // Update modal title
+                document.getElementById('modal-shop-title').textContent = `${stallName} Menu`;
+
+                // Get menu data
+                const menu = menu_data[stallName + '_menu'];
+                let div = '';
                 $.each(menu, function (i, m) {
                   div += 
-                    '<div>' +
-                      '<div style="background: #800000; color: white; border-radius: 10px; padding: 15px; margin: 10px">' +
-                        '<div>' +
-                          '<img src="data:image/' + m.P_imagetype + ';base64,' + atob(m.P_image) + '" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px">' + 
-                        '</div>' +
+                  '<div class="menu-card">' +
+                    '<img src="data:image/' + m.P_imagetype + ';base64,' + atob(m.P_image) + '" class="menu-img">' + 
 
-                        '<div style="font-size: 20px; text-transform: capitalize">' + m.P_name + '</div>' +
-                        '<div style="font-size: 30px;" class="poppins-bold">' + '₱' + m.P_price + '</div>' +
+                    // Name + Price in a flex row
+                    '<div class="menu-row between">' +
+                      '<div class="menu-name">' + m.P_name + '</div>' +
+                      '<div class="menu-price poppins-bold">₱' + m.P_price + '</div>' +
+                    '</div>' +
 
-                        '<hr>' +
+                    '<hr>' +
+                    `<input type="hidden" name="PIDs" value="${m.PID}">` +
 
-                        '<div>' + 
-                          '<div>Qty:</div>' + '<div>' + m.P_quantity + '</div>' +
-                        '</div>' +
+                    // Qty label + input in a flex row
+                    `<div class="menu-row between">` +
+                      `<div class="poppins-bold">Qty:</div>` +
+                      `<input class="input__order" type="number" name="Quantities" min="0" max="${m.P_quantity}" value="0">` +
+                    `</div>` +
 
-                        '<hr>' +
+                  '</div>';
 
-                        `<input type="hidden" name="PIDs" value="${m.PID}">` +
-                        `<div>` +
-                          `<div>Enter Quantity:</div>` +
-                          `<input class="input__order" type="number" name="Quantities" min="0" max="` + m.P_quantity + `" value="0">` +
-                        `</div>` +
-                      '</div>' +                 
-                    '</div>'               
                 })
                 $("#menu-update").html(div);
               }
+              
               var shop_1 = '<div><button type="button" data-toggle="modal" data-target="#menu" name="', 
                   shop_2 = '_menu" class="btn btn__opnMenu" onclick="updateMealTable(this)">Open menu</button></div></tr>',
                 // note that name is used for menu search (data is stored in menu_data)	
@@ -145,18 +158,38 @@
                   $.each(shop_arr[index], function (i, td) {
                     menu_data[td.shop_name + '_menu'] = td.menu
                     // Alternate between the two image paths for each shop
-                    var imagePath = (i % 2 === 0) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213' : 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213';
+                    var shopMeta = {
+                      "Mama's Kitchen": {
+                        image: '../static/images/mamas-kitchen.png',
+                        color: '#ff6a00'
+                      },
+                      "Street Food Spencer": {
+                        image: '../static/images/street-food-spencer.png',
+                        color: '#ffb800'
+                      },
+                      "Roast Republic": {
+                        image: '../static/images/roast-republic.png',
+                        color: '#0d3b2e'
+                      }
+                    };
+
+                    var meta = shopMeta[td.shop_name] || {
+                      image: '../static/images/default.png',
+                      color: '#cccccc'
+                    };
+
                     div += `
                       <div class="stall-card text-center">
-                        <div class="stall-card-inner" style="background-color: ${i % 2 === 0 ? '#ff6a00' : (i % 3 === 0 ? '#0d3b2e' : '#ffb800')}">
-                          <img class="stall-logo" src="${imagePath}" alt="Shop Image" />
+                        <div class="stall-card-inner" style="background-color: ${meta.color}">
+                          <img class="stall-logo" src="${meta.image}" alt="Shop Image"/>
                           <p class="stall-name poppins-bold">${td.shop_name}</p>
                         </div>
                         <button type="button" data-toggle="modal" data-target="#menu" name="${td.shop_name}_menu" class="btn choose-btn poppins-bold" onclick="updateMealTable(this)">
                           Choose
                         </button>
                       </div>
-                    `;                  
+                    `;
+             
                     // div += shop_1 + td.shop_name + shop_2;
                   });
                 }
@@ -359,97 +392,23 @@
           <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" style="color: #fff !important" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title" style="color: #fff !important">Menu</h4>
+              <button type="button" style="color: #000000 !important" class="close" data-dismiss="modal">&times;</button>
+              <h4 id="modal-shop-title" class="modal-title" style="color: #000000 !important">Menu</h4>
             </div>
             <form id="Order_Preview">
               <div class="modal-body">
                 <!-- Order made -->
-                <div class="row">
-                  <div class="col-md-6 col-sm-12 poppins-medium">
+                
 
-
-                    <div>
-                      <img src="{{ url_for('main.get_logo_image') }}" style="width: 300px; margin: 0 auto;" />
-                    </div>
-
-                    <div style="color: #000; font-size: 25px; margin: 50px 0px" class="poppins-bold">
-                      <p>CLICK AND CHOOSE OF ANY<br> FOOD YOU ARE CRAVING!</p>
-                    </div>
-                    
-                    <div class="row">
-                      <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
-                        <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
-
-                          <div class="poppins-bold" style="font-size: 23px;">
-                            01
-                          </div>
-
-                          <div class="poppins-bold" style="font-size: 30px;">
-                            ORDERING
-                          </div>
-
-                          <div style="font-size: 10px;">
-                            CLICK ANY KIND OF FOODS SHOWN ON SCREEN. PAY ATTENTION TO THE QUANTITY AND SERVING TIME
-                          </div>
-
-                        </div>
-                      </div>
-
-                      <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
-                        <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
-
-                          <div class="poppins-bold" style="font-size: 23px;">
-                            02
-                          </div>
-
-                          <div class="poppins-bold" style="font-size: 30px;">
-                            PAYMENT
-                          </div>
-
-                          <div style="font-size: 10px;">
-                            LOAD ANY AMOUNT OF MONEY (EXCEED YOUR LOAD AMOUNT TO THE PRICE OF FOOD) AND LET THE WEBSITE TRANSFORM IT TO CASH
-                          </div>
-
-                        </div>
-                      </div>
-
-                      <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
-                        <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
-
-                          <div class="poppins-bold" style="font-size: 30px;">
-                            TAKE NOTE
-                          </div>
-
-                          <div style="font-size: 10px; text-transform: uppercase;">
-                            Any food you order, is your responsibility to pick it up in Canteen
-                          </div>
-
-                        </div>
-                      </div>
-
-
-                    </div>
-                  </div>
-                  <div class="col-md-6 col-sm-12">
-
-                    <div class="table poppins-medium" style="width: 200px; margin: 0 auto;">
-                      <div>
-                        
-                      </div>
-
-                      <div id="menu-update">
-
-                      </div>
-                    </div>
-                  </div>
+                <div id="menu-update" class="menu-grid">
 
                 </div>
+                    
 
                 <!-- Order button  -->
               </div>
               <div class="modal-footer">
-                <label><span style="color: #fff">Shipping Option:</span>
+                <label><span style="color: #000000">Shipping Option:</span>
                   <select class="form-control" name="PickUp" style="width: 150px;">
                     <option value="1">Pick-up</option>
                   </select>
@@ -485,28 +444,39 @@
                       var store_number = ""
                       var store_socmed = ""
 
-                      // Co-op
-                      var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997_1.jpg?v=1715357713";
-                      var co_opStoreName = "Co-op"
-                      var co_opStoreNumber = "0997 293 6833"
-                      var co_opStoreSocMed = "Messenger: QHS Co-op Admin"
+                      // Mama's Kitchen
+                      var mkImagePath = "../static/images/mamas-kitchen.png";
+                      var mkStoreName = "Mama's Kitchen"
+                      var mkStoreNumber = "0987 654 3210"
+                      var mkStoreSocMed = "Messenger: Mama's Kitchen"
 
-                      // Canteen
-                      var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715221227";
-                      var canteenStoreName = "Canteen"
-                      var canteenStoreNumber = "0966 006 3617"
-                      var canteenStoreSocMed = "Messenger: QHS Canteen Admin"
+                      // Streetfood Spencer
+                      var sfsImagePath = "../static/images/street-food-spencer.png";
+                      var sfsStoreName = "Street Food Spencer"
+                      var sfsStoreNumber = "0912 345 9789"
+                      var sfsStoreSocMed = "Messenger: Street Food Spencer"
+
+                      // Roast Republic
+                      var rpImagePath = "../static/images/roast-republic.png";
+                      var rpStoreName = "Roast Republic"
+                      var rpStoreNumber = "0922 334 4567"
+                      var rpStoreSocMed = "Messenger: Roast Republic"
 
                       if (p.P_owner === 1) {
-                          imagePath = co_opImagePath;
-                          store_name = co_opStoreName;
-                          store_number = co_opStoreNumber;
-                          store_socmed = co_opStoreSocMed;
+                          imagePath = mkImagePath;
+                          store_name = mkStoreName;
+                          store_number = mkStoreNumber;
+                          store_socmed = mkStoreSocMed;
                       } else if (p.P_owner === 2) {
-                          imagePath = canteenImagePath;
-                          store_name = canteenStoreName;
-                          store_number = canteenStoreNumber;
-                          store_socmed = canteenStoreSocMed;
+                          imagePath = sfsImagePath;
+                          store_name = sfsStoreName;
+                          store_number = sfsStoreNumber;
+                          store_socmed = sfsStoreSocMed;
+                      } else if (p.P_owner === 3) {
+                          imagePath = rpImagePath;
+                          store_name = rpStoreName;
+                          store_number = rpStoreNumber;
+                          store_socmed = rpStoreSocMed;
                       } else {
                           // Handle other cases if needed
                       }
@@ -820,32 +790,13 @@
     color: black;           
     padding: 20px;
   }
-  /* .section-stalls {
-    padding: 60px 0;
-    background: #f8f9fa;
-  }
-  .stall-card {
-    background-color: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
-    text-align: center;
-  }
-  .stall-card img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 15px;
-  } */
   
   #shop-update {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 30px;
-    padding-top: 20px;
+    gap: 70px;
+    padding: 40px 20px;
   }
 
   /* Card wrapper */
@@ -853,14 +804,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: visible;
   }
 
   /* Glowing background box */
   .stall-card-inner {
-    width: 200px;
-    height: 220px;
+    width: 250px;
+    height: 260px;
     border-radius: 20px;
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+    box-shadow: 0 0 25px 10px rgba(233, 73, 73, 0.452);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -870,19 +822,33 @@
   /* Logo inside card */
   .stall-logo {
     width: 100%;
-    height: 120px;
+    max-width: 240px;
+    height: auto;
     object-fit: contain;
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px;
     padding: 10px;
   }
 
   /* Stall name */
   .stall-name {
-    margin-top: 5px;
+    position: relative;
+    display: inline-block;
+    margin-top: none;
+    margin-bottom: 20px;
     color: white;
     font-size: 18px;
-    border-bottom: 2px solid white;
-    padding-bottom: 5px;
+    /* border-bottom: 2px solid white; */
+    padding-bottom: 20px;
+  }
+  .stall-name::after {
+    content: '';
+    display: block;
+    height: 2px;
+    background-color: white;
+    width: 100%;
+    position: absolute;
+    /* bottom: -8px; */
+    left: 0;
   }
 
   /* Choose button */
@@ -900,6 +866,92 @@
   .choose-btn:hover {
     background-color: #ffd65a;
   }
+
+  #menu-update {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    /* gap: 20px; */
+    justify-items: center; /* center cards in their grid cells */
+    padding: 20px;
+  }
+
+
+  /* Each menu card */
+  .menu-card {
+    width: 250px;
+    background: #800000;
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+    text-align: center;
+  }
+
+  /* Image inside card */
+  .menu-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* Menu name and price styling */
+  .menu-name {
+    font-size: 30px;
+    text-transform: capitalize;
+  }
+
+  .menu-price {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+  .menu-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .menu-card {
+      width: 100%;
+    }
+  }
+  @media (max-width: 992px) {
+    #menu-update {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 576px) {
+    #menu-update {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .menu-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  /* Space between left and right (like name and price) */
+  .menu-row.between {
+    justify-content: space-between;
+  }
+
+  /* Optional: tighter spacing for the input */
+  .input__order {
+    width: 60px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+
   .canteen__img {
     width: 300px;
     height: 300px;
@@ -929,6 +981,7 @@
     color: white
   }
   .header__tltCanteen {
+    font-size: 32px;
     color: white; 
     background: none; 
     width: 100%; 
@@ -948,14 +1001,14 @@ input:focus-visible {
 }
 .input__order {
   width: 100%;
-      text-align: center;
-      padding: 10px;
-      border-radius: 10px;
-      outline: 0;
-      border: 0;
+  text-align: center;
+  padding: 2px;
+  border-radius: 5px;
+  outline: 0;
+  border: 0;
 }
 .modal-content {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(253, 217, 15, 0.445);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
