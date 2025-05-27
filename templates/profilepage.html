@@ -65,88 +65,77 @@
       </div>
   </div>
 
-
-
-
-    
-      
-
   <div class="">
     <div class="tab-content">
-      
-
       <!-- Profile -->
-
       <div id="Profile" class="tab-pane fade in active">
         <div class="bg__profile">
           <div class="bg-frntpage poppins-medium">
-
-              <div class="poppins-extrabold title__header" style="color: black">HELLO THERE FRIENDS!</div>
-
-            <div class="row" style="padding: 20px 0px">
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
-
-                <div class="profile__info">
+            <div class="container-fluid">
+              <div class="row" style="display: flex; padding: 40px 0; gap: 40px;">
+                <!-- Profile Info Column -->
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3" style="align-items: left;">
+                  <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" style="width: 70px; height: 70px; border-radius: 50%; margin-right: 15px;" alt="User Icon">
+                    <div>
+                      <div class="poppins-bold" style="color: white; font-size: 20px;">{{ user_info['U_name'] }}</div>
+                      <div style="color: white; font-size: 14px;">{{ user_info['U_account'] }}</div>
+                    </div>
+                  </div>
+                  <div class="profile__info">
                     <div style="margin-bottom: 10px; color: black;">
                       Username:
-                        <div>
-                            <input placeholder="{{user_info['U_account']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; color: black" />
-                        </div>
+                      <input class="creds" placeholder="{{user_info['U_account']}}" disabled/>
                     </div>
                     <div style="margin-bottom: 10px; color: black">
-                      Name: 
-                      <div>
-                        <input placeholder="{{user_info['U_name']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; text-transform: capitalize; color: black" />
-                      </div>
+                      Name:
+                      <input class="creds" placeholder="{{user_info['U_name']}}" disabled style="text-transform: capitalize;"/>
                     </div>
                     <div style="margin-bottom: 10px; color: black">
-                      Phone Number: 
-                      <div>
-                        <input placeholder="{{user_info['U_phone']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; color: black" />
-                      </div>
+                      Mobile Number:
+                      <input class="creds" placeholder="{{user_info['U_phone']}}" disabled/>
                     </div>
-                    
-                    <div style="text-align: center;">
-                        <div class="nav-tabs">
-                            <a style="display: block; margin-bottom: 10px;" class="btns" href="#MyOrder" onclick="searchMyOrders()">MY ORDERS</a>
-                        </div>
-        
-                    
-          
-                      <form align="left" name="form1" method="post" action="{{url_for('user.logout')}}">
-                          <input name="Logout" type="submit" class="btns btn btn-info " id="Logout" value="LOGOUT">
-                      </form>
+
+                    <div class="nav-tabs" style="display: flex; align-items: center; justify-content: center;">
+                      <a class="btnMyorders btn-danger poppins-bold" href="#MyOrder" onclick="searchMyOrders()">My Orders</a>
                     </div>
+                    <form method="post" action="{{url_for('user.logout')}}">
+                      <input name="Logout" type="submit" class="btnLogout btn-warning poppins-bold" value="Log out">
+                    </form>
+                  </div>
                 </div>
 
+                <!-- Wallet Column -->
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3" style="align-items: left; margin-top: 30px;">
+                  <div class="wallet__balance">
+                    <div class="money-row">
+                      <div style="font-size: 60px; font-weight: bold; color: black;">₱ </div>
+                      <div class="money">{{user_info['U_balance']}}</div>
+                    </div>
+                    <div class="balance__ poppins-bold">
+                      Available Balance
+                    </div>
+                  </div>
+                  <div class="note">
+                    <span style="color: #F3BD38; font-weight: bold;">Note:</span> To top up, contact the canteen admin to add the amount 
+                    and send it via <b>Gcash</b> to <b>09123456789</b>. Once confirmed, your load will appear here.
+                  </div>
+                </div>
 
+                <!-- Logo Column -->
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3" style="margin-left: 100px;">
+                  <div class="img__positioning" style="text-align: center;">
+                    <img src="{{ url_for('main.get_logo_image') }}" class="img__sizing" style="width: 100%; max-width: 300px; height: auto;" alt="logo">
+                  </div>
+                  <!-- <div class="img__positioning" style="text-align: center;">
+                    <img src="{{ url_for('main.get_cravengers_noshadow_image') }}" class="img__sizing" style="width: 100%; max-width: 300px; height: auto;" alt="label">
+                  </div> -->
+                </div>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="wallet__balance">
-                    <div class="poppins-extrabold" style="font-size: 60px; color: black">
-                    ₱ {{user_info['U_balance']}}
-                    </div>
-                    <div class="balance__">
-                        AVAILABLE BALANCE
-                    </div>
-                </div>
-
-                <div class="wallet__balance" style="margin-top: 10px; color: black">
-                    To top up your load, please contact the canteen admin to add the amount, and send it via GCash to 09123456789. Once confirmed, your load will appear here.
-                </div>
-              </div>
-
-              <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 rm__mobile">
-                <div class="img__positioning">
-                  <img src="{{ url_for('main.get_logo_image') }}" class="img__sizing" />
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
       </div>
-
 
       <!-- MyOrder -->
       <div id="MyOrder" class="tab-pane fade poppins-medium myorder__containerOuter">
@@ -161,6 +150,9 @@
           <option>Pending</option>
           <option>Cancelled</option>
         </select>
+        <button class="btn btn-secondary poppins-bold" style="color: black; text-decoration: none; margin-top: 5px;" data-toggle="tab" href="#Profile">
+          ← Profile
+        </button>
           <div class="row">
             <div class="col-xs-12" id="MyOrder-table">
               <table class="table" style="margin-top: 15px;">
@@ -205,9 +197,7 @@
                   </tr>
                 </tbody> -->
               </table>
-
               <div id="MyOrder-update">
-
               </div>
               <!-- <div>
                 <button type="button" name="empty" class="btn btn-danger " onclick="batchDeleteMyOrder()">Cancel Seleted
@@ -250,14 +240,9 @@
                             <td>tmp24</td>
                           </tr>
                         </tbody>
-
-
-
                       </table>
-
-                      
+                     
                       <!-- <div id="MyOrderDetail-T-1">
-
                       </div> -->
                       <!-- EX: row['subtotal'] -->
                       <!-- <p class="text-right">Subtotal $199</p>
@@ -424,10 +409,6 @@
                 return b.unique_number - a.unique_number;
             });
 
-            
-
-
-
             $.each(MyOrders, function (i, order) {
                 // Format the start_time string using formatStartTime function
                 var formattedStartTime = formatStartTime(order.start_time);
@@ -435,41 +416,11 @@
                 var formattedEndTime = formatEndTime(order.end_time);
 
 
-                var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997_1.jpg?v=1715357713";
+                var mkImagePath = "../static/images/mamas-kitchen.png";
 
-                var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715221227";
+                var sfsImagePath = "../static/images/street-food-spencer.png";
 
-                // if (order.S_name === "Gelo's Sari-Sari Store") {
-                //     imagePath = co_opImagePath;
-                // } else if (order.S_name === "arwind sari sari store") {
-                //     imagePath = canteenImagePath;
-                // } else {
-                //     // Handle other cases if needed
-                // }
-
-              // if (filter != 'All' && order.Status != filter) { return; }
-              // table += '<tr><th scope="row">' + order.unique_number + '</th>';
-              // table += '<td>' + order.Status + '</td>';
-              // table += '<td>' + order.start_time + '</td>';
-              // table += '<td>' + order.end_time + '</td>';
-              // table += '<td>' + order.S_name + '</td>';
-              // table += '<td>' + order.total_price + '</td>';
-              // if (order.Status == 'Pending') {
-              //   not_fin = `
-              //   <td>
-              //     <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
-              //       onclick="deleteOrder(this.name)">Cancel Order</button>
-              //   </td>
-              //   `
-              // } else {
-              //   not_fin = `<td></td><td></td>`
-              // }
-              // table += `
-              //   <td>
-              //     <button type="button" name="${order.OID}" data-toggle="modal" data-target="#MyOrderDetail-1" class="btn btn-info " 
-              //     onclick="updateOrderDetail(this.name)"> Order Details</button>
-              //   </td>
-              //   ${not_fin}</tr>`;
+                var rpImagePath = "../static/images/roast-republic.png";
 
               if (filter != 'All' && order.Status != filter) { return; }
               div += '<div style="padding: 16px; background: white; border-radius: 10px; margin: 10px 0px">';
@@ -478,11 +429,14 @@
 
                 div += '<div>';
                   // img here
-                  if (order.S_name === "Co-op") {
-                    div += `<img src="${co_opImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
+                  if (order.S_name === "Mama's Kitchen") {
+                    div += `<img src="${mkImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
                   }
-                  if (order.S_name === "Canteen") {
-                    div += `<img src="${canteenImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
+                  if (order.S_name === "Street Food Spencer") {
+                    div += `<img src="${sfsImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
+                  }
+                  if (order.S_name === "Roast Republic") {
+                    div += `<img src="${rpImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
                   }
                   div += '</div>';
 
@@ -591,7 +545,7 @@
 </html>
 
 <style>
-.bg-frntpage {
+  .bg-frntpage {
     background: 
       radial-gradient(75% 75% at 33% 62%, #F3BD38 6%, #F3BD3800 38%),
       radial-gradient(75% 75% at 30% 63%, #F3BD38 6%, #F3BD3800 38%),
@@ -605,156 +559,211 @@
       radial-gradient(63% 80% at 54% 10%, #F3BD38 1%, #F3BD3800 36%),
       radial-gradient(63% 80% at 49% 5%, #F3BD38 1%, #F3BD3800 36%),
       linear-gradient(125deg, #AF191A 56%, #F3BD38 85%);
-    height: 100vh;
-    padding: 50px 100px;
-}
-.bg__profile {
-  width: 100%;
-  background: linear-gradient(#9B9B9B 50%, #800000);
-}
-.balance__ {
-    background-color: #800000;
-    color: white;
-    padding: 10px;
-    width: 250px;
-    text-align: center;
-}
-.btns {
-    background-color: #800000;
-    color: white;
-    padding: 10px;
-    width: 230px;
-    text-align: center;
-    border-radius: 10px;
-    border: 0 !important;
-    font-size: 14px;
-}
-.btns:hover {
-    background-color: #800000;
-    color: white;
-    text-transform: none;
-}
-.nav-tabs {
-    border-bottom: 0px solid #ddd !important;
-}
-.profile__info {
+      min-height: 100vh;
+      padding: 50px 100px;
+  }
+
+  /* PROFILE CSS */
+  .profile__info {
     padding: 20px;
     /* text-align: center; */
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(to bottom right, #c4c4c4, #52525262);
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 25px 10px rgba(233, 73, 73, 0.452);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     width: 270px;
-}
-.wallet__balance {
+  }
+  .creds {
+    width: 100%; 
+    padding: 10px 15px; 
+    border-radius: 10px; 
+    background-color: #eee; 
+    color: black; 
+    border: none; 
+    margin-top: 5px;
+  }
+  .btnMyorders {
+      background-color: #800000;
+      color: white;
+      width: 100%;
+      padding: 5px;
+      text-align: center;
+      border-radius: 3px;
+      border: none;
+      font-size: 20px;
+      margin-bottom: 5px;
+  }
+  .btnMyorders:hover {
+      background-color: #961111fb;
+      color: white;
+      text-transform: none;
+  }
+  .btnLogout {
+      background-color: #800000;
+      color: #F3BD38;
+      width: 100%;
+      padding: 5px;
+      text-align: center;
+      border-radius: 3px;
+      border: none;
+      font-size: 15px;
+  }
+  .btnLogout:hover {
+      background-color: #961111fb;
+      color: white;
+      text-transform: none;
+  }
+
+  /* SECOND COLUMN CSS */
+  .wallet__balance {
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     /* text-align: center; */
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
+    background: rgba(187, 187, 187, 0.548);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    width: 290px;
-}
-.img__sizing {
-  width: 450px
-}
-.title__header {
-  font-size: 60px;
-}
-
-
-@media (max-width: 1301px) {
-  .bg-frntpage {
-    background: linear-gradient(#9B9B9B 50%, #800000);
-    height: 100vh;
-    padding: 10px 30px;
-    
+    border-radius: 15px; 
+    align-content: center;
+    justify-content: center;
   }
-  .img__sizing {
-    width: 100%
-  }
-}
-@media (max-width: 991px) {
-  .profile__info {
-    margin: 0 auto;
-  }
-  .wallet__balance {
-    margin: 0 auto;
-  }
-  .img__sizing {
-      width: 450px;
-      margin: 0 auto;
-  }
-  .img__positioning {
+  .money-row {
     display: flex;
+    align-content: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+  }
+  .money {
+    background-color: #cecece; 
+    /* height: 70%; */
+    border-radius: 10px; 
+    text-align: center;
+    font-size: 60px; 
+    font-weight: bold; 
+    color: black;
+  }
+  .balance__ {
+    display: flex;
+    background-color: #800000;
+    border-radius: 5px; 
+    color: white;
+    padding: 8px;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .note {
+    margin-top: 10px; 
+    background-color: #800000; 
+    color: white; 
+    padding: 10px 15px; 
+    border-radius: 10px; 
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    text-align: justify;
+  }
+
+  .nav-tabs {
+    border-bottom: 0px solid #ddd !important;
+  }
+  .img__sizing {
+    width: 450px
   }
   .title__header {
-    font-size: 40px;
-    text-align: center;
+    font-size: 60px;
   }
-}
-@media (max-width: 767px) {
-  .profile__info {
-    margin: 10px auto;
-  }
-  .rm__mobile {
-    display: none;
-  }
-}
 
 
-.myorder__container {
-  width: 700px;
-}
-@media (max-width: 809px) {
-  .myorder__container {
-    width: 100%;
-  }
-}
-
-.myorder__containerOuter {
-  padding: 50px;
-}
-@media (max-width: 653px) {
-  .myorder__containerOuter {
-    padding: 10px;
-  }
-}
-
-.desktop__btnsOrder {
-  display: flex; 
-  justify-content: end;
-}
-
-.mobile__btnsOrder {
-  display: flex; 
-  justify-content: center;
-  margin-top: 20px;
-}
-
-@media (max-width: 505px) {
-  .desktop__btnsOrder {
-    display: none;
-  }
-}
-@media (min-width: 505px) {
-  .mobile__btnsOrder {
-    display: none;
-  }
-}
-
-
-@media (max-width: 991px) {
+  @media (max-width: 1301px) {
     .bg-frntpage {
-        background: linear-gradient(#9B9B9B 50%, #800000);
-        height: 100%;
-        padding: 10px 30px;
+      background: linear-gradient(#9B9B9B 50%, #800000);
+      height: 100vh;
+      padding: 10px 30px;
+      
     }
-}
+    .img__sizing {
+      width: 100%
+    }
+  }
+  @media (max-width: 991px) {
+    .profile__info {
+      margin: 0 auto;
+    }
+    .wallet__balance {
+      margin: 0 auto;
+    }
+    .img__sizing {
+        width: 450px;
+        margin: 0 auto;
+    }
+    .img__positioning {
+      display: flex;
+    }
+    .title__header {
+      font-size: 40px;
+      text-align: center;
+    }
+  }
+  @media (max-width: 767px) {
+    .profile__info {
+      margin: 10px auto;
+    }
+    .rm__mobile {
+      display: none;
+    }
+  }
+
+  .myorder__container {
+    width: 700px;
+  }
+  @media (max-width: 809px) {
+    .myorder__container {
+      width: 100%;
+    }
+  }
+
+  .myorder__containerOuter {
+    padding: 50px;
+  }
+  @media (max-width: 653px) {
+    .myorder__containerOuter {
+      padding: 10px;
+    }
+  }
+
+  .desktop__btnsOrder {
+    display: flex; 
+    justify-content: end;
+  }
+
+  .mobile__btnsOrder {
+    display: flex; 
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 505px) {
+    .desktop__btnsOrder {
+      display: none;
+    }
+  }
+  @media (min-width: 505px) {
+    .mobile__btnsOrder {
+      display: none;
+    }
+  }
+
+  @media (max-width: 991px) {
+      .bg-frntpage {
+          background: linear-gradient(#9B9B9B 50%, #800000);
+          height: 100%;
+          padding: 10px 30px;
+      }
+  }
 
 
 

@@ -50,45 +50,14 @@ def get_logo_image():
     filename = '../templates/assets/logo.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
-# Food imgs
-@main.route('/borger')
-def get_borger_image():
-    filename = '../templates/assets/borger.jpg'  # Path to your image file
-    return send_file(filename, mimetype='image/jpg')
-
-@main.route('/kakanin')
-def get_kakanin_image():
-    filename = '../templates/assets/kakanin.jpg'  # Path to your image file
-    return send_file(filename, mimetype='image/jpg')
-
-@main.route('/mango-juice')
-def get_mangojuice_image():
-    filename = '../templates/assets/mangojuice.jpg'  # Path to your image file
-    return send_file(filename, mimetype='image/jpg')
-
-@main.route('/spag')
-def get_spag_image():
-    filename = '../templates/assets/spaghetti.jpg'  # Path to your image file
-    return send_file(filename, mimetype='image/jpg')
-
-@main.route('/tomi')
-def get_tomi_image():
-    filename = '../templates/assets/tomi.jpg'  # Path to your image file
-    return send_file(filename, mimetype='image/jpg')
-
-@main.route('/valuemeal')
-def get_valuemeal_image():
-    filename = '../templates/assets/valuemeal.jpg'  # Path to your image file
-    return send_file(filename, mimetype='image/jpg')
-
-@main.route('/profilematerial')
-def get_profilematerial_image():
-    filename = '../templates/assets/profile_material.png'  # Path to your image file
-    return send_file(filename, mimetype='image/png')
-
 @main.route('/cravengers')
 def get_cravengers_image():
     filename = '../templates/assets/cravengers.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/cravengers-noshadow')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/cravengers-nshadow.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
 
