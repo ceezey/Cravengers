@@ -60,6 +60,47 @@ def get_cravengers_noshadow_image():
     filename = '../templates/assets/cravengers-nshadow.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
+# homepage assets
+@main.route('/controller')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/controller.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/eco')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/eco.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/location')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/location.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/rider')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/rider.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/food')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/food.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/trophy')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/trophy.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/letter')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/letter.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/founder')
+def get_cravengers_noshadow_image():
+    filename = '../templates/assets/founder.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
 
 @main.route("/adminpage.html")
 def adminpage():
