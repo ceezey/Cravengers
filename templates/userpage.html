@@ -100,24 +100,20 @@
               </tbody>
             </table> -->
             
-            <div class="spacing__canteenList">
-              <div class="col-md-12">
-                <div class="canteen_data">
-
+            <div class="container spacing__canteenList">
+              <div class="row">
+                <div class="center-search col-md-12">
                   <div class="poppins-medium header__tltCanteen">
                     <form style="display: flex;" class="form-horizontal" action="/action_page.php" method="post" id="search_form">
-                          <input type="text" class="form-control" name="meal" placeholder="Search Meal">
-          
-                          <button type="submit" style="margin-left: 15px; height: 34px; background-color: #F3BD38; border: 1px solid white;" class="btn btn-primary">Search</button>
-          
+                      <input type="text" class="form-control" name="meal" placeholder="Search Meal">
+      
+                      <button type="submit" style="margin-left: 15px; height: 34px; background-color: #F3BD38; border: 1px solid white;" class="btn btn-primary">Search</button>
+      
                     </form>
                   </div>
-    
-    
-                  <div id="shop-update">
-                    <div class="poppins-bold" style="margin-top: 50px; font-size: 20px">Please search something...</div>
-                  </div>
-    
+                </div>
+                <div id="shop-update">
+                  <div class="poppins-bold" style="margin-top: 50px; font-size: 20px">Please search something...</div>
                 </div>
               </div>
             </div>
@@ -620,9 +616,12 @@
     border: none; 
     padding: 10px;
     align-items: center;
-    margin-left: 285px; /*temporary lng*/
-    /* display: flex;
-    justify-content: center; */
+  }
+  .center-search {
+    display: flex;
+		justify-content: center;
+		align-items: center;
+    /* flex-wrap: wrap; */
   }
   .total-price {
     color: black; 
@@ -630,14 +629,6 @@
     border-radius: 5px;
     background-color: #b8b8b8;
   }
-  .nya {
-    display: flex;
-    justify-content: flex-end; /* Align content to the right */
-    align-items: center;
-    gap: 20px; /* space between total and button */
-    padding: 10px 20px;
-  }
-
   .buy-row {
     display: flex;
     align-items: center;
@@ -649,8 +640,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 70px;
+    gap: 60px;
     padding: 40px 20px;
+    margin-top: 10px
   }
   .stall-card {
     display: flex;
@@ -659,8 +651,8 @@
     overflow: visible;
   }
   .stall-card-inner {
-    width: 250px;
-    height: 260px;
+    width: 300px;
+    height: 310px;
     border-radius: 20px;
     box-shadow: 0 0 25px 10px rgba(233, 73, 73, 0.452);
     display: flex;
@@ -670,7 +662,7 @@
   }
   .stall-logo {
     width: 100%;
-    max-width: 240px;
+    max-width: 290px;
     height: auto;
     object-fit: contain;
     border-radius: 10px;
@@ -699,11 +691,12 @@
 
   /* BUTTONS CSS */
   .choose-btn {
+    font-size: 20px;
     margin-top: 10px;
     background-color: #f5c241;
     color: #800000;
     border-radius: 6px;
-    padding: 6px 20px;
+    padding: 3px 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     border: none;
     transition: background 0.3s ease;
@@ -873,6 +866,13 @@
 
   .spacing__canteenList {
     margin-top: 150px;
+  }
+  .nya {
+    display: flex;
+    justify-content: flex-end; /* Align content to the right */
+    align-items: center;
+    gap: 20px; /* space between total and button */
+    padding: 10px 20px;
   }
 
   /* VERSATILE CSS */

@@ -280,6 +280,10 @@ input, textarea {
   opacity: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /*# sourceMappingURL=style.css.map */
 
 
