@@ -69,10 +69,7 @@
           </div>
       </div>
   </div>
-
-    
   <div class="bg-frntpage" id="top">
-    
       <div class="tab-content">
         <div id="Home" class="tab-pane fade in active">
           <!-- <h3>Home</h3> -->     
@@ -89,7 +86,6 @@
                   <button type="submit" style="margin-left: 18px;" class="btn btn-primary">Search</button>
               </div>
             </form>
-            
             <script type="text/javascript">
               var menu_data = {};
               function updateMealTable(button) {
@@ -134,11 +130,9 @@
                     `</div>` +
 
                   '</div>';
-
                 })
                 $("#menu-update").html(div);
-              }
-              
+              }           
               var shop_1 = '<div><button type="button" data-toggle="modal" data-target="#menu" name="', 
                   shop_2 = '_menu" class="btn btn__opnMenu" onclick="updateMealTable(this)">Open menu</button></div></tr>',
                 // note that name is used for menu search (data is stored in menu_data)	
@@ -174,12 +168,10 @@
                         color: '#0d3b2e'
                       }
                     };
-
                     var meta = shopMeta[td.shop_name] || {
                       image: '../static/images/default.png',
                       color: '#cccccc'
                     };
-
                     div += `
                       <div class="stall-card text-center">
                         <div class="stall-card-inner" style="background-color: ${meta.color}">
@@ -255,17 +247,15 @@
           </div>
         </div>
       </div>
-      <!-- Hero Section -->
+      <!-- Header -->
       <div class="container-fluid">
         <div class="headline poppins-medium">
           <h1 class="hero-title poppins-extrabold">READY TO ASSEMBLE YOUR <br />CRAVINGS?</h1>
           <p class="hero-subtitle poppins-bold">Follow these 3 easy steps!</p>
         </div>
       </div>
-      
 
-      <!-- Accordion Steps Section -->
-      
+      <!-- Accordion Steps Section -->  
       <div class="container">
         <div class="row">
 
@@ -364,8 +354,6 @@
     });
   </script>
 
-
-
   <div class="bg-scndpage" id="stalls">
     <div class="container">
       <div class="row spacing__canteenList">
@@ -376,12 +364,9 @@
                 Select Stall
               </p>
             </div>
-
-
             <div id="shop-update">
 
             </div>
-
           </div>
         </div>
       </div>
@@ -406,7 +391,6 @@
 
                   </div>
                 </div>
-           
                 <!-- Order button  -->
               </div>
               <div class="modal-footer">
@@ -529,7 +513,7 @@
                     
                     $('#Order_Made #Order_Made_Menu').html(div);
                     $('#Order_Made #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
-                  //   $('#Order_Made #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
+                    // $('#Order_Made #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
                     $('#Order_Made #Total_price').html(`₱${Order_info.Subtotal}`)
 
                     // global variable
@@ -586,7 +570,6 @@
                   <div class="poppins-medium text-white" style="color: white; font-size: 20px;">Total:</div>
                   <span class="total-price poppins-bold text-white" id="Total_price">₱0.00</span>
                 </div>    
-
                 <button type="submit" name="Order_Made" class="poppins-bold btn btn-default buy__now">
                   BUY NOW
                 </button>
@@ -640,13 +623,10 @@
                   });
                   
                 }
-              },
-                
-
+              },     
                 error: function (jqxhr, textStatus, errorThrown) {
                   alert(jqxhr.responseText)
                   location.reload(true);
-
                 }
               })
             });

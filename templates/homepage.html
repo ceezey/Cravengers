@@ -94,7 +94,7 @@
       <div class="container-fluid">
         <div class="row align-items-center justify-content-center min-vh-100 text-center text-md-start">
           <!-- Text Content -->
-          <div class="col-md-6 text-content" style="margin-top: 140px; margin-left: 60px;">
+          <div class="col-md-8 text-content" style="margin-top: 140px; margin-left: 60px;">
             <h1 class="poppins-extrabold">Your <span class="highlight">cravings</span>,<br>assembled!</h1>
             <p class="poppins-regular">
               Just like heroes unite for a greater cause, your favorite dishes come together with Cravengers.
@@ -105,8 +105,63 @@
       </div>
     </div>
 
-    <div class="bg-thrdpage">
+    <div class="bg-thrdpage py-5">
+      <div class="container-fluid px-0">
+        <div class="row no-gutters align-items-center">
+          <!-- Trophy Image -->
+          <div class="col-md-4 pl-0" style="padding-bottom: 100px; margin-bottom: 50px;">
+            <img src="{{ url_for('main.get_trophy_image') }}" class="img-fluid trophy-img" alt="Trophy">
+          </div>
 
+          <!-- Why Us Text -->
+          <div class="col-md-8 pt-5" style="margin-top: 100px;">
+            <h2 class="why-title poppins-extrabold">Why us?</h2>
+            <p class="why-text poppins-regular">
+              <br><br>
+              With Cravengers, every order you place brings more than just delicious food to your doorstep.<br><br>
+              <b>Earn streaks</b> by ordering regularly, <b>unlock unique badges</b> as you try new dishes, and <b>level up</b> 
+              your foodie profile to climb the ranks of the ultimate Cravenger leaderboard.<br><br>
+              The more you eat, the more you achieve — because here, your appetite fuels your progress.
+            </p>
+          </div>
+        </div>
+
+        <!-- Features Row -->
+        <div class="row feature-cards mt-5 mb-3 text-center" style="margin-right: 30px; margin-left: 30px;">
+          <div class="col-md-3 center">
+            <img src="{{ url_for('main.get_location_image') }}" class="feature-icon">
+            <div class="feature-card">
+              <h5 class="feature-title poppins-extrabold">SUPPORT LOCAL VENDORS</h5>
+              <p class="feature-body poppins-regular">Every order helps homegrown businesses thrive.<br><br> 
+                Discover your neighborhood’s hidden food gems and fuel the local economy one meal at a time.</p>
+            </div>
+          </div>
+          <div class="col-md-3 center">
+            <img src="{{ url_for('main.get_controller_image') }}" class="feature-icon">
+            <div class="feature-card">
+              <h5 class="feature-title poppins-extrabold">GAMIFIED ORDERING SYSTEM</h5>
+              <p class="feature-body poppins-regular">Craving with a twist!<br><br> Join weekly food quests and keep your streaks. Complete challenges 
+                and get a chance win free delivery, discounts, or free meals.</p>
+            </div>
+          </div>
+          <div class="col-md-3 center">
+            <img src="{{ url_for('main.get_eco_image') }}" class="feature-icon">
+            <div class="feature-card" style="padding-bottom: 5px;">
+              <h5 class="feature-title poppins-extrabold" style="padding: 20px;">GREEN INITIATIVE</h5>
+              <p class="feature-body poppins-regular">Opt out for no cutlery or eco-packaging to earn a Green Score.<br><br>
+                Convert points to coins or credits. Support eco-conscious vendors and protect the planet.</p>
+            </div>
+          </div>
+          <div class="col-md-3 center">
+            <img src="{{ url_for('main.get_rider_image') }}" class="feature-icon">
+            <div class="feature-card" style="padding-bottom: 50px;">
+              <h5 class="feature-title poppins-extrabold" style="padding: 20px;">QUICK DELIVERY</h5>
+              <p class="feature-body poppins-regular">Get cravings delivered fast and fresh.<br>
+                <br>Real-time tracking from vendor to doorstep.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     
     <div class="bg-frthpage py-5">
@@ -133,18 +188,18 @@
     </div>
 
     <div class="bg-ffthpage">
-      <div class="container" style="display: flex;">
+      <div class="container-fluid" style="display: flex; position: relative; min-height: 100vh;">
         <div class="row">
-          <div class="col-md-12" style="align-items: left; margin-top: 160px;">
+          <div class="col-md-12" style="align-items: left; margin-top: 160px; margin-left: 100px;">
             <h1 class="poppins-extrabold" style="color: black; font-size: 70px;">Sign up for <span class="highlight">free</span>
-              <br><span class="highlight">delivery </span>on your<br>first order!</h1>
-            <a href="sign-up.html" class="btn__standard btn-joinnow poppins-bold" style="margin-top: 20px;">
+              <br><span class="highlight">delivery </span>on your<br>first order! <br><br></h1>
+            <a href="sign-up.html" class="btn__standard btn-joinnow poppins-bold">
               Order Now
             </a>
           </div>
-          <!-- <div class="col-md-12" style="align-items: right;">
-            <img src="{{ url_for('main.get_letter_image') }}" alt="Letter Photo">
-          </div> -->
+          <img src="{{ url_for('main.get_letter_image') }}"
+            alt="Letter Photo"
+            style="position: absolute; bottom: 0; right: 0; max-width: 950px; width: 100%; margin-right: -180px;">
         </div>
       </div>
     </div>
@@ -190,13 +245,10 @@
   /* SECOND PAGE */
   .bg-scndpage {
     background: url("{{ url_for('main.get_food_image') }}") no-repeat center center;
+    background-repeat: no-repeat;
     background-size: cover;
     position: relative;
     min-height: 100vh;
-    /* display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    text-align: center; */
   }
   .scndpage-section h1 {
     font-size: 60px;
@@ -222,7 +274,7 @@
     top: 0; left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.068); /* dark overlay */
+    /* background: rgba(0, 0, 0, 0.068);  */
     z-index: 0;
   }
   .text-content {
@@ -230,12 +282,68 @@
     z-index: 1;
   }
 
-
-
   /* THIRD PAGE */
   .bg-thrdpage {
     background: linear-gradient(146deg, #F3BD38FF 0%, #800000 50%, #000000FF 100%);
     min-height: 200vh; 
+    align-items: stretch;
+    display: flex;
+  }
+  /* .center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  } */
+  .why-title {
+    font-size: 95px;
+    color: #F3BD38;
+  }
+  .why-text {
+    font-size: 25px;
+    line-height: 1.8;
+    color: white;
+    padding-right: 40px;
+  }
+  .trophy-img {
+    width: 1200px;
+    height: auto;
+    object-fit: contain;
+    margin-left: -20px;
+  }
+  .feature-icon {
+    width: 350px;
+    margin-bottom: 15px;
+  }
+  .feature-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 25px 10px rgba(0,0,0,0.1);
+    border-radius: 10px 10px 20px 20px;
+    border: 5px solid white;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+  }
+  .feature-title {
+    background-color: #F3BD38;
+    color: black;
+    font-size: 25px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: -1px;
+    text-align: center;
+  }
+  .feature-body {
+    background-color: white; 
+    /* border-radius: 0 0 20px 20px; */
+    color: black;     
+    font-size: 16px;      
+    padding: 20px;
+    /* min-height: 160px; */
+    text-align: center;
+    align-content: center;
   }
 
   /* FOURTH PAGE */
@@ -256,10 +364,6 @@
     height: 100%;
     z-index: 0;
   }
-  .spaced-br {
-    display: block; 
-    margin-top: 20px;
-  }
 
   /* FIFTH PAGE */
   .bg-ffthpage {
@@ -272,7 +376,9 @@
 
   /* ABOUT */
   .bg-abtsection{
-    background: radial-gradient(75% 75% at 50% 13%, #f3bd38 29%, #073AFF00 78%);
+    background: 
+      radial-gradient(100% 100% at 49% 10%, #F3BD38 2%, #FF000000 55%),
+      radial-gradient(100% 100% at 49% 10%, #F3BD3847 91%, #FF000000 94%);
     min-height: 40vh; 
   }
 
