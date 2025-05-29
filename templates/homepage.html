@@ -80,10 +80,10 @@
 
             <!-- Buttons side-by-side -->
             <div style="display: flex; gap: 20px;">
-                <a href="sign-up.html" class="btn__standard btn-joinnow poppins-bold">
+                <a href="sign-up.html" class="btn__standard btn-joinnow poppins-bold" aria-label="Sign up for Cravengers">
                     Sign up
                 </a>
-                <a href="index.html" class="btn__standard btn-login poppins-bold">
+                <a href="index.html" class="btn__standard btn-login poppins-bold" aria-label="Log in to Cravengers">
                     Log In
                 </a>
             </div>
@@ -106,15 +106,15 @@
     </div>
 
     <div class="bg-thrdpage py-5">
-      <div class="container-fluid px-0">
-        <div class="row no-gutters align-items-center">
+      <div class="container-fluid">
+        <div class="row align-items-center">
           <!-- Trophy Image -->
           <div class="col-md-4 pl-0" style="padding-bottom: 100px; margin-bottom: 50px;">
             <img src="{{ url_for('main.get_trophy_image') }}" class="img-fluid trophy-img" alt="Trophy">
           </div>
 
           <!-- Why Us Text -->
-          <div class="col-md-8 pt-5" style="margin-top: 100px;">
+          <div class="col-md-8" style="margin-top: 100px;">
             <h2 class="why-title poppins-extrabold">Why us?</h2>
             <p class="why-text poppins-regular">
               <br><br>
@@ -127,7 +127,7 @@
         </div>
 
         <!-- Features Row -->
-        <div class="row feature-cards mt-5 mb-3 text-center" style="margin-right: 30px; margin-left: 30px;">
+        <div class="row feature-cards text-center">
           <div class="col-md-3 center">
             <img src="{{ url_for('main.get_location_image') }}" class="feature-icon">
             <div class="feature-card">
@@ -140,8 +140,9 @@
             <img src="{{ url_for('main.get_controller_image') }}" class="feature-icon">
             <div class="feature-card">
               <h5 class="feature-title poppins-extrabold">GAMIFIED ORDERING SYSTEM</h5>
-              <p class="feature-body poppins-regular">Craving with a twist!<br><br> Join weekly food quests and keep your streaks. Complete challenges 
-                and get a chance win free delivery, discounts, or free meals.</p>
+              <p class="feature-body poppins-regular">Craving with a twist!<br><br> Join weekly food quests 
+                and keep your streaks. Complete challenges and get a chance win free delivery, discounts, or 
+                free meals.</p>
             </div>
           </div>
           <div class="col-md-3 center">
@@ -199,13 +200,45 @@
           </div>
           <img src="{{ url_for('main.get_letter_image') }}"
             alt="Letter Photo"
-            style="position: absolute; bottom: 0; right: 0; max-width: 950px; width: 100%; margin-right: -180px;">
+            style="position: absolute; bottom: 0; right: 0; max-width: 470px; width: 100%; margin-right: 50px;">
         </div>
       </div>
     </div>
 
-    <div class="bg-abtsection">
+    <div class="bg-abtsection footer-section py-5">
+      <div class="container-fluid" style="padding-top: 30px; margin-left: 50px;">
+        <div class="row text-left text-md-start">
+          <!-- Address -->
+          <div class="col-md-4 mb-4">
+            <h6 class="footer-heading poppins-bold">ADDRESS</h6>
+            <p class="footer-text">PUP A. Mabini Campus Anonas Street,<br>Sta. Mesa, Manila Philippines 1016</p>
+          </div>
 
+          <!-- Phone + Email -->
+          <div class="col-md-4 mb-4">
+            <h6 class="footer-heading poppins-bold">PHONE</h6>
+            <p class="footer-text">(+63) 1234 567 8900</p>
+            <h6 class="footer-heading poppins-bold mt-3" style="margin-top: 40px;">EMAIL</h6>
+            <p class="footer-text">cravengers@gmail.com</p>
+          </div>
+
+          <!-- Social + Copyright -->
+          <div class="col-md-4 mb-4">
+            <h6 class="footer-heading poppins-bold">SOCIAL</h6>
+            <p class="footer-text">
+              <i class="fab fa-facebook-f mr-3"></i>
+              <i class="fab fa-instagram"></i>
+            </p>
+            <h6 class="footer-heading poppins-bold mt-3" style="margin-top: 40px;">COPYRIGHT</h6>
+            <p class="footer-text">© 2025 Cravengers</p>
+          </div>
+        </div>
+
+        <!-- Logo Centered -->
+        <div class="text-center mt-4">
+          <img src="{{ url_for('main.get_cravengers_image') }}" alt="Cravengers Logo" class="footer-logo">
+        </div>
+      </div>
     </div>
 
     <!-- jQuery -->
@@ -289,11 +322,6 @@
     align-items: stretch;
     display: flex;
   }
-  /* .center {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-  } */
   .why-title {
     font-size: 95px;
     color: #F3BD38;
@@ -325,6 +353,8 @@
     display: flex;
     flex-direction: column;
     justify-content: stretch;
+    margin-left: 10px;
+    margin-right: 10px;
   }
   .feature-title {
     background-color: #F3BD38;
@@ -337,11 +367,9 @@
   }
   .feature-body {
     background-color: white; 
-    /* border-radius: 0 0 20px 20px; */
     color: black;     
     font-size: 16px;      
     padding: 20px;
-    /* min-height: 160px; */
     text-align: center;
     align-content: center;
   }
@@ -380,6 +408,23 @@
       radial-gradient(100% 100% at 49% 10%, #F3BD38 2%, #FF000000 55%),
       radial-gradient(100% 100% at 49% 10%, #F3BD3847 91%, #FF000000 94%);
     min-height: 40vh; 
+    color: black;
+  }
+  .footer-heading {
+    font-size: 16px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .footer-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .footer-logo {
+    width: 200px;
+    height: auto;
+  }
+  .footer-section {
+    font-family: 'Poppins', sans-serif;
   }
 
   /* BUTTONS CSS */
@@ -419,6 +464,50 @@
     width: 400px;
   }
 
+  /* Fade-in Animation */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide from left */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Apply to elements */
+  .bg-frntpage img,
+  .bg-frntpage .poppins-extrabold,
+  .bg-frntpage .btn__standard {
+    animation: fadeInUp 1s ease-in-out both;
+  }
+
+  .bg-frntpage .btn__standard:nth-child(1) {
+    animation-delay: 1s;
+  }
+  .bg-frntpage .btn__standard:nth-child(2) {
+    animation-delay: 1.3s;
+  }
+
+  .scndpage-section .text-content {
+    animation: slideInLeft 1s ease forwards;
+  }
+  .poppins-extrabold {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  }
 
   /* RESPONSIVE CSS */
   @media (max-width: 991px) {
@@ -459,5 +548,50 @@
       margin-bottom: 40px;
     }
   }
+  @media (max-width: 576px) {
+    .bg-frntpage img {
+      width: 90%;
+    }
+
+    .why-title {
+      font-size: 45px;
+      text-align: center;
+    }
+
+    .why-text {
+      font-size: 18px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .feature-card {
+      margin-bottom: 20px;
+    }
+
+    .feature-icon {
+      width: 80%;
+      margin: 0 auto 20px;
+    }
+
+    .row.feature-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn__standard {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  .btn__standard {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn__standard:hover {
+    transform: scale(1.05);
+  }
+  
+
+
 
 </style>
