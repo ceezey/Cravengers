@@ -29,6 +29,10 @@ def homepage():
     '''
     return render_template('homepage.html')
 
+@main.route("/sign-up.html")
+def sign_up():
+    return render_template("sign-up.html")
+
 # Route to serve image file
 @main.route('/home')
 def get_home_image():
@@ -240,9 +244,37 @@ def profilepage():
     return render_template("profilepage.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info)
 
 
-@main.route("/sign-up.html")
-def sign_up():
-    return render_template("sign-up.html")
+@main.route("/streak.html")
+# @login_required
+def streak():
+    # update session info every time
+    # user_info = session.get('user_info')
+    # UID = user_info['UID']
+    # db = get_db()
+    # user_info = db.cursor().execute(
+    #     """ select *
+    #         from Users
+    #         where UID = ?""", (UID,)
+    # ).fetchone()
+    # session['user_info'] = dict(user_info)
+
+    # fetch shop_info
+    # shop_info = db.cursor().execute(
+    #     """ select *
+    #         from Stores
+    #         where S_owner = ?""", (UID,)
+    # ).fetchone()
+
+    # fetch product_info
+    # product_info = db.cursor().execute(
+    #     """ select *
+    #         from Products
+    #         where P_owner = ?""", (2,)
+    # ).fetchall()
+
+    # image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
+
+    return render_template("streak.html")
 
 
 

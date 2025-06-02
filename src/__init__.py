@@ -61,6 +61,9 @@ def init_db():
     from .user import costumer # Adjust the import path according to your project structure
     app.register_blueprint(costumer)
 
+    from .mod import streak # Adjust the import path according to your project structure
+    app.register_blueprint(streak)
+
     return app
 
 @app.errorhandler(Exception)
