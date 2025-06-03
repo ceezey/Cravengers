@@ -105,6 +105,27 @@ def get_founders_image():
     filename = '../templates/assets/founders.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
+# streak assets
+@main.route('/bg1')
+def get_bg1_image():
+    filename = '../templates/assets/streak_bg1.svg'  # Path to your image file
+    return send_file(filename, mimetype='image/svg+xml')
+
+@main.route('/bg2')
+def get_bg2_image():
+    filename = '../templates/assets/streak_bg2.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/flame')
+def get_flame_image():
+    filename = '../templates/assets/streak_flame.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@main.route('/fork')
+def get_fork_image():
+    filename = '../templates/assets/streak_fork.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
 
 @main.route("/adminpage.html")
 def adminpage():

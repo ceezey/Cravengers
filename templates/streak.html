@@ -89,7 +89,7 @@
 <style>
         @font-face {
             font-family: 'Dela Gothic One';
-            src: url('DelaGothicOne-Regular.ttf') format('truetype');
+            src: url("{{ url_for('static', filename='fonts/DelaGothicOne-Regular.ttf') }}") format('truetype');
             font-weight: 400;
             font-style: normal;
         }
@@ -484,8 +484,8 @@
     <!-- Main Container -->
     <main class="main-container">
         <!-- Background Gradients -->
-        <img src="../templates/assets/streak_bg1.svg" alt="Background Gradient" class="bg-gradient-1">
-        <img src="../templates/assets/streak_bg2.png" alt="Background Gradient" class="bg-gradient-2">
+        <img src="{{ url_for('main.get_bg1_image') }}" alt="Background Gradient" class="bg-gradient-1">
+        <img src="{{ url_for('main.get_bg2_image') }}" alt="Background Gradient" class="bg-gradient-2">
 
         <!-- Main Heading -->
         <h1 class="main-heading">ASSEMBLE YOUR CRAVINGS NOW!</h1>
@@ -496,7 +496,7 @@
         <!-- Central Flame Logo -->
         <div class="flame-container">
             <div class="flame-bg"></div>
-            <img src="../templates/assets/streak_flame.png" alt="Flame Logo" class="flame-logo">
+            <img src="{{ url_for('main.get_flame_image') }}" alt="Flame Logo" class="flame-logo">
         </div>
 
         <!-- Order Counter -->
@@ -509,61 +509,61 @@
                 
                 <!-- Day 1 -->
                 <div class="day-marker" style="left: 35px;" onclick="handleDayClick(1)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 35px;">Day 1</div>
 
                 <!-- Day 2 -->
                 <div class="day-marker" style="left: 135px;" onclick="handleDayClick(2)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 161px;">Day 2</div>
 
                 <!-- Day 3 -->
                 <div class="day-marker" style="left: 252px;" onclick="handleDayClick(3)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 278px;">Day 3</div>
 
                 <!-- Day 4 -->
                 <div class="day-marker" style="left: 369px;" onclick="handleDayClick(4)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 395px;">Day 4</div>
 
                 <!-- Day 5 -->
                 <div class="day-marker large" style="left: 486px;" onclick="handleDayClick(5)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 521px;">Day 5</div>
 
                 <!-- Day 6 -->
                 <div class="day-marker" style="left: 620px;" onclick="handleDayClick(6)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 646px;">Day 6</div>
 
                 <!-- Day 7 -->
                 <div class="day-marker" style="left: 737px;" onclick="handleDayClick(7)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 763px;">Day 7</div>
 
                 <!-- Day 8 -->
                 <div class="day-marker" style="left: 854px;" onclick="handleDayClick(8)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 880px;">Day 8</div>
 
                 <!-- Day 9 -->
                 <div class="day-marker" style="left: 971px;" onclick="handleDayClick(9)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 997px;">Day 9</div>
 
                 <!-- Day 10 -->
                 <div class="day-marker large" style="left: 1091px;" onclick="handleDayClick(10)">
-                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
+                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 1126px;">Day 10</div>
             </div>
