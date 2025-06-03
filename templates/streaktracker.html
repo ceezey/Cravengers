@@ -24,61 +24,6 @@
             overflow-x: hidden;
         }
 
-        /* Header */
-        .header {
-            position: relative;
-            width: 1919px;
-            height: 106px;
-            background-color: #f3bd38f2;
-            box-shadow: 0px 4px 16px #0000001a;
-            z-index: 100;
-        }
-
-        .header-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 1919px;
-            height: 100px;
-            background-color: #f3bd38bf;
-        }
-
-        .logo {
-            position: absolute;
-            left: 100px;
-            top: 0;
-            width: 103px;
-            height: 100px;
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 256px;
-            top: 29px;
-            width: 48px;
-            height: 48px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .search-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .profile-icon {
-            position: absolute;
-            right: 169px;
-            top: 13px;
-            width: 79px;
-            height: 79px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .profile-icon:hover {
-            transform: scale(1.1);
-        }
-
         /* Main Container */
         .main-container {
             position: relative;
@@ -154,7 +99,7 @@
         /* Central Flame Logo */
         .flame-container {
             position: absolute;
-            left: 806px;
+            left: 800px;
             top: 255px;
             width: 307px;
             height: 338px;
@@ -163,7 +108,7 @@
 
         .flame-bg {
             position: absolute;
-            width: 307px;
+            width: 300px;
             height: 338px;
             background-color: #000000;
             border-radius: 169px;
@@ -171,8 +116,8 @@
 
         .flame-logo {
             position: absolute;
-            left: 17px;
-            top: 103px;
+            left: 0px;
+            top: 5px;
             width: 368px;
             height: 368px;
             animation: flame-flicker 3s ease-in-out infinite;
@@ -439,21 +384,12 @@
             }
         }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-bg"></div>
-        <img src="../streak tracker/assets/img_logo_im_18_1.png" alt="Cravengers Logo" class="logo">
-        <img src="../assets/img_search.svg" alt="Search" class="search-icon" onclick="handleSearch()">
-        <img src="../assets/img_logo_im_1.png" alt="User Profile" class="profile-icon" onclick="handleProfile()">
-    </header>
 
     <!-- Main Container -->
     <main class="main-container">
         <!-- Background Gradients -->
-        <img src="../streak tracker/assets/img_rectangle_3373.svg" alt="Background Gradient" class="bg-gradient-1">
-        <img src="../streak tracker/assets/img_gradient.png" alt="Background Gradient" class="bg-gradient-2">
+        <img src="../templates/assets/streak_bg1.svg" alt="Background Gradient" class="bg-gradient-1">
+        <img src="../templates/assets/streak_bg2.png" alt="Background Gradient" class="bg-gradient-2">
 
         <!-- Main Heading -->
         <h1 class="main-heading">ASSEMBLE YOUR CRAVINGS NOW!</h1>
@@ -464,7 +400,7 @@
         <!-- Central Flame Logo -->
         <div class="flame-container">
             <div class="flame-bg"></div>
-            <img src="../streak tracker/assets/img_flame.png" alt="Flame Logo" class="flame-logo">
+            <img src="../templates/assets/streak_flame.png" alt="Flame Logo" class="flame-logo">
         </div>
 
         <!-- Order Counter -->
