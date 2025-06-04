@@ -1,180 +1,14 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-<!--<![endif]-->
-
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Cravengers</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="A ordering system By 12 - Einstein" />
-	<meta name="keywords" content="A ordering system By 12 - Einstein" />
-	<meta name="author" content="" />
-
-	
-
-	<!-- Facebook and Twitter integration -->
-	<meta property="og:title" content="" />
-	<meta property="og:image" content="" />
-	<meta property="og:url" content="" />
-	<meta property="og:site_name" content="" />
-	<meta property="og:description" content="" />
-	<meta name="twitter:title" content="" />
-	<meta name="twitter:image" content="" />
-	<meta name="twitter:url" content="" />
-	<meta name="twitter:card" content="" />
-
-	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-	<link rel="shortcut icon" href="favicon.ico">
-
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
-
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-
-	<!-- Modernizr JS -->
-	<script src="{{ url_for('static', filename='js/modernizr-2.6.2.min.js') }}"></script>
-	<!-- FOR IE9 below -->
-	<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-</head>
-
-<body>
-
-	<!-- Nav -->
-	<div class="navbar_home" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #eab830;">
-		<!-- Logo (Left) -->
-		<a href="productlistpage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
-			<img src="{{ url_for('main.get_logo_image') }}" style="width: 40px;" />
-		</a>
-
-		<!-- Right icons (Search & Profile) -->
-		<div style="display: flex; align-items: center;">
-			<a href="#" class="btn__standard" style="margin-right: 15px; display: flex; align-items: center;">
-				<img src="{{ url_for('main.get_search_image') }}" style="width: 25px;" />
-			</a>
-			<a href="profilepage.html" class="btn__standard" style="margin-right: 50px; display: flex; align-items: center;">
-				<img src="{{ url_for('main.get_user_image') }}" style="width: 25px;" />
-			</a>
-		</div>
-	</div>
-  
-	<div class="bg-frntpage">
-		<div class="container">
-			<h1>Cravengers Streak Checker</h1>
-
-			<label for="uid">User ID:</label>
-			<input id="uid" value="{{ user_info['UID'] }}" readonly />
-
-			<!-- Progress Bar -->
-			<div style="margin-top: 1em;">
-				<label>Streak Progress:</label>
-				<div style="background-color: #eee; width: 100%; border-radius: 10px; overflow: hidden;">
-					<div id="progress-bar" style="height: 20px; background-color: #28a745; width: 0%; transition: width 0.5s;"></div>
-				</div>
-				<p id="streak-text"></p>
-			</div>
-
-			<!-- Result Message -->
-			<div id="result" style="margin-top: 1em;">Loading...</div>
-
-			<!-- Claim Button -->
-			<button id="claim-btn" style="display:none; margin-top: 1em;" onclick="claimVoucher()">Claim Voucher</button>
-
-			<script>
-				const UID = document.getElementById("uid").value;
-
-				async function checkStreak() {
-					const result = document.getElementById("result");
-					const streakText = document.getElementById("streak-text");
-					const progressBar = document.getElementById("progress-bar");
-					const claimBtn = document.getElementById("claim-btn");
-
-					result.innerHTML = "Checking streak...";
-					claimBtn.style.display = "none";
-
-					try {
-					const response = await fetch(`http://` + window.location.host + `/get-streak?uid=${UID}`);
-					if (!response.ok) throw new Error("User not found");
-
-					const data = await response.json();
-
-					// Update result
-					result.innerHTML = `<p>You have a streak of <strong>${data.streak}</strong> day(s).</p>`;
-					streakText.innerText = `Progress: ${Math.min(data.streak, 10)} / 10`;
-
-					// Update progress bar
-					const progressPercent = Math.min(data.streak, 10) * 10;
-					progressBar.style.width = progressPercent + "%";
-
-					// Show claim button if eligible
-					if (data.streak >= 10 && data.voucher_awarded) {
-						claimBtn.style.display = "block";
-					}
-					} catch (err) {
-					result.innerHTML = `<p style="color: red;">${err.message}</p>`;
-					}
-				}
-
-				async function claimVoucher() {
-					const result = document.getElementById("result");
-					result.innerHTML = "Processing claim...";
-
-					try {
-					const response = await fetch(`http://` + window.location.host + `/claim-voucher`, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ uid: UID })
-					});
-
-					const data = await response.json();
-
-					if (response.ok) {
-						result.innerHTML = `<p style="color: green;">${data.message}</p>`;
-						document.getElementById("claim-btn").style.display = "none";
-					} else {
-						result.innerHTML = `<p style="color: red;">${data.message}</p>`;
-					}
-					} catch (err) {
-					result.innerHTML = `<p style="color: red;">Error claiming voucher.</p>`;
-					}
-				}
-
-				// Run on load
-				window.onload = checkStreak;
-			</script>
-		</div>
-	</div>
-
-
-	<!-- jQuery -->
-	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-	<!-- Bootstrap -->
-	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-	<!-- Placeholder -->
-	<script src="{{ url_for('static', filename='js/jquery.placeholder.min.js') }}"></script>
-	<!-- Waypoints -->
-	<script src="{{ url_for('static', filename='js/jquery.waypoints.min.js') }}"></script>
-	<!-- Main JS -->
-	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-</body>
-</html>
-
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streak Tracker</title>
+   
+   <style>
         @font-face {
             font-family: 'Dela Gothic One';
-            src: url("{{ url_for('static', filename='fonts/DelaGothicOne-Regular.ttf') }}") format('truetype');
+            src: url('DelaGothicOne-Regular.ttf') format('truetype');
             font-weight: 400;
             font-style: normal;
         }
@@ -563,25 +397,14 @@
                 font-size: 20px;
                 text-align: center;
             }
-            .canvas {
-                position: fixed !important;
-                top: 0;
-                left: 0;
-                width: 100% !important;
-                height: 100% !important;
-                pointer-events: none !important;
-                z-index: 9999 !important;
-                opacity: 1 !important;
-            }
-
         }
     </style>
 
     <!-- Main Container -->
     <main class="main-container">
         <!-- Background Gradients -->
-        <img src="{{ url_for('main.get_bg1_image') }}" alt="Background Gradient" class="bg-gradient-1">
-        <img src="{{ url_for('main.get_bg2_image') }}" alt="Background Gradient" class="bg-gradient-2">
+        <img src="../templates/assets/streak_bg1.svg" alt="Background Gradient" class="bg-gradient-1">
+        <img src="../templates/assets/streak_bg2.png" alt="Background Gradient" class="bg-gradient-2">
 
         <!-- Main Heading -->
         <h1 class="main-heading">ASSEMBLE YOUR CRAVINGS NOW!</h1>
@@ -592,7 +415,7 @@
         <!-- Central Flame Logo -->
         <div class="flame-container">
             <div class="flame-bg"></div>
-            <img src="{{ url_for('main.get_flame_image') }}" alt="Flame Logo" class="flame-logo">
+            <img src="../templates/assets/streak_flame.png" alt="Flame Logo" class="flame-logo">
         </div>
 
         <!-- Order Counter -->
@@ -605,61 +428,61 @@
                 
                 <!-- Day 1 -->
                 <div class="day-marker" style="left: 35px;" onclick="handleDayClick(1)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 35px;">Day 1</div>
 
                 <!-- Day 2 -->
                 <div class="day-marker" style="left: 135px;" onclick="handleDayClick(2)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 161px;">Day 2</div>
 
                 <!-- Day 3 -->
                 <div class="day-marker" style="left: 252px;" onclick="handleDayClick(3)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 278px;">Day 3</div>
 
                 <!-- Day 4 -->
                 <div class="day-marker" style="left: 369px;" onclick="handleDayClick(4)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 395px;">Day 4</div>
 
                 <!-- Day 5 -->
                 <div class="day-marker large" style="left: 486px;" onclick="handleDayClick(5)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 521px;">Day 5</div>
 
                 <!-- Day 6 -->
                 <div class="day-marker" style="left: 620px;" onclick="handleDayClick(6)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 646px;">Day 6</div>
 
                 <!-- Day 7 -->
                 <div class="day-marker" style="left: 737px;" onclick="handleDayClick(7)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 763px;">Day 7</div>
 
                 <!-- Day 8 -->
                 <div class="day-marker" style="left: 854px;" onclick="handleDayClick(8)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 880px;">Day 8</div>
 
                 <!-- Day 9 -->
                 <div class="day-marker" style="left: 971px;" onclick="handleDayClick(9)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 997px;">Day 9</div>
 
                 <!-- Day 10 -->
                 <div class="day-marker large" style="left: 1091px;" onclick="handleDayClick(10)">
-                    <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
+                    <img src="../templates/assets/streak_fork.png" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 1126px;">Day 10</div>
             </div>
@@ -772,38 +595,8 @@
                 message = 'Day 10 completed. You received an exclusive voucher!';
                 smallNote = 'Enjoy your next meal for 50% off by clicking the Voucher on the checkout tab.<br>Note: Your streak will only reset after you use this voucher.';
                 buttonLabel = 'Claim Reward';
-                voucherImage = '{{ url_for("main.get_voucher_image") }}'
+                voucherImage = '../templates/assets/streak_voucher.png'
 
-                // 🎊 Launch Confetti
-                confetti({
-                    particleCount: 200,
-                    spread: 90,
-                    origin: { y: 0.6 },
-                    zIndex: 9999
-                });
-
-                // Continue confetti bursts
-                const duration = 3 * 1000;
-                const end = Date.now() + duration;
-
-                (function frame() {
-                    confetti({
-                        particleCount: 5,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0 }
-                    });
-                    confetti({
-                        particleCount: 5,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1 }
-                    });
-
-                    if (Date.now() < end) {
-                        requestAnimationFrame(frame);
-                    }
-                })();
             }
 
             // Create and show modal
