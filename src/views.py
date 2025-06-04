@@ -126,6 +126,10 @@ def get_fork_image():
     filename = '../templates/assets/streak_fork.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
+@main.route('/voucher')
+def get_voucher_image():
+    filename = '../templates/assets/streak_voucher.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
 
 @main.route("/adminpage.html")
 def adminpage():

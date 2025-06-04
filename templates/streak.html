@@ -689,7 +689,7 @@
                 message = 'Day 10 completed. You received an exclusive voucher!';
                 smallNote = 'Enjoy your next meal for 50% off by clicking the Voucher on the checkout tab.<br>Note: Your streak will only reset after you use this voucher.';
                 buttonLabel = 'Claim Reward';
-                voucherImage = '../templates/assets/streak_voucher.png'
+                voucherImage = '{{ url_for("main.get_voucher_image") }}'
 
                 // 🎊 Launch Confetti
                 confetti({
