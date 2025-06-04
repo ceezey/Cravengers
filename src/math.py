@@ -11,7 +11,7 @@ def write_current_number(number):
     with open('storage_number.txt', 'w') as file:
         file.write(str(number))
 
-# Function to generate a three-digit number
+# Function to generate a four-digit number
 def unique_order_number():
     current_number = read_current_number()
     if current_number == 9999:

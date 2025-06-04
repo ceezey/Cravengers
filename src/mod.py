@@ -1,10 +1,8 @@
-import sqlite3
 from . import get_db
 from datetime import datetime, timedelta
 from collections import defaultdict
 from flask import (
-    Blueprint, flash, session, 
-    request, jsonify                   
+    Blueprint, request, jsonify                   
     )
 
 streak = Blueprint('streak', __name__)
@@ -18,7 +16,7 @@ def calculate_streaks():
         JOIN Process_Order PO ON O.OID = PO.OID
         WHERE O.O_end_time IS NOT NULL
         ORDER BY PO.UID, O.O_end_time
-    """).fetchall()
+        """).fetchall()
     # conn.close()
 
     user_order_dates = defaultdict(list)
@@ -53,17 +51,80 @@ def calculate_streaks():
 
     return {"streaks": user_streaks, "vouchers": user_vouchers}
 
-@streak.route("/streak/<int:uid>", methods=["GET"])
-def get_streak(uid):
+@streak.route("/get-streak", methods=["GET"])
+def get_streak():
+    uid = int(request.args.get("uid", -1))
     data = calculate_streaks()
-    streaks = data["streaks"]
-    vouchers = data["vouchers"]
 
-    if uid in streaks:
+    # print(f"Requested UID: {uid}")
+    # print("Available streaks:", data["streaks"].keys())
+
+    if uid in data["streaks"]:
         return jsonify({
             "uid": uid,
-            "streak": streaks[uid],
-            "voucher_awarded": vouchers[uid]
+            "streak": data["streaks"][uid],
+            "voucher_awarded": data["vouchers"][uid]
         })
     else:
         return jsonify({"error": "User not found"}), 404
+    
+@streak.route("/claim-voucher", methods=["POST"])
+def claim_voucher():
+    uid = int(request.json.get("uid", -1))
+    db = get_db()
+    claimed = db.cursor().execute(
+        " SELECT 1 FROM VoucherClaims WHERE UID = ? ", (uid,)
+    ).fetchone()
+
+    # Check Streaks
+    streak_data = calculate_streaks()
+    if uid not in streak_data["streaks"] or streak_data["streaks"][uid] < 10:
+        return jsonify({"success": False, "message": "You don't have a 10-day streak yet."}), 400
+    
+    # Check Existing Claim
+    if claimed:
+        return jsonify({"success": False, "message": "Voucher already claimed."}), 400
+
+    # Save Claim
+    save_voucher_claim(uid)
+
+    return jsonify({"success": True, "message": "🎉 Voucher Claimed Successfully!!!"})
+
+def save_voucher_claim(uid):
+    db = get_db()
+    cursor = db.cursor()
+
+    # Check if user already has an unused voucher
+    exists = cursor.execute(
+        "SELECT 1 FROM Vouchers WHERE UID = ? AND V_used = 0", (uid,)
+    ).fetchone()
+
+    if exists:
+        return False  # Already has a voucher
+
+    # Insert voucher
+    cursor.execute("""
+        INSERT INTO Vouchers (UID, V_code, V_discount)
+        VALUES (?, ?, ?)
+    """, (uid, "CRAVENGERS10", 10.0))  # Or generate unique code
+    db.commit()
+    return True
+
+
+def get_user_voucher(uid):
+    db = get_db()
+    return db.execute("""
+        SELECT * FROM Vouchers
+        WHERE UID = ? AND V_used = 0
+    """, (uid,)).fetchone()
+
+
+def mark_voucher_used(uid):
+    db = get_db()
+    db.execute("""
+        UPDATE Vouchers
+        SET V_used = 1, V_used_date = datetime('now')
+        WHERE UID = ? AND V_used = 0
+    """, (uid,))
+    db.commit()
+

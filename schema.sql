@@ -95,3 +95,15 @@ CREATE TABLE
         -- constraints --
         CONSTRAINT P_quantity_non_negative CHECK (P_quantity >= 0)
     );
+
+CREATE TABLE IF NOT EXISTS Vouchers (
+    VID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UID INTEGER NOT NULL,              
+    V_code TEXT NOT NULL UNIQUE,          -- Voucher code (could be fixed or generated)
+    V_discount REAL DEFAULT 10.0,         -- Discount value
+    V_used INTEGER DEFAULT 0,             -- 0 = available, 1 = used
+    V_claimdate TEXT DEFAULT CURRENT_TIMESTAMP,
+    V_used_date TEXT,
+    V_expiry_date TEXT,                   -- Optional
+    FOREIGN KEY (UID) REFERENCES Users(UID)
+);

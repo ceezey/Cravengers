@@ -50,18 +50,18 @@
   <!-- Nav -->
 	<div class="navbar_home" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
       <div>
-          <!-- <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
-              CRAVENGERS
-          </a> -->
-          <a href="homepage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
+          <a href="productlistpage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
               <img src="{{ url_for('main.get_logo_image') }}" style="width: 40px;" />
           </a>
       </div>
       
       <div style="text-align: right; display: flex;">
           <div class="nav-tabs" style="border: 0 !important">
-              <a href="/productlistpage.html" class="btn__standard" style="margin-right: 15px">
-                  <img src="{{ url_for('main.get_home_image') }}" style="width: 25px" />
+              <a href="/streak.html" class="btn-streak poppins-bold" style="margin-right: 15px;">
+                Streak🔥
+              </a>
+              <a href="/userpage.html" class="btn__standard" style="margin-right: 15px">
+                  <img src="{{ url_for('main.get_search_image') }}" style="width: 25px" />
               </a>
               <a href="/profilepage.html" class="btn__standard" style="margin-right: 50px">
                   <img src="{{ url_for('main.get_user_image') }}" style="width: 25px" />
@@ -493,14 +493,22 @@
                     </div>
                     <!-- <input type="hidden" name="Order_info"></input> -->
                     <div class="modal-footer nya">
-                      <div class="buy-row">
-                        <div class="poppins-medium text-white" style="color: white; font-size: 20px;">Total:</div>
-                        <span class="total-price poppins-bold text-white" id="Total_price">₱0.00</span>
-                      </div>    
-
-                      <button type="submit" name="Order_Made" class="poppins-bold btn btn-default buy__now">
-                        BUY NOW
-                      </button>
+                      <div class="voucher-section d-flex align-items-center">
+                        <select class="form-control" name="Voucher" id="Voucher" style="width: 180px;">
+                          <option value="">Select Voucher</option>
+                          <option value="FREESHIP">FREESHIP - Free Delivery</option>
+                          <option value="DISC10">DISC10 - 10% Off</option>
+                          <option value="MEAL50">MEAL50 - ₱50 Off</option>
+                        </select>
+                      </div>
+                      <div class="buy-section d-flex align-items-center justify-content-end" style="gap: 10px;">
+                        <div class="poppins-medium text-white" style="color: white; font-size: 20px;">Total: 
+                          <span class="total-price poppins-bold text-white" id="Total_price">₱0.00</span>     
+                          <button type="submit" name="Order_Made" class="poppins-bold btn btn-default buy__now">
+                            BUY NOW
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </form>
                 </div>
@@ -723,6 +731,15 @@
     padding: 10px 30px;
     margin-top: -2px;
   }
+  .btn-streak {
+      background: 
+        linear-gradient(90deg, #AF191A 0%, #ffdb3d 100%);
+      color: black;
+      border: 1px solid white;
+      border-radius: 7px;
+      padding: 8px 10px;
+      font-size: 16px;
+  }
 
   /* MENU CSS */
   #menu-update { /* Each menu card */
@@ -869,10 +886,9 @@
   }
   .nya {
     display: flex;
-    justify-content: flex-end; /* Align content to the right */
+    justify-content: space-between;
     align-items: center;
-    gap: 20px; /* space between total and button */
-    padding: 10px 20px;
+    padding: 10px 15px;
   }
 
   /* VERSATILE CSS */
@@ -884,6 +900,22 @@
 
   @media (max-width: 768px) {
     .menu-card {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .nya {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .buy-section {
+      justify-content: space-between;
+    }
+
+    .voucher-section select {
       width: 100%;
     }
   }

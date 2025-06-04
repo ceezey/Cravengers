@@ -50,27 +50,110 @@
 <body>
 
 	<!-- Nav -->
-  <div class="navbar_home" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #eab830;">
-      <!-- Logo (Left) -->
-      <a href="homepage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
-          <img src="{{ url_for('main.get_logo_image') }}" style="width: 40px;" />
-      </a>
+	<div class="navbar_home" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #eab830;">
+		<!-- Logo (Left) -->
+		<a href="productlistpage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
+			<img src="{{ url_for('main.get_logo_image') }}" style="width: 40px;" />
+		</a>
 
-      <!-- Right icons (Search & Profile) -->
-      <div style="display: flex; align-items: center;">
-          <a href="#" class="btn__standard" style="margin-right: 15px; display: flex; align-items: center;">
-              <img src="{{ url_for('main.get_search_image') }}" style="width: 25px;" />
-          </a>
-          <a href="index.html" class="btn__standard" style="margin-right: 50px; display: flex; align-items: center;">
-              <img src="{{ url_for('main.get_user_image') }}" style="width: 25px;" />
-          </a>
-      </div>
-  </div>
+		<!-- Right icons (Search & Profile) -->
+		<div style="display: flex; align-items: center;">
+			<a href="#" class="btn__standard" style="margin-right: 15px; display: flex; align-items: center;">
+				<img src="{{ url_for('main.get_search_image') }}" style="width: 25px;" />
+			</a>
+			<a href="profilepage.html" class="btn__standard" style="margin-right: 50px; display: flex; align-items: center;">
+				<img src="{{ url_for('main.get_user_image') }}" style="width: 25px;" />
+			</a>
+		</div>
+	</div>
   
-  <div class="bg-frntpage">
-    <!-- page content here -->
-     
-  </div>
+	<div class="bg-frntpage">
+		<div class="container">
+			<h1>Cravengers Streak Checker</h1>
+
+			<label for="uid">User ID:</label>
+			<input id="uid" value="{{ user_info['UID'] }}" readonly />
+
+			<!-- Progress Bar -->
+			<div style="margin-top: 1em;">
+				<label>Streak Progress:</label>
+				<div style="background-color: #eee; width: 100%; border-radius: 10px; overflow: hidden;">
+					<div id="progress-bar" style="height: 20px; background-color: #28a745; width: 0%; transition: width 0.5s;"></div>
+				</div>
+				<p id="streak-text"></p>
+			</div>
+
+			<!-- Result Message -->
+			<div id="result" style="margin-top: 1em;">Loading...</div>
+
+			<!-- Claim Button -->
+			<button id="claim-btn" style="display:none; margin-top: 1em;" onclick="claimVoucher()">Claim Voucher</button>
+
+			<script>
+				const UID = document.getElementById("uid").value;
+
+				async function checkStreak() {
+					const result = document.getElementById("result");
+					const streakText = document.getElementById("streak-text");
+					const progressBar = document.getElementById("progress-bar");
+					const claimBtn = document.getElementById("claim-btn");
+
+					result.innerHTML = "Checking streak...";
+					claimBtn.style.display = "none";
+
+					try {
+					const response = await fetch(`http://` + window.location.host + `/get-streak?uid=${UID}`);
+					if (!response.ok) throw new Error("User not found");
+
+					const data = await response.json();
+
+					// Update result
+					result.innerHTML = `<p>You have a streak of <strong>${data.streak}</strong> day(s).</p>`;
+					streakText.innerText = `Progress: ${Math.min(data.streak, 10)} / 10`;
+
+					// Update progress bar
+					const progressPercent = Math.min(data.streak, 10) * 10;
+					progressBar.style.width = progressPercent + "%";
+
+					// Show claim button if eligible
+					if (data.streak >= 10 && data.voucher_awarded) {
+						claimBtn.style.display = "block";
+					}
+					} catch (err) {
+					result.innerHTML = `<p style="color: red;">${err.message}</p>`;
+					}
+				}
+
+				async function claimVoucher() {
+					const result = document.getElementById("result");
+					result.innerHTML = "Processing claim...";
+
+					try {
+					const response = await fetch(`http://` + window.location.host + `/claim-voucher`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ uid: UID })
+					});
+
+					const data = await response.json();
+
+					if (response.ok) {
+						result.innerHTML = `<p style="color: green;">${data.message}</p>`;
+						document.getElementById("claim-btn").style.display = "none";
+					} else {
+						result.innerHTML = `<p style="color: red;">${data.message}</p>`;
+					}
+					} catch (err) {
+					result.innerHTML = `<p style="color: red;">Error claiming voucher.</p>`;
+					}
+				}
+
+				// Run on load
+				window.onload = checkStreak;
+			</script>
+		</div>
+	</div>
+
 
 	<!-- jQuery -->
 	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>

@@ -245,36 +245,20 @@ def profilepage():
 
 
 @main.route("/streak.html")
-# @login_required
+@login_required
 def streak():
     # update session info every time
-    # user_info = session.get('user_info')
-    # UID = user_info['UID']
-    # db = get_db()
-    # user_info = db.cursor().execute(
-    #     """ select *
-    #         from Users
-    #         where UID = ?""", (UID,)
-    # ).fetchone()
-    # session['user_info'] = dict(user_info)
+    user_info = session.get('user_info')
+    UID = user_info['UID']
+    db = get_db()
+    user_info = db.cursor().execute(
+        """ select *
+            from Users
+            where UID = ?""", (UID,)
+    ).fetchone()
+    session['user_info'] = dict(user_info)
 
-    # fetch shop_info
-    # shop_info = db.cursor().execute(
-    #     """ select *
-    #         from Stores
-    #         where S_owner = ?""", (UID,)
-    # ).fetchone()
-
-    # fetch product_info
-    # product_info = db.cursor().execute(
-    #     """ select *
-    #         from Products
-    #         where P_owner = ?""", (2,)
-    # ).fetchall()
-
-    # image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
-
-    return render_template("streak.html")
+    return render_template("streak.html", user_info=user_info)
 
 
 

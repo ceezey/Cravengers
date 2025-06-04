@@ -45,21 +45,21 @@
   <!-- Nav -->
 	<div class="navbar_home" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
       <div>
-          <!-- <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
-              CRAVENGERS
-          </a> -->
-          <a href="homepage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
+          <a href="productlistpage.html" class="branding__title btn__standard" style="margin-left: 50px; display: flex; align-items: center;">
               <img src="{{ url_for('main.get_logo_image') }}" style="width: 40px;" />
           </a>
       </div>
       
       <div style="text-align: right; display: flex;">
           <div class="nav-tabs" style="border: 0 !important">
+              <a href="/streak.html" class="btn-streak poppins-bold" style="margin-right: 15px;">
+                Streak🔥
+              </a>
               <a href="/userpage.html" class="btn__standard" style="margin-right: 15px">
                   <img src="{{ url_for('main.get_search_image') }}" style="width: 25px" />
               </a>
-              <a href="/productlistpage.html" class="btn__standard" style="margin-right: 50px">
-                  <img src="{{ url_for('main.get_home_image') }}" style="width: 25px" />
+              <a href="/profilepage.html" class="btn__standard" style="margin-right: 50px">
+                  <img src="{{ url_for('main.get_user_image') }}" style="width: 25px" />
               </a>
           </div>
       </div>
@@ -561,6 +561,15 @@
       linear-gradient(125deg, #AF191A 56%, #F3BD38 85%);
       min-height: 100vh;
       padding: 50px 100px;
+  }
+  .btn-streak {
+      background: 
+        linear-gradient(90deg, #AF191A 0%, #ffdb3d 100%);
+      color: black;
+      border: 1px solid white;
+      border-radius: 7px;
+      padding: 8px 10px;
+      font-size: 16px;
   }
 
   /* PROFILE CSS */
