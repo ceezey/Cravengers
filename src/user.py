@@ -1,6 +1,7 @@
 import base64
 import sqlite3
 import json
+from .mod import use_voucher
 from .math import unique_order_number
 from .login import login_required
 from . import get_db, DISTANCE_BOUNDARY
@@ -98,6 +99,7 @@ def order_made():
 
     # get user data
     UID = session['user_info']['UID']
+    voucher_id = json_data.get("voucher_id")
     db = get_db()
     user_info = db.cursor().execute('''
         select *
@@ -151,16 +153,8 @@ def order_made():
             'message': "Failed to create order: insufficient quantity of {}".format(
                 non_sufficient_product_name)
         }), 200
+    
     # check if wallet ballence sufficient
-    # calculate fee
-    # lat1, lon1 = db.cursor().execute("select U_latitude, U_longitude from Users where UID = ?",
-    #                                  (UID, )).fetchone()
-    # lat2, lon2 = db.cursor().execute("select S_latitude, S_longitude from Stores where S_owner = ?",
-    #                                  (shop_owner_UID, )).fetchone()
-    # distance = float(distance_between_locations(lat1, lon1, lat2, lon2))
-
-    # Delivery_fee = 0 if json_data['Type'] == '0' else max(
-    #     int(round(distance * 10)), 10)
     Total = Subtotal
     if Total > user_info['U_balance']:
         return jsonify({
@@ -229,6 +223,9 @@ def order_made():
         return jsonify({
             'message': 'Failed to create order: please try again'
         }), 200
+    
+    if voucher_id:
+        use_voucher(UID, voucher_id)
 
     db.commit()
 
@@ -284,16 +281,6 @@ def order_preview():
         r['P_image'] = base64.b64encode(r['P_image']).decode()
         r['Order_quantity'] = q
         Subtotal += r['P_price'] * q
-
-    # calculate fee
-    # lat1, lon1 = db.cursor().execute("select U_latitude, U_longitude from Users where UID = ?",
-    #                                  (session['user_info']['UID'], )).fetchone()
-    # lat2, lon2 = db.cursor().execute("select S_latitude, S_longitude from Stores where S_owner = ?",
-    #                                  (Products[0]['P_owner'], )).fetchone()
-    # distance = float(distance_between_locations(lat1, lon1, lat2, lon2))
-
-    # Delivery_fee = 0 if request.form['Dilivery'] == '0' else max(
-    #     int(round(distance * 10)), 10)
 
     db.cursor().execute("drop table PID_list")
 

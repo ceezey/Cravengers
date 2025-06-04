@@ -60,7 +60,7 @@
 
 		<!-- Right icons (Search & Profile) -->
 		<div style="display: flex; align-items: center;">
-			<a href="#" class="btn__standard" style="margin-right: 15px; display: flex; align-items: center;">
+			<a href="userpage.html" class="btn__standard" style="margin-right: 15px; display: flex; align-items: center;">
 				<img src="{{ url_for('main.get_search_image') }}" style="width: 25px;" />
 			</a>
 			<a href="profilepage.html" class="btn__standard" style="margin-right: 50px; display: flex; align-items: center;">
@@ -69,94 +69,6 @@
 		</div>
 	</div>
   
-	<div class="bg-frntpage">
-		<div class="container">
-			<h1>Cravengers Streak Checker</h1>
-
-			<label for="uid">User ID:</label>
-			<input id="uid" value="{{ user_info['UID'] }}" readonly />
-
-			<!-- Progress Bar -->
-			<div style="margin-top: 1em;">
-				<label>Streak Progress:</label>
-				<div style="background-color: #eee; width: 100%; border-radius: 10px; overflow: hidden;">
-					<div id="progress-bar" style="height: 20px; background-color: #28a745; width: 0%; transition: width 0.5s;"></div>
-				</div>
-				<p id="streak-text"></p>
-			</div>
-
-			<!-- Result Message -->
-			<div id="result" style="margin-top: 1em;">Loading...</div>
-
-			<!-- Claim Button -->
-			<button id="claim-btn" style="display:none; margin-top: 1em;" onclick="claimVoucher()">Claim Voucher</button>
-
-			<script>
-				const UID = document.getElementById("uid").value;
-
-				async function checkStreak() {
-					const result = document.getElementById("result");
-					const streakText = document.getElementById("streak-text");
-					const progressBar = document.getElementById("progress-bar");
-					const claimBtn = document.getElementById("claim-btn");
-
-					result.innerHTML = "Checking streak...";
-					claimBtn.style.display = "none";
-
-					try {
-					const response = await fetch(`http://` + window.location.host + `/get-streak?uid=${UID}`);
-					if (!response.ok) throw new Error("User not found");
-
-					const data = await response.json();
-
-					// Update result
-					result.innerHTML = `<p>You have a streak of <strong>${data.streak}</strong> day(s).</p>`;
-					streakText.innerText = `Progress: ${Math.min(data.streak, 10)} / 10`;
-
-					// Update progress bar
-					const progressPercent = Math.min(data.streak, 10) * 10;
-					progressBar.style.width = progressPercent + "%";
-
-					// Show claim button if eligible
-					if (data.streak >= 10 && data.voucher_awarded) {
-						claimBtn.style.display = "block";
-					}
-					} catch (err) {
-					result.innerHTML = `<p style="color: red;">${err.message}</p>`;
-					}
-				}
-
-				async function claimVoucher() {
-					const result = document.getElementById("result");
-					result.innerHTML = "Processing claim...";
-
-					try {
-					const response = await fetch(`http://` + window.location.host + `/claim-voucher`, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ uid: UID })
-					});
-
-					const data = await response.json();
-
-					if (response.ok) {
-						result.innerHTML = `<p style="color: green;">${data.message}</p>`;
-						document.getElementById("claim-btn").style.display = "none";
-					} else {
-						result.innerHTML = `<p style="color: red;">${data.message}</p>`;
-					}
-					} catch (err) {
-					result.innerHTML = `<p style="color: red;">Error claiming voucher.</p>`;
-					}
-				}
-
-				// Run on load
-				window.onload = checkStreak;
-			</script>
-		</div>
-	</div>
-
-
 	<!-- jQuery -->
 	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 	<!-- Bootstrap -->
@@ -578,7 +490,7 @@
     </style>
 
     <!-- Main Container -->
-    <main class="main-container">
+    <main class="main-container" id="uid" value="{{ user_info['UID'] }}" >
         <!-- Background Gradients -->
         <img src="{{ url_for('main.get_bg1_image') }}" alt="Background Gradient" class="bg-gradient-1">
         <img src="{{ url_for('main.get_bg2_image') }}" alt="Background Gradient" class="bg-gradient-2">
@@ -604,61 +516,61 @@
                 <div class="timeline-line"></div>
                 
                 <!-- Day 1 -->
-                <div class="day-marker" style="left: 35px;" onclick="handleDayClick(1)">
+                <div class="day-marker" style="left: 35px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 35px;">Day 1</div>
 
                 <!-- Day 2 -->
-                <div class="day-marker" style="left: 135px;" onclick="handleDayClick(2)">
+                <div class="day-marker" style="left: 135px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 161px;">Day 2</div>
 
                 <!-- Day 3 -->
-                <div class="day-marker" style="left: 252px;" onclick="handleDayClick(3)">
+                <div class="day-marker" style="left: 252px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 278px;">Day 3</div>
 
                 <!-- Day 4 -->
-                <div class="day-marker" style="left: 369px;" onclick="handleDayClick(4)">
+                <div class="day-marker" style="left: 369px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 395px;">Day 4</div>
 
                 <!-- Day 5 -->
-                <div class="day-marker large" style="left: 486px;" onclick="handleDayClick(5)">
+                <div class="day-marker large" style="left: 486px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 521px;">Day 5</div>
 
                 <!-- Day 6 -->
-                <div class="day-marker" style="left: 620px;" onclick="handleDayClick(6)">
+                <div class="day-marker" style="left: 620px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 646px;">Day 6</div>
 
                 <!-- Day 7 -->
-                <div class="day-marker" style="left: 737px;" onclick="handleDayClick(7)">
+                <div class="day-marker" style="left: 737px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 763px;">Day 7</div>
 
                 <!-- Day 8 -->
-                <div class="day-marker" style="left: 854px;" onclick="handleDayClick(8)">
+                <div class="day-marker" style="left: 854px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 880px;">Day 8</div>
 
                 <!-- Day 9 -->
-                <div class="day-marker" style="left: 971px;" onclick="handleDayClick(9)">
+                <div class="day-marker" style="left: 971px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 997px;">Day 9</div>
 
                 <!-- Day 10 -->
-                <div class="day-marker large" style="left: 1091px;" onclick="handleDayClick(10)">
+                <div class="day-marker large" style="left: 1091px;">
                     <img src="{{ url_for('main.get_fork_image') }}" alt="Fork Icon">
                 </div>
                 <div class="day-label" style="left: 1126px;">Day 10</div>
@@ -670,89 +582,110 @@
     </main>
 
     <script>
-        // Global variables
-        let currentStreak = 0;
-        let orderCount = 0;
-        let completedDays = [0];
+		const UID = document.getElementById("uid").getAttribute("value");
+		console.log("Loaded UID: ", UID)
 
-        // Initialize the page
-        function initializePage() {
-            updateOrderCounter();
-            updateProgressTimeline();
-            animateFlame();
-        }
+		let currentStreak = 0;
+		let completedDays = [];
 
-        // Handle search functionality
-        function handleSearch() {
-            alert('Search functionality would open here');
-            console.log('Search clicked');
-        }
+		// Automatically fetch streak and update progress bar
+		async function checkStreak() {
+			try {
+				const response = await fetch(`http://` + window.location.host + `/get-streak?uid=${UID}`);
+				if (!response.ok) throw new Error("User not found");
 
-        // Handle profile functionality
-        function handleProfile() {
-            alert('Profile menu would open here');
-            console.log('Profile clicked');
-        }
+				const data = await response.json();
+				currentStreak = data.streak;
+				completedDays = Array.from({ length: currentStreak }, (_, i) => i + 1);
 
-        // Handle day click
-        function handleDayClick(day) {
-            if (day <= currentStreak + 1) {
-                if (!completedDays.includes(day)) {
-                    completedDays.push(day);
-                    currentStreak = Math.max(currentStreak, day);
-                    orderCount++;
-                    
-                    updateOrderCounter();
-                    updateProgressTimeline();
-                    
-                    // Show reward message for milestones
-                    if (day === 5 || day === 10) {
-                        showRewardMessage(day);
-                    }
-                }
-            } else {
-                alert(`Complete Day ${currentStreak + 1} first!`);
-            }
-        }
+				updateOrderCounter();
+				updateProgressTimeline();
 
-        // Update order counter with animation
-        function updateOrderCounter() {
-            const counter = document.getElementById('orderCounter');
-            const targetCount = orderCount;
-            let currentCount = parseInt(counter.textContent);
+				const lastShown = data.last_reward_shown_day || 0;
+
+				if ((currentStreak === 5 || currentStreak === 10) && currentStreak > lastShown) {
+					showRewardMessage(currentStreak);
+				}
+			} catch (err) {
+				console.error("Streak fetch error:", err);
+			}
+		}
+
+		// Order count animation
+		function updateOrderCounter() {
+			const counter = document.getElementById('orderCounter');
+			const target = currentStreak;
+			let current = parseInt(counter.textContent);
+
+			const increment = () => {
+				if (current < target) {
+					current++;
+					counter.textContent = current;
+					setTimeout(increment, 50);
+				} else {
+					counter.classList.add('pulse');
+					setTimeout(() => counter.classList.remove('pulse'), 1000);
+				}
+			};
+			increment();
+		}
+
+		// Progress marker update
+		function updateProgressTimeline() {
+			const markers = document.querySelectorAll('.day-marker');
+			markers.forEach((marker, idx) => {
+				const day = idx + 1;
+				if (completedDays.includes(day)) {
+					marker.classList.add('completed');
+				} else {
+					marker.classList.remove('completed');
+				}
+			});
+
+			const timelineLine = document.querySelector('.timeline-line');
+			const progress = (currentStreak / 10) * 100;
+			timelineLine.style.background = `linear-gradient(90deg, #f3bd38 0%, #f3bd38 ${progress}%, #7e7979 ${progress}%, #7e7979 100%)`;
+		}
+
+		// Animate flame logo
+        function animateFlame() {
+            const flameLogo = document.querySelector('.flame-logo');
+            let rotation = 0;
             
-            const increment = () => {
-                if (currentCount < targetCount) {
-                    currentCount++;
-                    counter.textContent = currentCount;
-                    setTimeout(increment, 100);
-                } else {
-                    counter.classList.add('pulse');
-                    setTimeout(() => counter.classList.remove('pulse'), 1000);
-                }
-            };
-            
-            increment();
+            setInterval(() => {
+                rotation += 0.5;
+                flameLogo.style.transform = `rotate(${Math.sin(rotation * 0.1) * 2}deg) scale(${1 + Math.sin(rotation * 0.05) * 0.05})`;
+            }, 100);
         }
 
-        // Update progress timeline
-        function updateProgressTimeline() {
-            const dayMarkers = document.querySelectorAll('.day-marker');
-            
-            dayMarkers.forEach((marker, index) => {
-                const dayNumber = index + 1;
-                if (completedDays.includes(dayNumber)) {
-                    marker.classList.add('completed');
-                } else {
-                    marker.classList.remove('completed');
-                }
-            });
-            
-            // Update timeline line gradient
-            const timelineLine = document.querySelector('.timeline-line');
-            const progressPercentage = (currentStreak / 10) * 100;
-            timelineLine.style.background = `linear-gradient(90deg, #f3bd38 0%, #f3bd38 ${progressPercentage}%, #7e7979 ${progressPercentage}%, #7e7979 100%)`;
-        }
+		// Run on load
+		window.onload = checkStreak;
+
+		async function claimVoucher(uid, button) {
+			try {
+				const response = await fetch(`/claim-voucher`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ uid })
+				});
+
+				const result = await response.json();
+
+				if (response.ok) {
+					alert(result.message);  // or show a success UI
+				} else {
+					alert("⚠️ " + result.message);
+				}
+			} catch (error) {
+				console.error("Voucher claim failed:", error);
+				alert("Something went wrong while claiming the voucher.");
+			} finally {
+				// Remove modal
+				button.parentElement.parentElement.remove();
+			}
+		}
 
         function showRewardMessage(day) {
             let heading = '';
@@ -766,6 +699,10 @@
                 heading = '💪 Almost there!';
                 message = 'You\'ve reached Day 5! Order more to get amazing rewards!';
                 buttonLabel = 'Continue Ordering';
+
+				fetch(`http://` + window.location.host + `/mark-reward-shown?uid=${UID}&day=${day}`, {
+					method: 'POST'
+				});
             } else if (day === 10) {
                 refNumber = 'Ref No. 987456321';
                 heading = '🎉 Reward Unlocked! 🎉';
@@ -804,6 +741,10 @@
                         requestAnimationFrame(frame);
                     }
                 })();
+				
+				fetch(`http://` + window.location.host + `/mark-reward-shown?uid=${UID}&day=${day}`, {
+					method: 'POST'
+				});
             }
 
             // Create and show modal
@@ -842,7 +783,7 @@
                 <h2 style="margin-bottom: 20px; font-size: 32px; font-family: 'Dela Gothic One', Calibri, sans-serif;">${heading}</h2>
                 <p style="margin-bottom: 20px;">${message}</p>
                 ${smallNote ? `<p style="font-size: 14px; margin-bottom: 30px; line-height: 1.5;">${smallNote}</p>` : ''}
-                <button onclick="this.parentElement.parentElement.remove()" 
+                <button onclick="claimVoucher(${UID}, this)" 
                         style="background: #000; color: #f3bd38; border: none; padding: 15px 30px; 
                             border-radius: 10px; font-size: 18px; cursor: pointer; 
                             font-family: Calibri, sans-serif;">
@@ -852,30 +793,6 @@
 
             modal.appendChild(modalContent);
             document.body.appendChild(modal);
-        }
-
-
-
-
-
-        // Animate flame logo
-        function animateFlame() {
-            const flameLogo = document.querySelector('.flame-logo');
-            let rotation = 0;
-            
-            setInterval(() => {
-                rotation += 0.5;
-                flameLogo.style.transform = `rotate(${Math.sin(rotation * 0.1) * 2}deg) scale(${1 + Math.sin(rotation * 0.05) * 0.05})`;
-            }, 100);
-        }
-
-        // Simulate daily progress (for demo)
-        function simulateDailyProgress() {
-            setInterval(() => {
-                if (currentStreak < 10 && Math.random() > 0.7) {
-                    handleDayClick(currentStreak + 1);
-                }
-            }, 5000);
         }
 
         // CSS animations
@@ -896,11 +813,6 @@
             }
         `;
         document.head.appendChild(style);
-
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            initializePage();
-        });
 
     </script>
 </body>

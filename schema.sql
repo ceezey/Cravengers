@@ -7,10 +7,9 @@ CREATE TABLE
         -- {First name}  {Last name}
         U_type INT NOT NULL,
         -- 0: Normal user, 1: Shop owner
-        -- U_latitude FLOAT NOT NULL,
-        -- U_longitude FLOAT NOT NULL,
         U_phone VARCHAR(10) NOT NULL,
         U_balance INT NOT NULL,
+        U_reward_shown_day INTEGER DEFAULT 0,
         -- constraints --
         CONSTRAINT U_balance_non_negative CHECK (U_balance >= 0)
     );
@@ -19,8 +18,6 @@ CREATE TABLE
     if NOT EXISTS Stores(
         SID INTEGER PRIMARY KEY AUTOINCREMENT,
         S_name VARCHAR(256) UNIQUE NOT NULL,
-        -- S_latitude FLOAT NOT NULL,
-        -- S_longitude FLOAT NOT NULL,
         S_phone VARCHAR(10) NOT NULL,
         S_foodtype VARCHAR(256) NOT NULL,
         S_owner INT NOT NULL,
@@ -96,14 +93,15 @@ CREATE TABLE
         CONSTRAINT P_quantity_non_negative CHECK (P_quantity >= 0)
     );
 
-CREATE TABLE IF NOT EXISTS Vouchers (
-    VID INTEGER PRIMARY KEY AUTOINCREMENT,
-    UID INTEGER NOT NULL,              
-    V_code TEXT NOT NULL UNIQUE,          -- Voucher code (could be fixed or generated)
-    V_discount REAL DEFAULT 10.0,         -- Discount value
-    V_used INTEGER DEFAULT 0,             -- 0 = available, 1 = used
-    V_claimdate TEXT DEFAULT CURRENT_TIMESTAMP,
-    V_used_date TEXT,
-    V_expiry_date TEXT,                   -- Optional
-    FOREIGN KEY (UID) REFERENCES Users(UID)
-);
+CREATE TABLE 
+    iF NOT EXISTS Vouchers (
+        VID INTEGER PRIMARY KEY AUTOINCREMENT,        
+        V_code TEXT NOT NULL UNIQUE,          -- Voucher code (could be fixed or generated)
+        V_discount REAL DEFAULT 10.0,         -- Discount value
+        V_used INTEGER DEFAULT 0,             -- 0 = available, 1 = used
+        V_claimdate TEXT DEFAULT CURRENT_TIMESTAMP,
+        V_used_date TEXT,
+        V_expiry_date TEXT,                   -- Optional
+        UID INTEGER NOT NULL,      
+        FOREIGN KEY (UID) REFERENCES Users(UID)
+    );

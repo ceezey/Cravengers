@@ -69,7 +69,7 @@
           </div>
       </div>
   </div>
-  <div class="bg-frntpage" id="top">
+  <div class="bg-frntpage">
       <div class="tab-content">
         <div id="Home" class="tab-pane fade in active">
           <!-- <h3>Home</h3> -->     
@@ -399,7 +399,7 @@
                     <option value="1"></option>
                   </select>
                 </label>
-                <button type="submit" name="Order_Preview" class="poppins-bold btn btn-default buy__now">Proceed Checkout</button>
+                <button type="submit" name="Order_Preview" class="poppins-bold btn btn-default buy_now">Proceed Checkout</button>
               </div>
             </form>
           </div>
@@ -551,7 +551,7 @@
         <div class="modal-dialog">
 
           <!-- Modal content-->
-          <div class="modal-content">
+          <div class="modal-content" id="uid" value="{{ user_info['UID'] }}">
             <div class="modal-header">
               <button type="button" class="modal-close-button close" onclick="location.reload(true);">&times;</button>
               <h4 class="poppins-bold modal-title" style="color: #000000;">Check out</h4>
@@ -569,14 +569,11 @@
                 <div class="voucher-section d-flex align-items-center">
                   <select class="form-control" name="Voucher" id="Voucher" style="width: 180px;">
                     <option value="">Select Voucher</option>
-                    <option value="FREESHIP">FREESHIP - Free Delivery</option>
-                    <option value="DISC10">DISC10 - 10% Off</option>
-                    <option value="MEAL50">MEAL50 - ₱50 Off</option>
                   </select>
                 </div>
                 <div class="buy-section d-flex align-items-center justify-content-end" style="gap: 10px;">
                   <div class="poppins-medium text-white" style="color: white; font-size: 20px;">Total: 
-                    <span class="total-price poppins-bold text-white" id="Total_price">₱0.00</span>     
+                    <span class="total-price poppins-bold text-white" id="Total_price" data-original="500.00">₱500.00</span>     
                     <button type="submit" name="Order_Made" class="poppins-bold btn btn-default buy__now">
                       BUY NOW
                     </button>
@@ -588,9 +585,23 @@
         </div>
         <script type="text/javascript">
           $('document').ready(function () {
+            const UID = document.getElementById("uid").getAttribute("value") || "-1";
+            console.log("Loaded UID: ", UID)
+
+            loadUserVouchers(UID);
+
             $('#Order_Made').on('submit', function (event) {
               console.log(JSON.stringify(Home_Order_Info))
               event.preventDefault();
+
+              const uid = UID;
+              const selectedOption = document.getElementById("Voucher").selectedOptions[0];
+              const vid = selectedOption?.value;
+
+              if (vid) {
+                Home_Order_Info.voucher_id = vid;
+              }
+
               $.ajax({
                 url: 'http://' + window.location.host + "/order_made",
                 method: "POST",
@@ -624,6 +635,10 @@
                     allowOutsideClick: false,
 
                   }).then((result) => {
+                    if (vid) {
+                      markVoucherAsUsed(uid, vid);
+                    }
+
                     if (result.isConfirmed) {
                       window.location.assign("/profilepage.html")
                     } else if (result.isDenied) {
@@ -640,6 +655,71 @@
               })
             });
           });
+
+          function loadUserVouchers(UID) {
+            fetch(`http://` + window.location.host + `/get-vouchers?uid=${UID}`)
+              .then(res => res.json())
+              .then(vouchers => {
+                const select = document.getElementById("Voucher");
+                select.innerHTML = '<option value="">Select Voucher</option>';
+
+                vouchers.forEach(v => {
+                  const option = document.createElement("option");
+                  option.value = v.vid;
+                  option.dataset.discount = v.discount;
+                  option.textContent = `${v.code} - ${v.discount}% OFF (expires ${v.expiry})`;
+                  select.appendChild(option);
+                });
+              })
+              .catch(err => {
+                console.error("Failed to load vouchers", err);
+              });
+            }
+
+            document.getElementById("Voucher").addEventListener("change", function () {
+              const discount = parseFloat(this.selectedOptions[0]?.dataset.discount || "0");
+              if (!discount) {
+                restoreOriginalPrice();
+                return;
+              }
+
+              const originalTotal = parseFloat(document.getElementById("Total_price").dataset.original || "0");
+              const discountedTotal = originalTotal * (1 - discount / 100);
+              document.getElementById("Total_price").textContent = `₱${discountedTotal.toFixed(2)}`;
+            });
+
+            function markVoucherAsUsed(uid, vid) {
+            fetch(`http://` + window.location.host + `/use-voucher`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ uid, vid })
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  console.log("Voucher successfully marked as used.");
+                  // Remove the used voucher from dropdown
+                  const select = document.getElementById("Voucher");
+                  const usedOption = select.querySelector(`option[value="${vid}"]`);
+                  if (usedOption) usedOption.remove();
+                  // Reset selection
+                  select.value = "";
+                  // Reset total price display
+                  restoreOriginalPrice();
+                } else {
+                  console.warn("Could not mark voucher as used:", data.message);
+                }
+              })
+              .catch(err => {
+                console.error("Error using voucher:", err);
+              });
+          }
+
+          function restoreOriginalPrice() {
+            const original = parseFloat(document.getElementById("Total_price").dataset.original || "0");
+            document.getElementById("Total_price").textContent = `₱${original.toFixed(2)}`;
+          }
+
         </script>
       </div>
     </div>
@@ -852,6 +932,16 @@
   .btn__opnMenu:hover {
     background: #700000;
     color: white
+  }
+  .buy_now {
+    color: white;
+    background: #800;
+    font-size: 15px;
+    outline: 0;
+    border: 0;
+    border-radius: 5px;
+    padding: 8px 30px;
+    margin-top: -2px;
   }
   .buy__now {
     color: white;
