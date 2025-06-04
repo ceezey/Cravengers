@@ -155,7 +155,8 @@ def order_made():
         }), 200
     
     # check if wallet ballence sufficient
-    Total = Subtotal
+    # Use discounted total if provided
+    Total = float(json_data.get("total_after_discount", Subtotal))
     if Total > user_info['U_balance']:
         return jsonify({
             'message': "Failed to create order: insufficient balance"

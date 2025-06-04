@@ -404,6 +404,8 @@
             </form>
           </div>
           <script type="text/javascript">
+            let originalTotal = 0; // for voucher
+
             // variable send to order_made()
             var Home_Order_Info = {
               "PIDs": [],
@@ -523,6 +525,14 @@
 
                     $('#menu').modal('hide')
                     $('#Order_Made').modal('show')
+
+                    originalTotal = parseFloat(Order_info.Subtotal);
+                    console.log("Total: ", originalTotal)
+
+                    $('#Total_price')
+                      .html(`₱${originalTotal.toFixed(2)}`)
+                      .attr('data-original', originalTotal.toFixed(2));
+
                   },
                   error: function (jqxhr, textStatus, errorThrown) {
                     // alert(jqxhr.responseText)
@@ -573,7 +583,7 @@
                 </div>
                 <div class="buy-section d-flex align-items-center justify-content-end" style="gap: 10px;">
                   <div class="poppins-medium text-white" style="color: white; font-size: 20px;">Total: 
-                    <span class="total-price poppins-bold text-white" id="Total_price" data-original="500.00">₱500.00</span>     
+                    <span class="total-price poppins-bold text-white" id="Total_price">₱0.00</span>     
                     <button type="submit" name="Order_Made" class="poppins-bold btn btn-default buy__now">
                       BUY NOW
                     </button>
@@ -586,12 +596,11 @@
         <script type="text/javascript">
           $('document').ready(function () {
             const UID = document.getElementById("uid").getAttribute("value") || "-1";
-            console.log("Loaded UID: ", UID)
+            console.log("Loaded UID: ", UID);
 
             loadUserVouchers(UID);
 
             $('#Order_Made').on('submit', function (event) {
-              console.log(JSON.stringify(Home_Order_Info))
               event.preventDefault();
 
               const uid = UID;
@@ -599,7 +608,13 @@
               const vid = selectedOption?.value;
 
               if (vid) {
+                const discount = parseFloat(selectedOption.dataset.discount || "0");
+                const discountedTotal = originalTotal * (1 - discount / 100);
+
                 Home_Order_Info.voucher_id = vid;
+                Home_Order_Info.total_after_discount = discountedTotal.toFixed(2);
+              } else {
+                Home_Order_Info.total_after_discount = originalTotal.toFixed(2); // No voucher, full price
               }
 
               $.ajax({
@@ -609,50 +624,52 @@
                 data: JSON.stringify(Home_Order_Info),
                 async: false,
                 success: function (data) {
-                  console.log(data)
-                  // alert(data.message);
-                  // location.reload(true);
-
                   if (data.message === "Failed to create order: insufficient balance") {
-                    // Show success message using SweetAlert
                     Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        title: data.message,
-                        text: "Please Top-Up",
-                        showConfirmButton: true,
+                      position: "center",
+                      icon: "error",
+                      title: data.message,
+                      text: "Please Top-Up",
+                      showConfirmButton: true,
                     });
-                }
-                else {
-                  Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: data.message,
-                    text: "Please Proceed to My Orders for receipt",
-                    showDenyButton: true,
-                    confirmButtonText: "Go to Profile",
-                    denyButtonText: `Continue Shopping`,
-                    allowOutsideClick: false,
+                  } else {
+                    Swal.fire({
+                      position: "center",
+                      icon: "success",
+                      title: data.message,
+                      text: "Please Proceed to My Orders for receipt",
+                      showDenyButton: true,
+                      confirmButtonText: "Go to Profile",
+                      denyButtonText: `Continue Shopping`,
+                      allowOutsideClick: false,
+                    }).then((result) => {
+                      if (vid) markVoucherAsUsed(uid, vid);
 
-                  }).then((result) => {
-                    if (vid) {
-                      markVoucherAsUsed(uid, vid);
-                    }
-
-                    if (result.isConfirmed) {
-                      window.location.assign("/profilepage.html")
-                    } else if (result.isDenied) {
-                      location.reload(true);
-                    }
-                  });
-                  
-                }
-              },     
-                error: function (jqxhr, textStatus, errorThrown) {
-                  alert(jqxhr.responseText)
+                      if (result.isConfirmed) {
+                        window.location.assign("/profilepage.html");
+                      } else if (result.isDenied) {
+                        location.reload(true);
+                      }
+                    });
+                  }
+                },
+                error: function (jqxhr) {
+                  alert(jqxhr.responseText);
                   location.reload(true);
                 }
-              })
+              });
+            });
+
+            document.getElementById("Voucher").addEventListener("change", function () {
+              const discount = parseFloat(this.selectedOptions[0]?.dataset.discount || "0");
+              if (!discount) {
+                restoreOriginalPrice();
+                return;
+              }
+
+              const base = parseFloat(document.getElementById("Total_price").dataset.original || "0");
+              const discountedTotal = base * (1 - discount / 100);
+              document.getElementById("Total_price").textContent = `₱${discountedTotal.toFixed(2)}`;
             });
           });
 
@@ -674,21 +691,13 @@
               .catch(err => {
                 console.error("Failed to load vouchers", err);
               });
-            }
+          }
 
-            document.getElementById("Voucher").addEventListener("change", function () {
-              const discount = parseFloat(this.selectedOptions[0]?.dataset.discount || "0");
-              if (!discount) {
-                restoreOriginalPrice();
-                return;
-              }
+          function restoreOriginalPrice() {
+            document.getElementById("Total_price").textContent = `₱${originalTotal.toFixed(2)}`;
+          }
 
-              const originalTotal = parseFloat(document.getElementById("Total_price").dataset.original || "0");
-              const discountedTotal = originalTotal * (1 - discount / 100);
-              document.getElementById("Total_price").textContent = `₱${discountedTotal.toFixed(2)}`;
-            });
-
-            function markVoucherAsUsed(uid, vid) {
+          function markVoucherAsUsed(uid, vid) {
             fetch(`http://` + window.location.host + `/use-voucher`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -698,13 +707,10 @@
               .then(data => {
                 if (data.success) {
                   console.log("Voucher successfully marked as used.");
-                  // Remove the used voucher from dropdown
                   const select = document.getElementById("Voucher");
                   const usedOption = select.querySelector(`option[value="${vid}"]`);
                   if (usedOption) usedOption.remove();
-                  // Reset selection
                   select.value = "";
-                  // Reset total price display
                   restoreOriginalPrice();
                 } else {
                   console.warn("Could not mark voucher as used:", data.message);
@@ -714,12 +720,6 @@
                 console.error("Error using voucher:", err);
               });
           }
-
-          function restoreOriginalPrice() {
-            const original = parseFloat(document.getElementById("Total_price").dataset.original || "0");
-            document.getElementById("Total_price").textContent = `₱${original.toFixed(2)}`;
-          }
-
         </script>
       </div>
     </div>

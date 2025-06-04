@@ -190,3 +190,35 @@ def mark_reward_shown():
 
     return jsonify({"success": True})
 
+# Getting Voucher for Testing Purposes (Bypasses 10-Day Streak Requirement)
+@streak.route("/issue-test-voucher/<int:uid>", methods=["POST"])
+def issue_test_voucher(uid):
+    """
+    For testing only: force-issue a 50% voucher to user <uid>.
+    """
+    db = get_db()
+    cursor = db.cursor()
+
+    # Check if there’s already an unused, unexpired voucher for this user:
+    exists = cursor.execute(
+        "SELECT 1 FROM Vouchers WHERE UID = ? AND V_used = 0 AND (V_expiry_date IS NULL OR V_expiry_date > datetime('now'))",
+        (uid,)
+    ).fetchone()
+    if exists:
+        return jsonify({"success": False, "message": "User already has an active voucher."}), 400
+
+    # Create a “test” voucher code that lasts, say, 7 days from now:
+
+    code = f"DISC-{uuid.uuid4().hex[:6].upper()}"
+    expiry = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+
+    cursor.execute("""
+        INSERT INTO Vouchers (UID, V_code, V_discount, V_expiry_date)
+        VALUES (?, ?, ?, ?)
+    """, (uid, code, 50.0, expiry))
+    db.commit()
+
+    return jsonify({
+        "success": True,
+        "message": f"Test voucher '{code}' issued (50% off, expires {expiry})."
+    })
