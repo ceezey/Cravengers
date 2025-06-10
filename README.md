@@ -1,38 +1,104 @@
-# Online-Food-Ordering-System
+![Cravengers Logo](./templates/assets/cravengers.png)
 
-![mainpage](./screenshot.jpeg)
+# Cravengers: Online Food Ordering System
 
-Online Food Ordering System Website using basic Python(Flask), SQL, HTML, JS & CSS. It has a food ordering module for a customer. It also provides menu and orders management module for admin.
+## About
 
-Course project: Introduction to database by Jiun-Long Huang (NYCU 2022 Spring)
+CRAVENGERS is a gamified web-based food ordering application where cravings meet challenges, turning every meal into an adventure. Users can order their favorite dishes, earn streaks, collect rewards, and level up their foodie journey. Developed using Python (Flask), SQL, HTML, JavaScript, and CSS, Cravengers features two main modules that enhance both user experience and administrative efficiency. The Customer Module allows users to browse menus, place orders, and track their progress through a series of interactive, gamified challenges. On the other hand, the Admin Module enables seamless management of menus, order handling, and real-time monitoring of user activity. Whether you're aiming to unlock your next food badge or simply searching for a tasty bite, Cravengers invites you to assemble your cravings and embark on the ultimate foodie quest.
 
-Team of 3: S.W. Li, P.C. Li, H.Y. Xu
+## Purpose
+
+A project for [COMP010] Information Management under Sir. Espineli.
 
 ## Features
 
-* Home page
-  * Register/Login
-  * Search for products and stores by price, distance, food type, etc.
-  * Add credit
-  * View menu and order directly
-* Shops page
-  * Register as a shop owner
-  * Manage products and inventory
-* My Orders page
-  * View all orders and details
-  * Filter and sort orders
-  * Batch cancel/refund orders
-* Shop Orders page
-  * View all orders and details for your store
-  * Filter and sort orders
-  * Batch finish/cancel/refund orders
-* Transaction Records page
-  * View all transaction records
-  * Filter and sort records
-* All operations are safe from SQL injection
+The application is built with a modular architecture, consisting of a Customer Module and an Admin Module, both securely connected to a robust SQL-based backend protected from SQL injection through the use of parameterized queries and ORM practices.
+
+🔹 Customer Module (User Side)
+Browse and Order Food
+
+Users can explore store menus, view product details, and place customized orders.
+
+Cancel Active Orders
+
+Allows users to cancel pending or unprocessed orders with a single click.
+
+Track and View Orders
+
+Displays a chronological list of active and past orders with status updates.
+
+Gamified Streak & Reward System
+
+Users collect streaks for consecutive orders, earn vouchers, and unlock food-themed achievements.
+
+Voucher Redemption
+
+Apply percentage-based discounts to orders using valid, unexpired vouchers.
+
+Real-time Price Adjustment
+
+Instantly reflects voucher discounts on the order summary before confirmation.
+
+🔸 Admin Module (Manager Side)
+View All Orders
+
+Admins can view and filter all user orders by status, date, or customer.
+
+Cancel or Finalize Orders
+
+Approve, complete, or cancel orders directly from the admin panel.
+
+Top-Up User Wallets
+
+Safely credit user accounts with balance through validated admin actions.
+
+Manage Store Menus
+
+Add, edit, or remove products tied to specific stores. Includes product images and pricing.
+
+Order Filtering & Sorting
+
+Powerful order management tools to sort by time, amount, or customer.
+
+Security Integration
+
+Prevents SQL injection via parameterized queries and strict input validation.
+
+Live Dashboard
+
+Real-time activity monitoring and performance overview of the platform.
+
+
+## Techstack
+
+- Python (Flask)
+- SQL (SQLite/MySQL)
+- HTML
+- CSS
+- JavaScript
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd Cravengers
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Set up the database as required.
 
 ## Usage
 
 ```bash
-python app.py
+python appy.py
 ```
+
+## Contributors
+
+- Bautista, Danielle Eizy
+- Bagui, Shayne
+- Coronacion, Mikylla
+- Francisco, Cian Jake
