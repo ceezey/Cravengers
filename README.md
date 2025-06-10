@@ -51,7 +51,7 @@ A project for [COMP010] Information Management under Sir. Espineli.
       Order Filtering & Sorting
          - Powerful order management tools to sort by time, amount, or customer.
 
-## Techstack
+## Language and Techs Used
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
